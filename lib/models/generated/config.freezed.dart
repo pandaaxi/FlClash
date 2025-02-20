@@ -14,12 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-AppSetting _$AppSettingFromJson(Map<String, dynamic> json) {
-  return _AppSetting.fromJson(json);
+AppSettingProps _$AppSettingPropsFromJson(Map<String, dynamic> json) {
+  return _AppSettingProps.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AppSetting {
+mixin _$AppSettingProps {
   String? get locale => throw _privateConstructorUsedError;
   @JsonKey(fromJson: dashboardWidgetsSafeFormJson)
   List<DashboardWidget> get dashboardWidgets =>
@@ -38,21 +38,21 @@ mixin _$AppSetting {
   bool get minimizeOnExit => throw _privateConstructorUsedError;
   bool get hidden => throw _privateConstructorUsedError;
 
-  /// Serializes this AppSetting to a JSON map.
+  /// Serializes this AppSettingProps to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of AppSetting
+  /// Create a copy of AppSettingProps
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $AppSettingCopyWith<AppSetting> get copyWith =>
+  $AppSettingPropsCopyWith<AppSettingProps> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AppSettingCopyWith<$Res> {
-  factory $AppSettingCopyWith(
-          AppSetting value, $Res Function(AppSetting) then) =
-      _$AppSettingCopyWithImpl<$Res, AppSetting>;
+abstract class $AppSettingPropsCopyWith<$Res> {
+  factory $AppSettingPropsCopyWith(
+          AppSettingProps value, $Res Function(AppSettingProps) then) =
+      _$AppSettingPropsCopyWithImpl<$Res, AppSettingProps>;
   @useResult
   $Res call(
       {String? locale,
@@ -74,16 +74,16 @@ abstract class $AppSettingCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AppSettingCopyWithImpl<$Res, $Val extends AppSetting>
-    implements $AppSettingCopyWith<$Res> {
-  _$AppSettingCopyWithImpl(this._value, this._then);
+class _$AppSettingPropsCopyWithImpl<$Res, $Val extends AppSettingProps>
+    implements $AppSettingPropsCopyWith<$Res> {
+  _$AppSettingPropsCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of AppSetting
+  /// Create a copy of AppSettingProps
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -170,11 +170,11 @@ class _$AppSettingCopyWithImpl<$Res, $Val extends AppSetting>
 }
 
 /// @nodoc
-abstract class _$$AppSettingImplCopyWith<$Res>
-    implements $AppSettingCopyWith<$Res> {
-  factory _$$AppSettingImplCopyWith(
-          _$AppSettingImpl value, $Res Function(_$AppSettingImpl) then) =
-      __$$AppSettingImplCopyWithImpl<$Res>;
+abstract class _$$AppSettingPropsImplCopyWith<$Res>
+    implements $AppSettingPropsCopyWith<$Res> {
+  factory _$$AppSettingPropsImplCopyWith(_$AppSettingPropsImpl value,
+          $Res Function(_$AppSettingPropsImpl) then) =
+      __$$AppSettingPropsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -197,14 +197,14 @@ abstract class _$$AppSettingImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$AppSettingImplCopyWithImpl<$Res>
-    extends _$AppSettingCopyWithImpl<$Res, _$AppSettingImpl>
-    implements _$$AppSettingImplCopyWith<$Res> {
-  __$$AppSettingImplCopyWithImpl(
-      _$AppSettingImpl _value, $Res Function(_$AppSettingImpl) _then)
+class __$$AppSettingPropsImplCopyWithImpl<$Res>
+    extends _$AppSettingPropsCopyWithImpl<$Res, _$AppSettingPropsImpl>
+    implements _$$AppSettingPropsImplCopyWith<$Res> {
+  __$$AppSettingPropsImplCopyWithImpl(
+      _$AppSettingPropsImpl _value, $Res Function(_$AppSettingPropsImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AppSetting
+  /// Create a copy of AppSettingProps
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -225,7 +225,7 @@ class __$$AppSettingImplCopyWithImpl<$Res>
     Object? minimizeOnExit = null,
     Object? hidden = null,
   }) {
-    return _then(_$AppSettingImpl(
+    return _then(_$AppSettingPropsImpl(
       locale: freezed == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
@@ -292,8 +292,8 @@ class __$$AppSettingImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AppSettingImpl implements _AppSetting {
-  const _$AppSettingImpl(
+class _$AppSettingPropsImpl implements _AppSettingProps {
+  const _$AppSettingPropsImpl(
       {this.locale,
       @JsonKey(fromJson: dashboardWidgetsSafeFormJson)
       final List<DashboardWidget> dashboardWidgets = defaultDashboardWidgets,
@@ -312,8 +312,8 @@ class _$AppSettingImpl implements _AppSetting {
       this.hidden = false})
       : _dashboardWidgets = dashboardWidgets;
 
-  factory _$AppSettingImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AppSettingImplFromJson(json);
+  factory _$AppSettingPropsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppSettingPropsImplFromJson(json);
 
   @override
   final String? locale;
@@ -369,14 +369,14 @@ class _$AppSettingImpl implements _AppSetting {
 
   @override
   String toString() {
-    return 'AppSetting(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden)';
+    return 'AppSettingProps(locale: $locale, dashboardWidgets: $dashboardWidgets, onlyStatisticsProxy: $onlyStatisticsProxy, autoLaunch: $autoLaunch, silentLaunch: $silentLaunch, autoRun: $autoRun, openLogs: $openLogs, closeConnections: $closeConnections, testUrl: $testUrl, isAnimateToPage: $isAnimateToPage, autoCheckUpdate: $autoCheckUpdate, showLabel: $showLabel, disclaimerAccepted: $disclaimerAccepted, minimizeOnExit: $minimizeOnExit, hidden: $hidden)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppSettingImpl &&
+            other is _$AppSettingPropsImpl &&
             (identical(other.locale, locale) || other.locale == locale) &&
             const DeepCollectionEquality()
                 .equals(other._dashboardWidgets, _dashboardWidgets) &&
@@ -425,24 +425,25 @@ class _$AppSettingImpl implements _AppSetting {
       minimizeOnExit,
       hidden);
 
-  /// Create a copy of AppSetting
+  /// Create a copy of AppSettingProps
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$AppSettingImplCopyWith<_$AppSettingImpl> get copyWith =>
-      __$$AppSettingImplCopyWithImpl<_$AppSettingImpl>(this, _$identity);
+  _$$AppSettingPropsImplCopyWith<_$AppSettingPropsImpl> get copyWith =>
+      __$$AppSettingPropsImplCopyWithImpl<_$AppSettingPropsImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AppSettingImplToJson(
+    return _$$AppSettingPropsImplToJson(
       this,
     );
   }
 }
 
-abstract class _AppSetting implements AppSetting {
-  const factory _AppSetting(
+abstract class _AppSettingProps implements AppSettingProps {
+  const factory _AppSettingProps(
       {final String? locale,
       @JsonKey(fromJson: dashboardWidgetsSafeFormJson)
       final List<DashboardWidget> dashboardWidgets,
@@ -458,10 +459,10 @@ abstract class _AppSetting implements AppSetting {
       final bool showLabel,
       final bool disclaimerAccepted,
       final bool minimizeOnExit,
-      final bool hidden}) = _$AppSettingImpl;
+      final bool hidden}) = _$AppSettingPropsImpl;
 
-  factory _AppSetting.fromJson(Map<String, dynamic> json) =
-      _$AppSettingImpl.fromJson;
+  factory _AppSettingProps.fromJson(Map<String, dynamic> json) =
+      _$AppSettingPropsImpl.fromJson;
 
   @override
   String? get locale;
@@ -495,11 +496,11 @@ abstract class _AppSetting implements AppSetting {
   @override
   bool get hidden;
 
-  /// Create a copy of AppSetting
+  /// Create a copy of AppSettingProps
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AppSettingImplCopyWith<_$AppSettingImpl> get copyWith =>
+  _$$AppSettingPropsImplCopyWith<_$AppSettingPropsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1867,5 +1868,599 @@ abstract class _ThemeProps implements ThemeProps {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ThemePropsImplCopyWith<_$ThemePropsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Config _$ConfigFromJson(Map<String, dynamic> json) {
+  return _Config.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Config {
+  @JsonKey(fromJson: AppSettingProps.safeFromJson)
+  AppSettingProps get appSetting => throw _privateConstructorUsedError;
+  List<Profile> get profiles => throw _privateConstructorUsedError;
+  List<HotKeyAction> get hotKeyActions => throw _privateConstructorUsedError;
+  String? get currentProfileId => throw _privateConstructorUsedError;
+  bool get overrideDns => throw _privateConstructorUsedError;
+  bool get isAccessControl => throw _privateConstructorUsedError;
+  AccessControl get accessControl => throw _privateConstructorUsedError;
+  DAV? get dav => throw _privateConstructorUsedError;
+  NetworkProps get networkProps => throw _privateConstructorUsedError;
+  VpnProps get vpnProps => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: ThemeProps.safeFromJson)
+  ThemeProps get themeProps => throw _privateConstructorUsedError;
+  ProxiesStyle get proxiesStyle => throw _privateConstructorUsedError;
+  WindowProps get windowProps => throw _privateConstructorUsedError;
+  ClashConfig get patchClashConfig => throw _privateConstructorUsedError;
+
+  /// Serializes this Config to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ConfigCopyWith<Config> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ConfigCopyWith<$Res> {
+  factory $ConfigCopyWith(Config value, $Res Function(Config) then) =
+      _$ConfigCopyWithImpl<$Res, Config>;
+  @useResult
+  $Res call(
+      {@JsonKey(fromJson: AppSettingProps.safeFromJson)
+      AppSettingProps appSetting,
+      List<Profile> profiles,
+      List<HotKeyAction> hotKeyActions,
+      String? currentProfileId,
+      bool overrideDns,
+      bool isAccessControl,
+      AccessControl accessControl,
+      DAV? dav,
+      NetworkProps networkProps,
+      VpnProps vpnProps,
+      @JsonKey(fromJson: ThemeProps.safeFromJson) ThemeProps themeProps,
+      ProxiesStyle proxiesStyle,
+      WindowProps windowProps,
+      ClashConfig patchClashConfig});
+
+  $AppSettingPropsCopyWith<$Res> get appSetting;
+  $AccessControlCopyWith<$Res> get accessControl;
+  $DAVCopyWith<$Res>? get dav;
+  $NetworkPropsCopyWith<$Res> get networkProps;
+  $VpnPropsCopyWith<$Res> get vpnProps;
+  $ThemePropsCopyWith<$Res> get themeProps;
+  $ProxiesStyleCopyWith<$Res> get proxiesStyle;
+  $WindowPropsCopyWith<$Res> get windowProps;
+  $ClashConfigCopyWith<$Res> get patchClashConfig;
+}
+
+/// @nodoc
+class _$ConfigCopyWithImpl<$Res, $Val extends Config>
+    implements $ConfigCopyWith<$Res> {
+  _$ConfigCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? appSetting = null,
+    Object? profiles = null,
+    Object? hotKeyActions = null,
+    Object? currentProfileId = freezed,
+    Object? overrideDns = null,
+    Object? isAccessControl = null,
+    Object? accessControl = null,
+    Object? dav = freezed,
+    Object? networkProps = null,
+    Object? vpnProps = null,
+    Object? themeProps = null,
+    Object? proxiesStyle = null,
+    Object? windowProps = null,
+    Object? patchClashConfig = null,
+  }) {
+    return _then(_value.copyWith(
+      appSetting: null == appSetting
+          ? _value.appSetting
+          : appSetting // ignore: cast_nullable_to_non_nullable
+              as AppSettingProps,
+      profiles: null == profiles
+          ? _value.profiles
+          : profiles // ignore: cast_nullable_to_non_nullable
+              as List<Profile>,
+      hotKeyActions: null == hotKeyActions
+          ? _value.hotKeyActions
+          : hotKeyActions // ignore: cast_nullable_to_non_nullable
+              as List<HotKeyAction>,
+      currentProfileId: freezed == currentProfileId
+          ? _value.currentProfileId
+          : currentProfileId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      overrideDns: null == overrideDns
+          ? _value.overrideDns
+          : overrideDns // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isAccessControl: null == isAccessControl
+          ? _value.isAccessControl
+          : isAccessControl // ignore: cast_nullable_to_non_nullable
+              as bool,
+      accessControl: null == accessControl
+          ? _value.accessControl
+          : accessControl // ignore: cast_nullable_to_non_nullable
+              as AccessControl,
+      dav: freezed == dav
+          ? _value.dav
+          : dav // ignore: cast_nullable_to_non_nullable
+              as DAV?,
+      networkProps: null == networkProps
+          ? _value.networkProps
+          : networkProps // ignore: cast_nullable_to_non_nullable
+              as NetworkProps,
+      vpnProps: null == vpnProps
+          ? _value.vpnProps
+          : vpnProps // ignore: cast_nullable_to_non_nullable
+              as VpnProps,
+      themeProps: null == themeProps
+          ? _value.themeProps
+          : themeProps // ignore: cast_nullable_to_non_nullable
+              as ThemeProps,
+      proxiesStyle: null == proxiesStyle
+          ? _value.proxiesStyle
+          : proxiesStyle // ignore: cast_nullable_to_non_nullable
+              as ProxiesStyle,
+      windowProps: null == windowProps
+          ? _value.windowProps
+          : windowProps // ignore: cast_nullable_to_non_nullable
+              as WindowProps,
+      patchClashConfig: null == patchClashConfig
+          ? _value.patchClashConfig
+          : patchClashConfig // ignore: cast_nullable_to_non_nullable
+              as ClashConfig,
+    ) as $Val);
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AppSettingPropsCopyWith<$Res> get appSetting {
+    return $AppSettingPropsCopyWith<$Res>(_value.appSetting, (value) {
+      return _then(_value.copyWith(appSetting: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AccessControlCopyWith<$Res> get accessControl {
+    return $AccessControlCopyWith<$Res>(_value.accessControl, (value) {
+      return _then(_value.copyWith(accessControl: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $DAVCopyWith<$Res>? get dav {
+    if (_value.dav == null) {
+      return null;
+    }
+
+    return $DAVCopyWith<$Res>(_value.dav!, (value) {
+      return _then(_value.copyWith(dav: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $NetworkPropsCopyWith<$Res> get networkProps {
+    return $NetworkPropsCopyWith<$Res>(_value.networkProps, (value) {
+      return _then(_value.copyWith(networkProps: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VpnPropsCopyWith<$Res> get vpnProps {
+    return $VpnPropsCopyWith<$Res>(_value.vpnProps, (value) {
+      return _then(_value.copyWith(vpnProps: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ThemePropsCopyWith<$Res> get themeProps {
+    return $ThemePropsCopyWith<$Res>(_value.themeProps, (value) {
+      return _then(_value.copyWith(themeProps: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ProxiesStyleCopyWith<$Res> get proxiesStyle {
+    return $ProxiesStyleCopyWith<$Res>(_value.proxiesStyle, (value) {
+      return _then(_value.copyWith(proxiesStyle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WindowPropsCopyWith<$Res> get windowProps {
+    return $WindowPropsCopyWith<$Res>(_value.windowProps, (value) {
+      return _then(_value.copyWith(windowProps: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ClashConfigCopyWith<$Res> get patchClashConfig {
+    return $ClashConfigCopyWith<$Res>(_value.patchClashConfig, (value) {
+      return _then(_value.copyWith(patchClashConfig: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$ConfigImplCopyWith<$Res> implements $ConfigCopyWith<$Res> {
+  factory _$$ConfigImplCopyWith(
+          _$ConfigImpl value, $Res Function(_$ConfigImpl) then) =
+      __$$ConfigImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(fromJson: AppSettingProps.safeFromJson)
+      AppSettingProps appSetting,
+      List<Profile> profiles,
+      List<HotKeyAction> hotKeyActions,
+      String? currentProfileId,
+      bool overrideDns,
+      bool isAccessControl,
+      AccessControl accessControl,
+      DAV? dav,
+      NetworkProps networkProps,
+      VpnProps vpnProps,
+      @JsonKey(fromJson: ThemeProps.safeFromJson) ThemeProps themeProps,
+      ProxiesStyle proxiesStyle,
+      WindowProps windowProps,
+      ClashConfig patchClashConfig});
+
+  @override
+  $AppSettingPropsCopyWith<$Res> get appSetting;
+  @override
+  $AccessControlCopyWith<$Res> get accessControl;
+  @override
+  $DAVCopyWith<$Res>? get dav;
+  @override
+  $NetworkPropsCopyWith<$Res> get networkProps;
+  @override
+  $VpnPropsCopyWith<$Res> get vpnProps;
+  @override
+  $ThemePropsCopyWith<$Res> get themeProps;
+  @override
+  $ProxiesStyleCopyWith<$Res> get proxiesStyle;
+  @override
+  $WindowPropsCopyWith<$Res> get windowProps;
+  @override
+  $ClashConfigCopyWith<$Res> get patchClashConfig;
+}
+
+/// @nodoc
+class __$$ConfigImplCopyWithImpl<$Res>
+    extends _$ConfigCopyWithImpl<$Res, _$ConfigImpl>
+    implements _$$ConfigImplCopyWith<$Res> {
+  __$$ConfigImplCopyWithImpl(
+      _$ConfigImpl _value, $Res Function(_$ConfigImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? appSetting = null,
+    Object? profiles = null,
+    Object? hotKeyActions = null,
+    Object? currentProfileId = freezed,
+    Object? overrideDns = null,
+    Object? isAccessControl = null,
+    Object? accessControl = null,
+    Object? dav = freezed,
+    Object? networkProps = null,
+    Object? vpnProps = null,
+    Object? themeProps = null,
+    Object? proxiesStyle = null,
+    Object? windowProps = null,
+    Object? patchClashConfig = null,
+  }) {
+    return _then(_$ConfigImpl(
+      appSetting: null == appSetting
+          ? _value.appSetting
+          : appSetting // ignore: cast_nullable_to_non_nullable
+              as AppSettingProps,
+      profiles: null == profiles
+          ? _value._profiles
+          : profiles // ignore: cast_nullable_to_non_nullable
+              as List<Profile>,
+      hotKeyActions: null == hotKeyActions
+          ? _value._hotKeyActions
+          : hotKeyActions // ignore: cast_nullable_to_non_nullable
+              as List<HotKeyAction>,
+      currentProfileId: freezed == currentProfileId
+          ? _value.currentProfileId
+          : currentProfileId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      overrideDns: null == overrideDns
+          ? _value.overrideDns
+          : overrideDns // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isAccessControl: null == isAccessControl
+          ? _value.isAccessControl
+          : isAccessControl // ignore: cast_nullable_to_non_nullable
+              as bool,
+      accessControl: null == accessControl
+          ? _value.accessControl
+          : accessControl // ignore: cast_nullable_to_non_nullable
+              as AccessControl,
+      dav: freezed == dav
+          ? _value.dav
+          : dav // ignore: cast_nullable_to_non_nullable
+              as DAV?,
+      networkProps: null == networkProps
+          ? _value.networkProps
+          : networkProps // ignore: cast_nullable_to_non_nullable
+              as NetworkProps,
+      vpnProps: null == vpnProps
+          ? _value.vpnProps
+          : vpnProps // ignore: cast_nullable_to_non_nullable
+              as VpnProps,
+      themeProps: null == themeProps
+          ? _value.themeProps
+          : themeProps // ignore: cast_nullable_to_non_nullable
+              as ThemeProps,
+      proxiesStyle: null == proxiesStyle
+          ? _value.proxiesStyle
+          : proxiesStyle // ignore: cast_nullable_to_non_nullable
+              as ProxiesStyle,
+      windowProps: null == windowProps
+          ? _value.windowProps
+          : windowProps // ignore: cast_nullable_to_non_nullable
+              as WindowProps,
+      patchClashConfig: null == patchClashConfig
+          ? _value.patchClashConfig
+          : patchClashConfig // ignore: cast_nullable_to_non_nullable
+              as ClashConfig,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ConfigImpl implements _Config {
+  const _$ConfigImpl(
+      {@JsonKey(fromJson: AppSettingProps.safeFromJson)
+      this.appSetting = defaultAppSettingProps,
+      final List<Profile> profiles = const [],
+      final List<HotKeyAction> hotKeyActions = const [],
+      this.currentProfileId,
+      this.overrideDns = false,
+      this.isAccessControl = false,
+      this.accessControl = defaultAccessControl,
+      this.dav,
+      this.networkProps = defaultNetworkProps,
+      this.vpnProps = defaultVpnProps,
+      @JsonKey(fromJson: ThemeProps.safeFromJson)
+      this.themeProps = const ThemeProps(),
+      this.proxiesStyle = const ProxiesStyle(),
+      this.windowProps = defaultWindowProps,
+      this.patchClashConfig = defaultClashConfig})
+      : _profiles = profiles,
+        _hotKeyActions = hotKeyActions;
+
+  factory _$ConfigImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ConfigImplFromJson(json);
+
+  @override
+  @JsonKey(fromJson: AppSettingProps.safeFromJson)
+  final AppSettingProps appSetting;
+  final List<Profile> _profiles;
+  @override
+  @JsonKey()
+  List<Profile> get profiles {
+    if (_profiles is EqualUnmodifiableListView) return _profiles;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_profiles);
+  }
+
+  final List<HotKeyAction> _hotKeyActions;
+  @override
+  @JsonKey()
+  List<HotKeyAction> get hotKeyActions {
+    if (_hotKeyActions is EqualUnmodifiableListView) return _hotKeyActions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_hotKeyActions);
+  }
+
+  @override
+  final String? currentProfileId;
+  @override
+  @JsonKey()
+  final bool overrideDns;
+  @override
+  @JsonKey()
+  final bool isAccessControl;
+  @override
+  @JsonKey()
+  final AccessControl accessControl;
+  @override
+  final DAV? dav;
+  @override
+  @JsonKey()
+  final NetworkProps networkProps;
+  @override
+  @JsonKey()
+  final VpnProps vpnProps;
+  @override
+  @JsonKey(fromJson: ThemeProps.safeFromJson)
+  final ThemeProps themeProps;
+  @override
+  @JsonKey()
+  final ProxiesStyle proxiesStyle;
+  @override
+  @JsonKey()
+  final WindowProps windowProps;
+  @override
+  @JsonKey()
+  final ClashConfig patchClashConfig;
+
+  @override
+  String toString() {
+    return 'Config(appSetting: $appSetting, profiles: $profiles, hotKeyActions: $hotKeyActions, currentProfileId: $currentProfileId, overrideDns: $overrideDns, isAccessControl: $isAccessControl, accessControl: $accessControl, dav: $dav, networkProps: $networkProps, vpnProps: $vpnProps, themeProps: $themeProps, proxiesStyle: $proxiesStyle, windowProps: $windowProps, patchClashConfig: $patchClashConfig)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ConfigImpl &&
+            (identical(other.appSetting, appSetting) ||
+                other.appSetting == appSetting) &&
+            const DeepCollectionEquality().equals(other._profiles, _profiles) &&
+            const DeepCollectionEquality()
+                .equals(other._hotKeyActions, _hotKeyActions) &&
+            (identical(other.currentProfileId, currentProfileId) ||
+                other.currentProfileId == currentProfileId) &&
+            (identical(other.overrideDns, overrideDns) ||
+                other.overrideDns == overrideDns) &&
+            (identical(other.isAccessControl, isAccessControl) ||
+                other.isAccessControl == isAccessControl) &&
+            (identical(other.accessControl, accessControl) ||
+                other.accessControl == accessControl) &&
+            (identical(other.dav, dav) || other.dav == dav) &&
+            (identical(other.networkProps, networkProps) ||
+                other.networkProps == networkProps) &&
+            (identical(other.vpnProps, vpnProps) ||
+                other.vpnProps == vpnProps) &&
+            (identical(other.themeProps, themeProps) ||
+                other.themeProps == themeProps) &&
+            (identical(other.proxiesStyle, proxiesStyle) ||
+                other.proxiesStyle == proxiesStyle) &&
+            (identical(other.windowProps, windowProps) ||
+                other.windowProps == windowProps) &&
+            (identical(other.patchClashConfig, patchClashConfig) ||
+                other.patchClashConfig == patchClashConfig));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      appSetting,
+      const DeepCollectionEquality().hash(_profiles),
+      const DeepCollectionEquality().hash(_hotKeyActions),
+      currentProfileId,
+      overrideDns,
+      isAccessControl,
+      accessControl,
+      dav,
+      networkProps,
+      vpnProps,
+      themeProps,
+      proxiesStyle,
+      windowProps,
+      patchClashConfig);
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ConfigImplCopyWith<_$ConfigImpl> get copyWith =>
+      __$$ConfigImplCopyWithImpl<_$ConfigImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ConfigImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Config implements Config {
+  const factory _Config(
+      {@JsonKey(fromJson: AppSettingProps.safeFromJson)
+      final AppSettingProps appSetting,
+      final List<Profile> profiles,
+      final List<HotKeyAction> hotKeyActions,
+      final String? currentProfileId,
+      final bool overrideDns,
+      final bool isAccessControl,
+      final AccessControl accessControl,
+      final DAV? dav,
+      final NetworkProps networkProps,
+      final VpnProps vpnProps,
+      @JsonKey(fromJson: ThemeProps.safeFromJson) final ThemeProps themeProps,
+      final ProxiesStyle proxiesStyle,
+      final WindowProps windowProps,
+      final ClashConfig patchClashConfig}) = _$ConfigImpl;
+
+  factory _Config.fromJson(Map<String, dynamic> json) = _$ConfigImpl.fromJson;
+
+  @override
+  @JsonKey(fromJson: AppSettingProps.safeFromJson)
+  AppSettingProps get appSetting;
+  @override
+  List<Profile> get profiles;
+  @override
+  List<HotKeyAction> get hotKeyActions;
+  @override
+  String? get currentProfileId;
+  @override
+  bool get overrideDns;
+  @override
+  bool get isAccessControl;
+  @override
+  AccessControl get accessControl;
+  @override
+  DAV? get dav;
+  @override
+  NetworkProps get networkProps;
+  @override
+  VpnProps get vpnProps;
+  @override
+  @JsonKey(fromJson: ThemeProps.safeFromJson)
+  ThemeProps get themeProps;
+  @override
+  ProxiesStyle get proxiesStyle;
+  @override
+  WindowProps get windowProps;
+  @override
+  ClashConfig get patchClashConfig;
+
+  /// Create a copy of Config
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ConfigImplCopyWith<_$ConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

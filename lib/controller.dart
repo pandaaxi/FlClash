@@ -8,26 +8,27 @@ import 'package:archive/archive.dart';
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/archive.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/providers/app.dart';
+import 'package:fl_clash/providers/clash_config.dart';
+import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
-import 'package:provider/provider.dart';
+import 'package:re_highlight/styles/base16/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common/common.dart';
 import 'models/models.dart';
 
 class AppController {
-  final BuildContext context;
-  late AppState appState;
-  late AppFlowingState appFlowingState;
-  late Config config;
+  bool lastTunEnable = false;
+  int? lastProfileModified;
 
-  AppController(this.context) {
-    appState = context.read<AppState>();
-    config = context.read<Config>();
-    appFlowingState = context.read<AppFlowingState>();
-  }
+  final BuildContext context;
+  final WidgetRef ref;
+
+  AppController(this.context, this.ref);
 
   updateClashConfigDebounce() {
     debouncer.call(DebounceTag.updateClashConfig, updateClashConfig);
@@ -39,7 +40,7 @@ class AppController {
 
   addCheckIpNumDebounce() {
     debouncer.call(DebounceTag.addCheckIpNum, () {
-      appState.checkIpNum++;
+      ref.read(checkIpNumProvider.notifier).add();
     });
   }
 
@@ -65,10 +66,12 @@ class AppController {
   }
 
   restartCore() async {
-    await globalState.restartCore(
-      appState: appState,
-      config: config,
-    );
+    await clashService?.reStart();
+    await initCore();
+
+    if (ref.read(runTimeProvider.notifier).isStart) {
+      await globalState.handleStart();
+    }
   }
 
   updateStatus(bool isStart) async {
@@ -165,41 +168,80 @@ class AppController {
     }
   }
 
-  Future<void> updateClashConfig({bool isPatch = true}) async {
+  Future<void> updateClashConfig([bool? isPatch]) async {
     final commonScaffoldState = globalState.homeScaffoldKey.currentState;
     if (commonScaffoldState?.mounted != true) return;
     await commonScaffoldState?.loadingRun(() async {
-      await globalState.updateClashConfig(
-        appState: appState,
-        config: config,
-        isPatch: isPatch,
+      await _updateClashConfig(
+        isPatch,
       );
     });
   }
 
-  Future applyProfile({bool isPrue = false}) async {
-    if (isPrue) {
-      await globalState.applyProfile(
-        appState: appState,
-        config: config,
-      );
+  Future<void> _updateClashConfig([bool? isPatch]) async {
+    final profile = ref.watch(currentProfileProvider);
+    await ref.read(currentProfileProvider)?.checkAndUpdate();
+    final patchConfig = ref.read(patchClashConfigProvider);
+    final appSetting = ref.read(appSettingProvider);
+    bool enableTun = patchConfig.tun.enable;
+    if (enableTun != lastTunEnable &&
+        lastTunEnable == false &&
+        !Platform.isAndroid) {
+      final code = await system.authorizeCore();
+      switch (code) {
+        case AuthorizeCode.none:
+          break;
+        case AuthorizeCode.success:
+          lastTunEnable = enableTun;
+          await restartCore();
+          return;
+        case AuthorizeCode.error:
+          enableTun = false;
+      }
+    }
+    if (appSetting.openLogs) {
+      clashCore.startLog();
+    } else {
+      clashCore.stopLog();
+    }
+    final res = await clashCore.updateConfig(
+      getUpdateConfigParams(isPatch),
+    );
+    if (res.isNotEmpty) throw res;
+    lastTunEnable = enableTun;
+    lastProfileModified = await profile?.profileLastModified;
+  }
+
+  UpdateConfigParams getUpdateConfigParams([bool? isPatch]) {
+    return globalState.getUpdateConfigParams(
+      clashConfig: ref.read(patchClashConfigProvider),
+      selectedMap: ref.read(selectedDataSourceProvider),
+      overrideDns: ref.read(overrideDnsProvider),
+      testUrl: ref.read(appSettingProvider).testUrl,
+      isPatch: isPatch,
+    );
+  }
+
+  Future _applyProfile() async {
+    await clashCore.requestGc();
+    await updateClashConfig();
+    await updateGroups(appState);
+    await updateProviders(appState);
+  }
+
+  Future applyProfile({bool silence = false}) async {
+    if (silence) {
+      await _applyProfile();
     } else {
       final commonScaffoldState = globalState.homeScaffoldKey.currentState;
       if (commonScaffoldState?.mounted != true) return;
       await commonScaffoldState?.loadingRun(() async {
-        await globalState.applyProfile(
-          appState: appState,
-          config: config,
-        );
+        await _applyProfile();
       });
     }
     addCheckIpNumDebounce();
   }
 
-  changeProfile(String? value) async {
-    if (value == config.currentProfileId) return;
-    config.currentProfileId = value;
-  }
 
   autoUpdateProfiles() async {
     for (final profile in config.profiles) {
@@ -235,16 +277,18 @@ class AppController {
   }
 
   Future<void> updateGroups() async {
-    await globalState.updateGroups(appState);
+    ref.read(groupsProvider.notifier).setState(
+          await clashCore.getProxiesGroups(),
+        );
   }
 
-  updateSystemColorSchemes(ColorSchemes systemColorSchemes) {
-    appState.systemColorSchemes = systemColorSchemes;
+  updateSystemColorSchemes(ColorSchemes colorSchemes) {
+    ref.read(appSchemesProvider.notifier).setState(colorSchemes);
   }
 
   savePreferences() async {
-    commonPrint.log("savePreferences");
-    await preferences.saveConfig(config);
+    // commonPrint.log("savePreferences");
+    // await preferences.saveConfig(config);
     // await preferences.saveClashConfig(clashConfig);
   }
 
@@ -252,16 +296,20 @@ class AppController {
     required String groupName,
     required String proxyName,
   }) async {
-    await globalState.changeProxy(
-      config: config,
-      groupName: groupName,
-      proxyName: proxyName,
+    await clashCore.changeProxy(
+      ChangeProxyParams(
+        groupName: groupName,
+        proxyName: proxyName,
+      ),
     );
+    if (ref.read(appSettingProvider).closeConnections) {
+      clashCore.closeConnections();
+    }
     addCheckIpNumDebounce();
   }
 
   handleBackOrExit() async {
-    if (config.appSetting.minimizeOnExit) {
+    if (ref.read(appSettingProvider).minimizeOnExit) {
       if (system.isDesktop) {
         await savePreferencesDebounce();
       }
@@ -284,7 +332,7 @@ class AppController {
   }
 
   autoCheckUpdate() async {
-    if (!config.appSetting.autoCheckUpdate) return;
+    if (!ref.read(appSettingProvider).autoCheckUpdate) return;
     final res = await request.checkForUpdate();
     checkUpdateResultHandle(data: res);
   }
@@ -349,6 +397,22 @@ class AppController {
       }
     }
     await handleExit();
+  }
+
+  Future<void> initCore() async {
+    final isInit = await clashCore.isInit;
+    if (!isInit) {
+      await clashCore.setState(
+        globalState.getCoreState(
+          ref.read(currentProfileProvider),
+        ),
+      );
+      await clashCore.init();
+    }
+    await applyProfile(
+      appState: appState,
+      config: config,
+    );
   }
 
   init() async {
@@ -666,7 +730,8 @@ class AppController {
   }
 
   updateMode() {
-    final index = Mode.values.indexWhere((item) => item == config.patchClashConfig.mode);
+    final index =
+        Mode.values.indexWhere((item) => item == config.patchClashConfig.mode);
     if (index == -1) {
       return;
     }

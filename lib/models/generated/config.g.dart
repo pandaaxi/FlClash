@@ -6,56 +6,9 @@ part of '../config.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Config _$ConfigFromJson(Map<String, dynamic> json) => Config()
-  ..appSetting =
-      AppSetting.safeFromJson(json['appSetting'] as Map<String, Object?>?)
-  ..profiles = (json['profiles'] as List<dynamic>?)
-          ?.map((e) => Profile.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      []
-  ..currentProfileId = json['currentProfileId'] as String?
-  ..isAccessControl = json['isAccessControl'] as bool? ?? false
-  ..accessControl =
-      AccessControl.fromJson(json['accessControl'] as Map<String, dynamic>)
-  ..dav = json['dav'] == null
-      ? null
-      : DAV.fromJson(json['dav'] as Map<String, dynamic>)
-  ..windowProps =
-      WindowProps.fromJson(json['windowProps'] as Map<String, dynamic>?)
-  ..vpnProps = VpnProps.fromJson(json['vpnProps'] as Map<String, dynamic>?)
-  ..networkProps =
-      NetworkProps.fromJson(json['networkProps'] as Map<String, dynamic>?)
-  ..overrideDns = json['overrideDns'] as bool? ?? false
-  ..hotKeyActions = (json['hotKeyActions'] as List<dynamic>?)
-          ?.map((e) => HotKeyAction.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-      []
-  ..proxiesStyle =
-      ProxiesStyle.fromJson(json['proxiesStyle'] as Map<String, dynamic>?)
-  ..patchClashConfig = ClashConfig.safeFormJson(
-      json['patchClashConfig'] as Map<String, Object?>?)
-  ..themeProps =
-      ThemeProps.safeFromJson(json['themeProps'] as Map<String, Object?>?);
-
-Map<String, dynamic> _$ConfigToJson(Config instance) => <String, dynamic>{
-      'appSetting': instance.appSetting,
-      'profiles': instance.profiles,
-      'currentProfileId': instance.currentProfileId,
-      'isAccessControl': instance.isAccessControl,
-      'accessControl': instance.accessControl,
-      'dav': instance.dav,
-      'windowProps': instance.windowProps,
-      'vpnProps': instance.vpnProps,
-      'networkProps': instance.networkProps,
-      'overrideDns': instance.overrideDns,
-      'hotKeyActions': instance.hotKeyActions,
-      'proxiesStyle': instance.proxiesStyle,
-      'patchClashConfig': instance.patchClashConfig,
-      'themeProps': instance.themeProps,
-    };
-
-_$AppSettingImpl _$$AppSettingImplFromJson(Map<String, dynamic> json) =>
-    _$AppSettingImpl(
+_$AppSettingPropsImpl _$$AppSettingPropsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppSettingPropsImpl(
       locale: json['locale'] as String?,
       dashboardWidgets: json['dashboardWidgets'] == null
           ? defaultDashboardWidgets
@@ -75,7 +28,8 @@ _$AppSettingImpl _$$AppSettingImplFromJson(Map<String, dynamic> json) =>
       hidden: json['hidden'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$$AppSettingImplToJson(_$AppSettingImpl instance) =>
+Map<String, dynamic> _$$AppSettingPropsImplToJson(
+        _$AppSettingPropsImpl instance) =>
     <String, dynamic>{
       'locale': instance.locale,
       'dashboardWidgets': instance.dashboardWidgets
@@ -289,3 +243,68 @@ const _$FontFamilyEnumMap = {
   FontFamily.twEmoji: 'twEmoji',
   FontFamily.icon: 'icon',
 };
+
+_$ConfigImpl _$$ConfigImplFromJson(Map<String, dynamic> json) => _$ConfigImpl(
+      appSetting: json['appSetting'] == null
+          ? defaultAppSettingProps
+          : AppSettingProps.safeFromJson(
+              json['appSetting'] as Map<String, Object?>?),
+      profiles: (json['profiles'] as List<dynamic>?)
+              ?.map((e) => Profile.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      hotKeyActions: (json['hotKeyActions'] as List<dynamic>?)
+              ?.map((e) => HotKeyAction.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      currentProfileId: json['currentProfileId'] as String?,
+      overrideDns: json['overrideDns'] as bool? ?? false,
+      isAccessControl: json['isAccessControl'] as bool? ?? false,
+      accessControl: json['accessControl'] == null
+          ? defaultAccessControl
+          : AccessControl.fromJson(
+              json['accessControl'] as Map<String, dynamic>),
+      dav: json['dav'] == null
+          ? null
+          : DAV.fromJson(json['dav'] as Map<String, dynamic>),
+      networkProps: json['networkProps'] == null
+          ? defaultNetworkProps
+          : NetworkProps.fromJson(
+              json['networkProps'] as Map<String, dynamic>?),
+      vpnProps: json['vpnProps'] == null
+          ? defaultVpnProps
+          : VpnProps.fromJson(json['vpnProps'] as Map<String, dynamic>?),
+      themeProps: json['themeProps'] == null
+          ? const ThemeProps()
+          : ThemeProps.safeFromJson(
+              json['themeProps'] as Map<String, Object?>?),
+      proxiesStyle: json['proxiesStyle'] == null
+          ? const ProxiesStyle()
+          : ProxiesStyle.fromJson(
+              json['proxiesStyle'] as Map<String, dynamic>?),
+      windowProps: json['windowProps'] == null
+          ? defaultWindowProps
+          : WindowProps.fromJson(json['windowProps'] as Map<String, dynamic>?),
+      patchClashConfig: json['patchClashConfig'] == null
+          ? defaultClashConfig
+          : ClashConfig.fromJson(
+              json['patchClashConfig'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$ConfigImplToJson(_$ConfigImpl instance) =>
+    <String, dynamic>{
+      'appSetting': instance.appSetting,
+      'profiles': instance.profiles,
+      'hotKeyActions': instance.hotKeyActions,
+      'currentProfileId': instance.currentProfileId,
+      'overrideDns': instance.overrideDns,
+      'isAccessControl': instance.isAccessControl,
+      'accessControl': instance.accessControl,
+      'dav': instance.dav,
+      'networkProps': instance.networkProps,
+      'vpnProps': instance.vpnProps,
+      'themeProps': instance.themeProps,
+      'proxiesStyle': instance.proxiesStyle,
+      'windowProps': instance.windowProps,
+      'patchClashConfig': instance.patchClashConfig,
+    };

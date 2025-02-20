@@ -5,8 +5,10 @@ import 'package:animations/animations.dart';
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/plugins/service.dart';
+import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,9 +19,11 @@ import 'models/models.dart';
 typedef UpdateTasks = List<FutureOr Function()>;
 
 class GlobalState {
+  static GlobalState? _instance;
   bool isService = false;
   Timer? timer;
   Timer? groupsUpdateTimer;
+  late Config config;
   late PackageInfo packageInfo;
   Function? updateCurrentDelayDebounce;
   PageController? pageController;
@@ -30,10 +34,21 @@ class GlobalState {
   final navigatorKey = GlobalKey<NavigatorState>();
   late AppController appController;
   GlobalKey<CommonScaffoldState> homeScaffoldKey = GlobalKey();
-  bool lastTunEnable = false;
-  int? lastProfileModified;
 
   bool get isStart => startTime != null && startTime!.isBeforeNow;
+
+  GlobalState._internal();
+
+  factory GlobalState() {
+    _instance ??= GlobalState._internal();
+    return _instance!;
+  }
+
+  init() async {
+    packageInfo = await PackageInfo.fromPlatform();
+    config = await preferences.getConfig() ?? Config();
+    await globalState.migrateOldData(config);
+  }
 
   startUpdateTasks([UpdateTasks? tasks]) async {
     if (timer != null && timer!.isActive == true) return;
@@ -63,7 +78,7 @@ class GlobalState {
     required AppState appState,
     required Config config,
   }) async {
-    await globalState.init(
+    await globalState.initClash(
       appState: appState,
       config: config,
     );
@@ -73,44 +88,6 @@ class GlobalState {
     );
   }
 
-  Future<void> updateClashConfig({
-    required AppState appState,
-    required Config config,
-    bool isPatch = true,
-  }) async {
-    await config.currentProfile?.checkAndUpdate();
-    bool enableTun = config.patchClashConfig.tun.enable;
-    if (enableTun != lastTunEnable &&
-        lastTunEnable == false &&
-        !Platform.isAndroid) {
-      final code = await system.authorizeCore();
-      switch (code) {
-        case AuthorizeCode.none:
-          break;
-        case AuthorizeCode.success:
-          lastTunEnable = enableTun;
-          await restartCore(
-            appState: appState,
-            config: config,
-          );
-          return;
-        case AuthorizeCode.error:
-          enableTun = false;
-      }
-    }
-    if (config.appSetting.openLogs) {
-      clashCore.startLog();
-    } else {
-      clashCore.stopLog();
-    }
-    final res = await clashCore.updateConfig(getUpdateConfigParams(
-      config,
-      isPatch,
-    ));
-    if (res.isNotEmpty) throw res;
-    lastTunEnable = enableTun;
-    lastProfileModified = await config.getCurrentProfile()?.profileLastModified;
-  }
 
   handleStart([UpdateTasks? tasks]) async {
     startTime ??= DateTime.now();
@@ -147,66 +124,44 @@ class GlobalState {
     stopUpdateTasks();
   }
 
-  Future applyProfile({
-    required AppState appState,
-    required Config config,
-  }) async {
-    await clashCore.requestGc();
-    await updateClashConfig(
-      appState: appState,
-      config: config,
-      isPatch: false,
-    );
-    await updateGroups(appState);
-    await updateProviders(appState);
-  }
-
   updateProviders(AppState appState) async {
     appState.providers = await clashCore.getExternalProviders();
   }
 
-  CoreState getCoreState(Config config) {
+  CoreState getCoreState(Profile? profile) {
     return CoreState(
       vpnProps: config.vpnProps,
       onlyStatisticsProxy: config.appSetting.onlyStatisticsProxy,
-      currentProfileName:
-          config.currentProfile?.label ?? config.currentProfile?.id ?? "",
+      currentProfileName: profile?.label ?? profile?.id ?? "",
       bypassDomain: config.networkProps.bypassDomain,
     );
   }
 
-  getUpdateConfigParams(Config config, bool isPatch) {
-    final patchClashConfig = config.patchClashConfig;
+  getUpdateConfigParams({
+    required ClashConfig clashConfig,
+    String? currentProfileId,
+    bool? isPatch,
+    required SelectedMap selectedMap,
+    required bool overrideDns,
+    required String testUrl,
+  }) {
     return UpdateConfigParams(
-      profileId: config.currentProfileId ?? "",
-      config: patchClashConfig.copyWith(
-        globalUa: patchClashConfig.globalUa ?? packageInfo.ua,
-        tun: patchClashConfig.tun.copyWith(
+      profileId: currentProfileId ?? "",
+      config: clashConfig.copyWith(
+        globalUa: clashConfig.globalUa ?? packageInfo.ua,
+        tun: clashConfig.tun.copyWith(
           routeAddress: config.networkProps.routeMode == RouteMode.bypassPrivate
               ? defaultBypassPrivateRouteAddress
-              : patchClashConfig.tun.routeAddress,
+              : clashConfig.tun.routeAddress,
         ),
       ),
       params: ConfigExtendedParams(
-        isPatch: isPatch,
-        selectedMap: config.currentSelectedMap,
-        overrideDns: config.overrideDns,
-        testUrl: config.appSetting.testUrl,
+        isPatch: isPatch ?? false,
+        selectedMap: selectedMap,
+        overrideDns: overrideDns,
+        testUrl: testUrl,
       ),
     );
-  }
-
-  Future<void> init({
-    required AppState appState,
-    required Config config,
-  }) async {
-    final isInit = await clashCore.isInit;
-    if (!isInit) {
-      await clashCore.setState(
-        getCoreState(config),
-      );
-      await clashCore.init();
-    }
   }
 
   Future<void> updateGroups(AppState appState) async {
@@ -256,22 +211,6 @@ class GlobalState {
         },
       ),
     );
-  }
-
-  changeProxy({
-    required Config config,
-    required String groupName,
-    required String proxyName,
-  }) async {
-    await clashCore.changeProxy(
-      ChangeProxyParams(
-        groupName: groupName,
-        proxyName: proxyName,
-      ),
-    );
-    if (config.appSetting.closeConnections) {
-      clashCore.closeConnections();
-    }
   }
 
   Future<T?> showCommonDialog<T>({
@@ -346,7 +285,9 @@ class GlobalState {
   Future<void> migrateOldData(Config config) async {
     final clashConfig = await preferences.getClashConfig();
     if (clashConfig != null) {
-      config.patchClashConfig = clashConfig;
+      config = config.copyWith(
+        patchClashConfig: clashConfig,
+      );
       preferences.clearClashConfig();
       preferences.saveConfig(config);
     }

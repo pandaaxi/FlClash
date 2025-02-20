@@ -7,7 +7,6 @@ import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/manager/hotkey_manager.dart';
 import 'package:fl_clash/manager/manager.dart';
 import 'package:fl_clash/plugins/app.dart';
-import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
@@ -18,33 +17,6 @@ import 'package:provider/provider.dart';
 import 'controller.dart';
 import 'models/models.dart';
 import 'pages/pages.dart';
-
-runAppWithPreferences(
-  Widget child, {
-  required AppState appState,
-  required Config config,
-  required AppFlowingState appFlowingState,
-}) {
-  runApp(MultiProvider(
-    providers: [
-      // ChangeNotifierProvider<Config>(
-      //   create: (_) => config,
-      // ),
-      // ChangeNotifierProvider<AppFlowingState>(
-      //   create: (_) => appFlowingState,
-      // ),
-      // ChangeNotifierProxyProvider<Config, AppState>(
-      //   create: (_) => appState,
-      //   update: (_, config, appState) {
-      //     appState?.mode = config.patchClashConfig.mode;
-      //     appState?.selectedMap = config.currentSelectedMap;
-      //     return appState!;
-      //   },
-      // )
-    ],
-    child: child,
-  ));
-}
 
 class Application extends ConsumerStatefulWidget {
   const Application({
@@ -89,7 +61,7 @@ class ApplicationState extends ConsumerState<Application> {
     super.initState();
     _autoUpdateGroupTask();
     _autoUpdateProfilesTask();
-    globalState.appController = AppController(context);
+    globalState.appController = AppController(context,ref);
     globalState.measure = Measure.of(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final currentContext = globalState.navigatorKey.currentContext;

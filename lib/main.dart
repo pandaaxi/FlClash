@@ -11,6 +11,7 @@ import 'package:fl_clash/plugins/tile.dart';
 import 'package:fl_clash/plugins/vpn.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'application.dart';
@@ -24,38 +25,29 @@ Future<void> main() async {
   globalState.isService = false;
   WidgetsFlutterBinding.ensureInitialized();
   await clashCore.preload();
-  globalState.packageInfo = await PackageInfo.fromPlatform();
   final version = await system.version;
-  final config = await preferences.getConfig() ?? Config();
-  await globalState.migrateOldData(config);
-  await AppLocalizations.load(
-    other.getLocaleForString(config.appSetting.locale) ??
-        WidgetsBinding.instance.platformDispatcher.locale,
-  );
+  await globalState.init();
   await android?.init();
-  await window?.init(config.windowProps, version);
-  final appState = AppState(
-    mode: config.patchClashConfig.mode,
-    version: version,
-    selectedMap: config.currentSelectedMap,
-  );
+  await window?.init(version);
+  // final appState = AppState(
+  //   mode: config.patchClashConfig.mode,
+  //   version: version,
+  //   selectedMap: config.currentSelectedMap,
+  // );
   final appFlowingState = AppFlowingState();
-  appState.navigationItems = navigation.getItems(
-    openLogs: config.appSetting.openLogs,
-    hasProxies: false,
-  );
-  tray.update(
-    appState: appState,
-    appFlowingState: appFlowingState,
-    config: config,
-  );
+  // appState.navigationItems = navigation.getItems(
+  //   openLogs: config.appSetting.openLogs,
+  //   hasProxies: false,
+  // );
+  // tray.update(
+  //   appState: appState,
+  //   appFlowingState: appFlowingState,
+  //   config: config,
+  // );
   HttpOverrides.global = FlClashHttpOverrides();
-  runAppWithPreferences(
-    const Application(),
-    appState: appState,
-    appFlowingState: appFlowingState,
-    config: config,
-  );
+  runApp(ProviderScope(
+    child: const Application(),
+  ));
 }
 
 @pragma('vm:entry-point')

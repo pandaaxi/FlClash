@@ -36,7 +36,7 @@ class Providers extends _$Providers {
     return [];
   }
 
-  update(List<ExternalProvider> value) {
+  setState(List<ExternalProvider> value) {
     state = value;
   }
 }
@@ -48,7 +48,7 @@ class Packages extends _$Packages {
     return [];
   }
 
-  update(List<Package> value) {
+  setState(List<Package> value) {
     state = value;
   }
 }
@@ -60,7 +60,7 @@ class AppBrightness extends _$AppBrightness {
     return null;
   }
 
-  update(Brightness? value) {
+  setState(Brightness? value) {
     state = value;
   }
 }
@@ -84,7 +84,7 @@ class TotalTraffic extends _$TotalTraffic {
     return Traffic();
   }
 
-  update(Traffic newTraffic) {
+  setState(Traffic newTraffic) {
     state = newTraffic;
   }
 }
@@ -96,7 +96,7 @@ class LocalIp extends _$LocalIp {
     return "";
   }
 
-  update(String? value) {
+  setState(String? value) {
     state = value;
   }
 }
@@ -108,8 +108,12 @@ class RunTime extends _$RunTime {
     return null;
   }
 
-  update(int? value) {
+  setState(int? value) {
     state = value;
+  }
+
+  bool get isStart {
+    return state != null;
   }
 }
 
@@ -120,7 +124,7 @@ class ViewWidth extends _$ViewWidth {
     return other.getScreenSize().width;
   }
 
-  update(double value) {
+  setState(double value) {
     state = value;
   }
 }
@@ -132,7 +136,7 @@ class Init extends _$Init {
     return false;
   }
 
-  update(bool value) {
+  setState(bool value) {
     state = value;
   }
 }
@@ -144,7 +148,7 @@ class PageLabel extends _$PageLabel {
     return "dashboard";
   }
 
-  update(String value) {
+  setState(String value) {
     state = value;
   }
 }
@@ -156,7 +160,7 @@ class AppSchemes extends _$AppSchemes {
     return null;
   }
 
-  update(ColorSchemes? value) {
+  setState(ColorSchemes? value) {
     state = value;
   }
 }
@@ -188,7 +192,7 @@ class Version extends _$Version {
     return 0;
   }
 
-  update(int value) {
+  setState(int value) {
     state = value;
   }
 }
@@ -200,7 +204,7 @@ class Groups extends _$Groups {
     return [];
   }
 
-  update(List<Group> value) {
+  setState(List<Group> value) {
     state = value;
   }
 }
@@ -212,7 +216,7 @@ class SelectedDataSource extends _$SelectedDataSource {
     return {};
   }
 
-  update(Map<String, String> value) {
+  setState(Map<String, String> value) {
     state = value;
   }
 }
@@ -224,7 +228,7 @@ class DelayDataSource extends _$DelayDataSource {
     return {};
   }
 
-  update(DelayMap value) {
+  setState(DelayMap value) {
     state = value;
   }
 }

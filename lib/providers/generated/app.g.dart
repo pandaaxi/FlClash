@@ -35,7 +35,7 @@ final requestsProvider =
 );
 
 typedef _$Requests = AutoDisposeNotifier<FixedList<Connection>>;
-String _$providersHash() => r'dfd39d193436896fbaa97e74d173828298695328';
+String _$providersHash() => r'928c2e3241b7dec02d8f57d26b592b5c88d1bc03';
 
 /// See also [Providers].
 @ProviderFor(Providers)
@@ -50,7 +50,7 @@ final providersProvider =
 );
 
 typedef _$Providers = AutoDisposeNotifier<List<ExternalProvider>>;
-String _$packagesHash() => r'60de4847bfdba57b679629d1063c0ddc9404f038';
+String _$packagesHash() => r'38dcd9526cec64fd51a9fbbdb042b5ce4074a4c1';
 
 /// See also [Packages].
 @ProviderFor(Packages)
@@ -65,7 +65,7 @@ final packagesProvider =
 );
 
 typedef _$Packages = AutoDisposeNotifier<List<Package>>;
-String _$appBrightnessHash() => r'1f2bec4a994b361a4a7f2dc62b3d861371175400';
+String _$appBrightnessHash() => r'527449f3d18686f4dbeb19e0ce42fbc7ae7629fc';
 
 /// See also [AppBrightness].
 @ProviderFor(AppBrightness)
@@ -96,7 +96,7 @@ final trafficsProvider =
 );
 
 typedef _$Traffics = AutoDisposeNotifier<FixedList<Traffic>>;
-String _$totalTrafficHash() => r'd9f383cf38432ac241daf86c3392658c5949ebe4';
+String _$totalTrafficHash() => r'641dfd9c8f0bb482a88b7205f01623501cdd2cf0';
 
 /// See also [TotalTraffic].
 @ProviderFor(TotalTraffic)
@@ -111,7 +111,7 @@ final totalTrafficProvider =
 );
 
 typedef _$TotalTraffic = AutoDisposeNotifier<Traffic>;
-String _$localIpHash() => r'ee734a4a9ae2f307e46b1a01a3972cfd78234353';
+String _$localIpHash() => r'1bc9d2453e0c878910aeadb788bbd9e79e944776';
 
 /// See also [LocalIp].
 @ProviderFor(LocalIp)
@@ -125,7 +125,7 @@ final localIpProvider = AutoDisposeNotifierProvider<LocalIp, String?>.internal(
 );
 
 typedef _$LocalIp = AutoDisposeNotifier<String?>;
-String _$runTimeHash() => r'9c9ef8050cf866e5cc2c8bdc90c080eaefb9d705';
+String _$runTimeHash() => r'aaf127a85a4d0d9296f8995a5f154f7bf30d38d2';
 
 /// See also [RunTime].
 @ProviderFor(RunTime)
@@ -139,7 +139,7 @@ final runTimeProvider = AutoDisposeNotifierProvider<RunTime, int?>.internal(
 );
 
 typedef _$RunTime = AutoDisposeNotifier<int?>;
-String _$viewWidthHash() => r'fa29353861e98783e3194acfc3e100dedd870521';
+String _$viewWidthHash() => r'433f5729940697efd69d1dd03e55a79e5756033f';
 
 /// See also [ViewWidth].
 @ProviderFor(ViewWidth)
@@ -154,7 +154,7 @@ final viewWidthProvider =
 );
 
 typedef _$ViewWidth = AutoDisposeNotifier<double>;
-String _$initHash() => r'69eafc5e52f7e9c39ce0d4455d9bed86d049bf9c';
+String _$initHash() => r'319b346d8afecb7b381628a252bc14f2f9d7451b';
 
 /// See also [Init].
 @ProviderFor(Init)
@@ -168,7 +168,7 @@ final initProvider = AutoDisposeNotifierProvider<Init, bool>.internal(
 );
 
 typedef _$Init = AutoDisposeNotifier<bool>;
-String _$pageLabelHash() => r'68a47dfde11d2745a98ecce57e9eb65ca5c16bc6';
+String _$pageLabelHash() => r'db8465be91f4de11568046daada64f44c1b6a804';
 
 /// See also [PageLabel].
 @ProviderFor(PageLabel)
@@ -183,7 +183,7 @@ final pageLabelProvider =
 );
 
 typedef _$PageLabel = AutoDisposeNotifier<String>;
-String _$appSchemesHash() => r'15a155f9b341ce5168e06a1cedf54228e706ea33';
+String _$appSchemesHash() => r'70beced440be284d93d061bf0485f258d0f429d2';
 
 /// See also [AppSchemes].
 @ProviderFor(AppSchemes)
@@ -227,7 +227,7 @@ final checkIpNumProvider =
 );
 
 typedef _$CheckIpNum = AutoDisposeNotifier<int>;
-String _$versionHash() => r'6ed921ee2962adafdc87b59243ec50c67c91b2b1';
+String _$versionHash() => r'29c3c6ec530f5e0a6eae11712c245c891f3880e4';
 
 /// See also [Version].
 @ProviderFor(Version)
@@ -241,7 +241,7 @@ final versionProvider = AutoDisposeNotifierProvider<Version, int>.internal(
 );
 
 typedef _$Version = AutoDisposeNotifier<int>;
-String _$groupsHash() => r'cc3629eeb3aef4effe8aadb66aba7002f533ec78';
+String _$groupsHash() => r'd0885baf3d2e99406544eb783f9c2c69a36d8641';
 
 /// See also [Groups].
 @ProviderFor(Groups)
@@ -257,7 +257,7 @@ final groupsProvider =
 
 typedef _$Groups = AutoDisposeNotifier<List<Group>>;
 String _$selectedDataSourceHash() =>
-    r'1ab7893bf34eaa084d6bddc4809595c442eae9a0';
+    r'c05bfe89bb6c1612009822f1da8424f16e1952c6';
 
 /// See also [SelectedDataSource].
 @ProviderFor(SelectedDataSource)
@@ -273,7 +273,7 @@ final selectedDataSourceProvider = AutoDisposeNotifierProvider<
 );
 
 typedef _$SelectedDataSource = AutoDisposeNotifier<Map<String, String>>;
-String _$delayDataSourceHash() => r'ac291a99259ad7b5d3c0c4a92cbfe18a283f0751';
+String _$delayDataSourceHash() => r'6808c3e9f156a067abe1e4886acbf756a77b2243';
 
 /// See also [DelayDataSource].
 @ProviderFor(DelayDataSource)
