@@ -54,7 +54,7 @@ final windowSettingProvider =
 );
 
 typedef _$WindowSetting = AutoDisposeNotifier<WindowProps>;
-String _$vpnSettingHash() => r'577d578ee2b84a798bb34e6e60396c9f40cbfb26';
+String _$vpnSettingHash() => r'733e97d6b2531a85a99b963efb880087639ab3cd';
 
 /// See also [VpnSetting].
 @ProviderFor(VpnSetting)

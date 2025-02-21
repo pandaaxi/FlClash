@@ -60,6 +60,10 @@ class VpnSetting extends _$VpnSetting {
       vpnProps: value,
     );
   }
+
+  updateState(VpnProps Function(VpnProps state) builder) {
+    state = builder(state);
+  }
 }
 
 @riverpod
