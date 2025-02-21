@@ -65,6 +65,33 @@ class _ScrollOverBuilderState extends State<ScrollOverBuilder> {
 //   }
 // }
 
+// class ActiveBuilder extends StatelessWidget {
+//   final String label;
+//   final StateAndChildWidgetBuilder<bool> builder;
+//   final Widget? child;
+//
+//   const ActiveBuilder({
+//     super.key,
+//     required this.label,
+//     required this.builder,
+//     required this.child,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Selector<AppState, bool>(
+//       selector: (_, appState) => appState.currentLabel == label,
+//       builder: (_, state, child) {
+//         return builder(
+//           state,
+//           child,
+//         );
+//       },
+//       child: child,
+//     );
+//   }
+// }
+
 typedef StateWidgetBuilder<T> = Widget Function(T state);
 
 typedef StateAndChildWidgetBuilder<T> = Widget Function(T state, Widget? child);

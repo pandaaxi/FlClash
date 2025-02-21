@@ -38,6 +38,8 @@ class AppState with _$AppState {
 
 extension AppStateExt on AppState {
   ViewMode get viewMode => other.getViewMode(viewWidth);
+
+  bool get isStart => runTime != null;
 }
 
 // class AppState with ChangeNotifier {
