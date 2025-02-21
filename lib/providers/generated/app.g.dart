@@ -41,6 +41,87 @@ final currentNavigationsProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentNavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
+String _$coreStateHash() => r'33f01ee9173525862c89522bf73b3174beb63daa';
+
+/// See also [coreState].
+@ProviderFor(coreState)
+final coreStateProvider = AutoDisposeProvider<CoreState>.internal(
+  coreState,
+  name: r'coreStateProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$coreStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef CoreStateRef = AutoDisposeProviderRef<CoreState>;
+String _$clashConfigStateHash() => r'0708f81450e740a471c65d1dd5db0ed0dc702b3c';
+
+/// See also [clashConfigState].
+@ProviderFor(clashConfigState)
+final clashConfigStateProvider = AutoDisposeProvider<ClashConfigState>.internal(
+  clashConfigState,
+  name: r'clashConfigStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$clashConfigStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ClashConfigStateRef = AutoDisposeProviderRef<ClashConfigState>;
+String _$proxyStateHash() => r'418464d2ab29bb701ff001ca80396526fd2c8d3a';
+
+/// See also [proxyState].
+@ProviderFor(proxyState)
+final proxyStateProvider = AutoDisposeProvider<ProxyState>.internal(
+  proxyState,
+  name: r'proxyStateProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$proxyStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ProxyStateRef = AutoDisposeProviderRef<ProxyState>;
+String _$trayStateHash() => r'eb722635400d06cfb7d2c124f0fb46edb891d9e4';
+
+/// See also [trayState].
+@ProviderFor(trayState)
+final trayStateProvider = AutoDisposeProvider<TrayState>.internal(
+  trayState,
+  name: r'trayStateProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$trayStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef TrayStateRef = AutoDisposeProviderRef<TrayState>;
+String _$vpnStateHash() => r'7d1d3a99e3de43a60bac03bb38b688e39b60d568';
+
+/// See also [vpnState].
+@ProviderFor(vpnState)
+final vpnStateProvider = AutoDisposeProvider<VpnState>.internal(
+  vpnState,
+  name: r'vpnStateProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$vpnStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef VpnStateRef = AutoDisposeProviderRef<VpnState>;
 String _$logsHash() => r'643d60bb9eb69624e11b5d605c66f78b5746c6d8';
 
 /// See also [Logs].
@@ -174,7 +255,7 @@ final runTimeProvider = AutoDisposeNotifierProvider<RunTime, int?>.internal(
 );
 
 typedef _$RunTime = AutoDisposeNotifier<int?>;
-String _$viewWidthHash() => r'34733601e43b27812b48daf49ef9609c7e893bf1';
+String _$viewWidthHash() => r'9adf1e7dec30ce75d4eb9f9a3d1dde3075ccf64a';
 
 /// See also [ViewWidth].
 @ProviderFor(ViewWidth)

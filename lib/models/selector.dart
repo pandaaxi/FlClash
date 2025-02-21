@@ -52,10 +52,7 @@ class NetworkDetectionState with _$NetworkDetectionState {
 class ApplicationSelectorState with _$ApplicationSelectorState {
   const factory ApplicationSelectorState({
     required String? locale,
-    required ThemeMode? themeMode,
-    required int? primaryColor,
-    required bool prueBlack,
-    required FontFamily fontFamily,
+    required ThemeProps? themeProps,
   }) = _ApplicationSelectorState;
 }
 
@@ -71,7 +68,7 @@ class TrayState with _$TrayState {
     required String? locale,
     required Brightness? brightness,
     required List<Group> groups,
-    required SelectedMap map,
+    required SelectedMap selectedMap,
   }) = _TrayState;
 }
 
@@ -216,24 +213,8 @@ class HttpOverridesState with _$HttpOverridesState {
 @freezed
 class ClashConfigState with _$ClashConfigState {
   const factory ClashConfigState({
-    required int mixedPort,
-    required bool allowLan,
-    required bool ipv6,
     required bool overrideDns,
-    required GeodataLoader geodataLoader,
-    required LogLevel logLevel,
-    required ExternalControllerStatus externalController,
-    required Mode mode,
-    required FindProcessMode findProcessMode,
-    required int keepAliveInterval,
-    required bool unifiedDelay,
-    required bool tcpConcurrent,
-    required HostsMap hosts,
-    required Tun tun,
-    required Dns dns,
-    required GeoXUrl geoXUrl,
-    required List<String> rules,
-    required String? globalUa,
+    required ClashConfig clashConfig,
   }) = _ClashConfigState;
 }
 
@@ -246,10 +227,10 @@ class DashboardState with _$DashboardState {
 }
 
 @freezed
-class VPNState with _$VPNState {
-  const factory VPNState({
+class VpnState with _$VpnState {
+  const factory VpnState({
     required AccessControl? accessControl,
     required TunStack stack,
     required VpnProps vpnProps,
-  }) = _VPNState;
+  }) = _VpnState;
 }

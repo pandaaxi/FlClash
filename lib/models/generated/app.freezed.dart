@@ -21,7 +21,7 @@ mixin _$AppState {
   List<Package> get packages => throw _privateConstructorUsedError;
   ColorSchemes get colorSchemes => throw _privateConstructorUsedError;
   int get sortNum => throw _privateConstructorUsedError;
-  double? get viewWidth => throw _privateConstructorUsedError;
+  double get viewWidth => throw _privateConstructorUsedError;
   Map<String, Map<String, int?>> get delayMap =>
       throw _privateConstructorUsedError;
   Map<String, String> get selectedMap => throw _privateConstructorUsedError;
@@ -55,7 +55,7 @@ abstract class $AppStateCopyWith<$Res> {
       List<Package> packages,
       ColorSchemes colorSchemes,
       int sortNum,
-      double? viewWidth,
+      double viewWidth,
       Map<String, Map<String, int?>> delayMap,
       Map<String, String> selectedMap,
       List<Group> groups,
@@ -93,7 +93,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? packages = null,
     Object? colorSchemes = null,
     Object? sortNum = null,
-    Object? viewWidth = freezed,
+    Object? viewWidth = null,
     Object? delayMap = null,
     Object? selectedMap = null,
     Object? groups = null,
@@ -129,10 +129,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.sortNum
           : sortNum // ignore: cast_nullable_to_non_nullable
               as int,
-      viewWidth: freezed == viewWidth
+      viewWidth: null == viewWidth
           ? _value.viewWidth
           : viewWidth // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
       delayMap: null == delayMap
           ? _value.delayMap
           : delayMap // ignore: cast_nullable_to_non_nullable
@@ -213,7 +213,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
       List<Package> packages,
       ColorSchemes colorSchemes,
       int sortNum,
-      double? viewWidth,
+      double viewWidth,
       Map<String, Map<String, int?>> delayMap,
       Map<String, String> selectedMap,
       List<Group> groups,
@@ -250,7 +250,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? packages = null,
     Object? colorSchemes = null,
     Object? sortNum = null,
-    Object? viewWidth = freezed,
+    Object? viewWidth = null,
     Object? delayMap = null,
     Object? selectedMap = null,
     Object? groups = null,
@@ -286,10 +286,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.sortNum
           : sortNum // ignore: cast_nullable_to_non_nullable
               as int,
-      viewWidth: freezed == viewWidth
+      viewWidth: null == viewWidth
           ? _value.viewWidth
           : viewWidth // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as double,
       delayMap: null == delayMap
           ? _value._delayMap
           : delayMap // ignore: cast_nullable_to_non_nullable
@@ -355,7 +355,7 @@ class _$AppStateImpl implements _AppState {
       final List<Package> packages = const [],
       this.colorSchemes = const ColorSchemes(),
       this.sortNum = 0,
-      this.viewWidth,
+      required this.viewWidth,
       final Map<String, Map<String, int?>> delayMap = const {},
       final Map<String, String> selectedMap = const {},
       final List<Group> groups = const [],
@@ -396,7 +396,7 @@ class _$AppStateImpl implements _AppState {
   @JsonKey()
   final int sortNum;
   @override
-  final double? viewWidth;
+  final double viewWidth;
   final Map<String, Map<String, int?>> _delayMap;
   @override
   @JsonKey()
@@ -534,7 +534,7 @@ abstract class _AppState implements AppState {
       final List<Package> packages,
       final ColorSchemes colorSchemes,
       final int sortNum,
-      final double? viewWidth,
+      required final double viewWidth,
       final Map<String, Map<String, int?>> delayMap,
       final Map<String, String> selectedMap,
       final List<Group> groups,
@@ -560,7 +560,7 @@ abstract class _AppState implements AppState {
   @override
   int get sortNum;
   @override
-  double? get viewWidth;
+  double get viewWidth;
   @override
   Map<String, Map<String, int?>> get delayMap;
   @override

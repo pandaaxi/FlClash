@@ -1,5 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,7 @@ showExtendPage(
     key: globalKey,
     child: body,
   );
-  final isMobile =
-      globalState.appController.appState.viewMode == ViewMode.mobile;
+  final isMobile = globalState.appState.viewMode == ViewMode.mobile;
   if (isMobile) {
     BaseNavigator.push(
       context,
@@ -70,8 +70,7 @@ showSheet({
   bool isScrollControlled = true,
   double width = 320,
 }) {
-  final viewMode = globalState.appController.appState.viewMode;
-  final isMobile = viewMode == ViewMode.mobile;
+  final isMobile = globalState.appState.viewMode == ViewMode.mobile;
   if (isMobile) {
     showModalBottomSheet(
       context: context,

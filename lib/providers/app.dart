@@ -35,6 +35,91 @@ List<NavigationItem> currentNavigations(Ref ref) {
 }
 
 @riverpod
+CoreState coreState(Ref ref) {
+  final vpnProps = ref.watch(vpnSettingProvider);
+  final currentProfile = ref.watch(currentProfileProvider);
+  final onlyStatisticsProxy = ref.watch(appSettingProvider).onlyStatisticsProxy;
+  return CoreState(
+    vpnProps: vpnProps,
+    onlyStatisticsProxy: onlyStatisticsProxy,
+    currentProfileName: currentProfile?.label ?? currentProfile?.id ?? "",
+  );
+}
+
+@riverpod
+ClashConfigState clashConfigState(Ref ref) {
+  final clashConfig = ref.watch(patchClashConfigProvider);
+  final overrideDns = ref.watch(overrideDnsProvider);
+  return ClashConfigState(
+    overrideDns: overrideDns,
+    clashConfig: clashConfig,
+  );
+}
+
+@riverpod
+ProxyState proxyState(Ref ref) {
+  final isStart = ref.watch(runTimeProvider.notifier).isStart;
+  final networkProps = ref.watch(networkSettingProvider);
+  final mixedPort = ref.watch(
+    patchClashConfigProvider.select((state) => state.mixedPort),
+  );
+  return ProxyState(
+    isStart: isStart,
+    systemProxy: networkProps.systemProxy,
+    bassDomain: networkProps.bypassDomain,
+    port: mixedPort,
+  );
+}
+
+@riverpod
+TrayState trayState(Ref ref) {
+  final isStart = ref.watch(runTimeProvider.notifier).isStart;
+  final networkProps = ref.watch(networkSettingProvider);
+  final clashConfig = ref.watch(
+    patchClashConfigProvider,
+  );
+  final appSetting = ref.watch(
+    appSettingProvider,
+  );
+  final groups = ref.watch(
+    groupsProvider,
+  );
+  final brightness = ref.watch(
+    appBrightnessProvider,
+  );
+
+  final selectedMap = ref.watch(selectedDataSourceProvider);
+
+  return TrayState(
+    mode: clashConfig.mode,
+    port: clashConfig.mixedPort,
+    autoLaunch: appSetting.autoRun,
+    systemProxy: networkProps.systemProxy,
+    tunEnable: clashConfig.tun.enable,
+    isStart: isStart,
+    locale: appSetting.locale,
+    brightness: brightness,
+    groups: groups,
+    selectedMap: selectedMap,
+  );
+}
+
+@riverpod
+VpnState vpnState(Ref ref) {
+  final vpnProps = ref.watch(vpnSettingProvider);
+  final accessControl = ref.watch(accessControlSettingProvider);
+  final stack = ref.watch(
+    patchClashConfigProvider.select((state) => state.tun.stack),
+  );
+
+  return VpnState(
+    accessControl: accessControl,
+    stack: stack,
+    vpnProps: vpnProps,
+  );
+}
+
+@riverpod
 class Logs extends _$Logs {
   @override
   FixedList<Log> build() {
@@ -203,11 +288,14 @@ class RunTime extends _$RunTime {
 class ViewWidth extends _$ViewWidth {
   @override
   double build() {
-    return globalState.appState.viewWidth ?? other.getScreenSize().width;
+    return globalState.appState.viewWidth;
   }
 
   @override
   set state(double value) {
+    if (value != state) {
+      return;
+    }
     state = value;
     globalState.appState = globalState.appState.copyWith(
       viewWidth: state,

@@ -1,11 +1,12 @@
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/common/mixin.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tray_manager/tray_manager.dart';
 
-class TrayManager extends StatefulWidget {
+class TrayManager extends ConsumerStatefulWidget {
   final Widget child;
 
   const TrayManager({
@@ -14,42 +15,27 @@ class TrayManager extends StatefulWidget {
   });
 
   @override
-  State<TrayManager> createState() => _TrayContainerState();
+  ConsumerState<TrayManager> createState() => _TrayContainerState();
 }
 
-class _TrayContainerState extends State<TrayManager> with TrayListener {
+class _TrayContainerState extends ConsumerState<TrayManager>
+    with TrayListener, ListenManualMixin {
   @override
   void initState() {
     super.initState();
     trayManager.addListener(this);
+    subscriptions = [
+      ref.listenManual(trayStateProvider, (prev, next) {
+        if (prev != next) {
+          globalState.appController.updateTray();
+        }
+      })
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return Selector3<AppState, AppFlowingState, Config, TrayState>(
-      selector: (_, appState, appFlowingState, config) => TrayState(
-        mode: config.patchClashConfig.mode,
-        autoLaunch: config.appSetting.autoLaunch,
-        isStart: appFlowingState.isStart,
-        locale: config.appSetting.locale,
-        systemProxy: config.networkProps.systemProxy,
-        tunEnable: config.patchClashConfig.tun.enable,
-        brightness: appState.brightness,
-        port: config.patchClashConfig.mixedPort,
-        groups: appState.groups,
-        map: appState.selectedMap,
-      ),
-      shouldRebuild: (prev, next) {
-        if (prev != next) {
-          globalState.appController.updateTray();
-        }
-        return prev != next;
-      },
-      builder: (_, state, child) {
-        return child!;
-      },
-      child: widget.child,
-    );
+    return widget.child;
   }
 
   @override

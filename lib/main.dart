@@ -115,29 +115,29 @@ Future<void> _service(List<String> flags) async {
   if (!quickStart) {
     _handleMainIpc(clashLibHandler);
   } else {
-    commonPrint.log("quick start");
-    await ClashCore.initGeo();
-    globalState.packageInfo = await PackageInfo.fromPlatform();
-    app?.tip(appLocalizations.startVpn);
-    final homeDirPath = await appPath.homeDirPath;
-    clashLibHandler
-        .quickStart(
-      homeDirPath,
-      globalState.getUpdateConfigParams(config, false),
-      globalState.getCoreState(config),
-    )
-        .then(
-      (res) async {
-        if (res.isNotEmpty) {
-          await vpn?.stop();
-          exit(0);
-        }
-        await vpn?.start(
-          clashLibHandler.getAndroidVpnOptions(),
-        );
-        clashLibHandler.startListener();
-      },
-    );
+    // commonPrint.log("quick start");
+    // await ClashCore.initGeo();
+    // globalState.packageInfo = await PackageInfo.fromPlatform();
+    // app?.tip(appLocalizations.startVpn);
+    // final homeDirPath = await appPath.homeDirPath;
+    // clashLibHandler
+    //     .quickStart(
+    //   homeDirPath,
+    //   globalState.getUpdateConfigParams(config, false),
+    //   globalState.getCoreState(config),
+    // )
+    //     .then(
+    //   (res) async {
+    //     if (res.isNotEmpty) {
+    //       await vpn?.stop();
+    //       exit(0);
+    //     }
+    //     await vpn?.start(
+    //       clashLibHandler.getAndroidVpnOptions(),
+    //     );
+    //     clashLibHandler.startListener();
+    //   },
+    // );
   }
 }
 

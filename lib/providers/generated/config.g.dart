@@ -38,7 +38,7 @@ final appSettingProvider =
 );
 
 typedef _$AppSetting = AutoDisposeNotifier<AppSettingProps>;
-String _$windowSettingHash() => r'a0ddbd13b54b790845f3596479a96cae0920aae6';
+String _$windowSettingHash() => r'ea4de9f7600aae5429263e30f1448c061d2efe66';
 
 /// See also [WindowSetting].
 @ProviderFor(WindowSetting)

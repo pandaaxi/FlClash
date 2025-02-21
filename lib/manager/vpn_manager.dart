@@ -1,11 +1,12 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/mixin.dart';
 import 'package:fl_clash/enum/enum.dart';
-import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class VpnManager extends StatefulWidget {
+class VpnManager extends ConsumerStatefulWidget {
   final Widget child;
 
   const VpnManager({
@@ -14,44 +15,36 @@ class VpnManager extends StatefulWidget {
   });
 
   @override
-  State<VpnManager> createState() => _VpnContainerState();
+  ConsumerState<VpnManager> createState() => _VpnContainerState();
 }
 
-class _VpnContainerState extends State<VpnManager> {
+class _VpnContainerState extends ConsumerState<VpnManager>
+    with ListenManualMixin {
+  @override
+  void initState() {
+    super.initState();
+    subscriptions = [
+      ref.listenManual(vpnStateProvider, (prev, next) {
+        showTip();
+      })
+    ];
+  }
+
   showTip() {
     debouncer.call(
       DebounceTag.vpnTip,
       () {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          final appFlowingState = globalState.appController.appFlowingState;
-          if (appFlowingState.isStart) {
-            globalState.showNotifier(
-              appLocalizations.vpnTip,
-            );
-          }
-        });
+        if (ref.read(runTimeProvider.notifier).isStart) {
+          globalState.showNotifier(
+            appLocalizations.vpnTip,
+          );
+        }
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Selector<Config, VPNState>(
-      selector: (_, config) => VPNState(
-        accessControl: config.accessControl,
-        vpnProps: config.vpnProps,
-        stack: config.patchClashConfig.tun.stack,
-      ),
-      shouldRebuild: (prev, next) {
-        if (prev != next) {
-          showTip();
-        }
-        return prev != next;
-      },
-      builder: (_, __, child) {
-        return child!;
-      },
-      child: widget.child,
-    );
+    return widget.child;
   }
 }

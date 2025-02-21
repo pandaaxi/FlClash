@@ -1,4 +1,4 @@
-import 'package:fl_clash/models/common.dart';
+import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'card.dart';
@@ -26,7 +26,7 @@ class ColorSchemeBox extends StatelessWidget {
       );
     } else {
       return Theme.of(context).copyWith(
-        colorScheme: globalState.appController.appState.systemColorSchemes
+        colorScheme: globalState.appState.colorSchemes
             .getColorSchemeForBrightness(Theme.of(context).brightness),
       );
     }
@@ -34,7 +34,8 @@ class ColorSchemeBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(aspectRatio: 1,
+    return AspectRatio(
+      aspectRatio: 1,
       child: Theme(
         data: _getTheme(context),
         child: Builder(

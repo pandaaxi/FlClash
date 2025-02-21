@@ -40,6 +40,10 @@ class WindowSetting extends _$WindowSetting {
       windowProps: value,
     );
   }
+
+  updateState(WindowProps Function(WindowProps state) builder) {
+    state = builder(state);
+  }
 }
 
 @riverpod

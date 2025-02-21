@@ -19,7 +19,7 @@ class AppState with _$AppState {
     @Default([]) List<Package> packages,
     @Default(ColorSchemes()) ColorSchemes colorSchemes,
     @Default(0) int sortNum,
-    double? viewWidth,
+    required double viewWidth,
     @Default({}) DelayMap delayMap,
     @Default({}) SelectedMap selectedMap,
     @Default([]) List<Group> groups,
@@ -34,6 +34,10 @@ class AppState with _$AppState {
     FixedList<Traffic>? traffics,
     Traffic? totalTraffic,
   }) = _AppState;
+}
+
+extension AppStateExt on AppState {
+  ViewMode get viewMode => other.getViewMode(viewWidth);
 }
 
 // class AppState with ChangeNotifier {

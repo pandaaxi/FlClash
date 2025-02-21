@@ -48,6 +48,7 @@ class GlobalState {
     config = await preferences.getConfig() ?? Config();
     appState = AppState(
       version: version,
+      viewWidth: other.getScreenSize().width,
     );
     await globalState.migrateOldData(config);
   }
@@ -76,41 +77,11 @@ class GlobalState {
     timer = null;
   }
 
-  Future<void> initCore({
-    required AppState appState,
-    required Config config,
-  }) async {
-    await globalState.initClash(
-      appState: appState,
-      config: config,
-    );
-    await applyProfile(
-      appState: appState,
-      config: config,
-    );
-  }
-
   handleStart([UpdateTasks? tasks]) async {
     startTime ??= DateTime.now();
     await clashCore.startListener();
     await service?.startVpn();
     startUpdateTasks(tasks);
-  }
-
-  restartCore({
-    required AppState appState,
-    required Config config,
-    bool isPatch = true,
-  }) async {
-    await clashService?.reStart();
-    await initCore(
-      appState: appState,
-      config: config,
-    );
-
-    if (isStart) {
-      await handleStart();
-    }
   }
 
   Future updateStartTime() async {
@@ -159,10 +130,6 @@ class GlobalState {
         testUrl: testUrl,
       ),
     );
-  }
-
-  Future<void> updateGroups(AppState appState) async {
-    appState.groups = await clashCore.getProxiesGroups();
   }
 
   Future<bool?> showMessage<bool>({

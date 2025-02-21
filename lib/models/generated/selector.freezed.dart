@@ -824,10 +824,7 @@ abstract class _NetworkDetectionState implements NetworkDetectionState {
 /// @nodoc
 mixin _$ApplicationSelectorState {
   String? get locale => throw _privateConstructorUsedError;
-  ThemeMode? get themeMode => throw _privateConstructorUsedError;
-  int? get primaryColor => throw _privateConstructorUsedError;
-  bool get prueBlack => throw _privateConstructorUsedError;
-  FontFamily get fontFamily => throw _privateConstructorUsedError;
+  ThemeProps? get themeProps => throw _privateConstructorUsedError;
 
   /// Create a copy of ApplicationSelectorState
   /// with the given fields replaced by the non-null parameter values.
@@ -842,12 +839,9 @@ abstract class $ApplicationSelectorStateCopyWith<$Res> {
           $Res Function(ApplicationSelectorState) then) =
       _$ApplicationSelectorStateCopyWithImpl<$Res, ApplicationSelectorState>;
   @useResult
-  $Res call(
-      {String? locale,
-      ThemeMode? themeMode,
-      int? primaryColor,
-      bool prueBlack,
-      FontFamily fontFamily});
+  $Res call({String? locale, ThemeProps? themeProps});
+
+  $ThemePropsCopyWith<$Res>? get themeProps;
 }
 
 /// @nodoc
@@ -867,33 +861,32 @@ class _$ApplicationSelectorStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? locale = freezed,
-    Object? themeMode = freezed,
-    Object? primaryColor = freezed,
-    Object? prueBlack = null,
-    Object? fontFamily = null,
+    Object? themeProps = freezed,
   }) {
     return _then(_value.copyWith(
       locale: freezed == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as String?,
-      themeMode: freezed == themeMode
-          ? _value.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode?,
-      primaryColor: freezed == primaryColor
-          ? _value.primaryColor
-          : primaryColor // ignore: cast_nullable_to_non_nullable
-              as int?,
-      prueBlack: null == prueBlack
-          ? _value.prueBlack
-          : prueBlack // ignore: cast_nullable_to_non_nullable
-              as bool,
-      fontFamily: null == fontFamily
-          ? _value.fontFamily
-          : fontFamily // ignore: cast_nullable_to_non_nullable
-              as FontFamily,
+      themeProps: freezed == themeProps
+          ? _value.themeProps
+          : themeProps // ignore: cast_nullable_to_non_nullable
+              as ThemeProps?,
     ) as $Val);
+  }
+
+  /// Create a copy of ApplicationSelectorState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ThemePropsCopyWith<$Res>? get themeProps {
+    if (_value.themeProps == null) {
+      return null;
+    }
+
+    return $ThemePropsCopyWith<$Res>(_value.themeProps!, (value) {
+      return _then(_value.copyWith(themeProps: value) as $Val);
+    });
   }
 }
 
@@ -906,12 +899,10 @@ abstract class _$$ApplicationSelectorStateImplCopyWith<$Res>
       __$$ApplicationSelectorStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String? locale,
-      ThemeMode? themeMode,
-      int? primaryColor,
-      bool prueBlack,
-      FontFamily fontFamily});
+  $Res call({String? locale, ThemeProps? themeProps});
+
+  @override
+  $ThemePropsCopyWith<$Res>? get themeProps;
 }
 
 /// @nodoc
@@ -930,32 +921,17 @@ class __$$ApplicationSelectorStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? locale = freezed,
-    Object? themeMode = freezed,
-    Object? primaryColor = freezed,
-    Object? prueBlack = null,
-    Object? fontFamily = null,
+    Object? themeProps = freezed,
   }) {
     return _then(_$ApplicationSelectorStateImpl(
       locale: freezed == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as String?,
-      themeMode: freezed == themeMode
-          ? _value.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode?,
-      primaryColor: freezed == primaryColor
-          ? _value.primaryColor
-          : primaryColor // ignore: cast_nullable_to_non_nullable
-              as int?,
-      prueBlack: null == prueBlack
-          ? _value.prueBlack
-          : prueBlack // ignore: cast_nullable_to_non_nullable
-              as bool,
-      fontFamily: null == fontFamily
-          ? _value.fontFamily
-          : fontFamily // ignore: cast_nullable_to_non_nullable
-              as FontFamily,
+      themeProps: freezed == themeProps
+          ? _value.themeProps
+          : themeProps // ignore: cast_nullable_to_non_nullable
+              as ThemeProps?,
     ));
   }
 }
@@ -964,26 +940,16 @@ class __$$ApplicationSelectorStateImplCopyWithImpl<$Res>
 
 class _$ApplicationSelectorStateImpl implements _ApplicationSelectorState {
   const _$ApplicationSelectorStateImpl(
-      {required this.locale,
-      required this.themeMode,
-      required this.primaryColor,
-      required this.prueBlack,
-      required this.fontFamily});
+      {required this.locale, required this.themeProps});
 
   @override
   final String? locale;
   @override
-  final ThemeMode? themeMode;
-  @override
-  final int? primaryColor;
-  @override
-  final bool prueBlack;
-  @override
-  final FontFamily fontFamily;
+  final ThemeProps? themeProps;
 
   @override
   String toString() {
-    return 'ApplicationSelectorState(locale: $locale, themeMode: $themeMode, primaryColor: $primaryColor, prueBlack: $prueBlack, fontFamily: $fontFamily)';
+    return 'ApplicationSelectorState(locale: $locale, themeProps: $themeProps)';
   }
 
   @override
@@ -992,19 +958,12 @@ class _$ApplicationSelectorStateImpl implements _ApplicationSelectorState {
         (other.runtimeType == runtimeType &&
             other is _$ApplicationSelectorStateImpl &&
             (identical(other.locale, locale) || other.locale == locale) &&
-            (identical(other.themeMode, themeMode) ||
-                other.themeMode == themeMode) &&
-            (identical(other.primaryColor, primaryColor) ||
-                other.primaryColor == primaryColor) &&
-            (identical(other.prueBlack, prueBlack) ||
-                other.prueBlack == prueBlack) &&
-            (identical(other.fontFamily, fontFamily) ||
-                other.fontFamily == fontFamily));
+            (identical(other.themeProps, themeProps) ||
+                other.themeProps == themeProps));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, locale, themeMode, primaryColor, prueBlack, fontFamily);
+  int get hashCode => Object.hash(runtimeType, locale, themeProps);
 
   /// Create a copy of ApplicationSelectorState
   /// with the given fields replaced by the non-null parameter values.
@@ -1019,21 +978,12 @@ class _$ApplicationSelectorStateImpl implements _ApplicationSelectorState {
 abstract class _ApplicationSelectorState implements ApplicationSelectorState {
   const factory _ApplicationSelectorState(
       {required final String? locale,
-      required final ThemeMode? themeMode,
-      required final int? primaryColor,
-      required final bool prueBlack,
-      required final FontFamily fontFamily}) = _$ApplicationSelectorStateImpl;
+      required final ThemeProps? themeProps}) = _$ApplicationSelectorStateImpl;
 
   @override
   String? get locale;
   @override
-  ThemeMode? get themeMode;
-  @override
-  int? get primaryColor;
-  @override
-  bool get prueBlack;
-  @override
-  FontFamily get fontFamily;
+  ThemeProps? get themeProps;
 
   /// Create a copy of ApplicationSelectorState
   /// with the given fields replaced by the non-null parameter values.
@@ -1054,7 +1004,7 @@ mixin _$TrayState {
   String? get locale => throw _privateConstructorUsedError;
   Brightness? get brightness => throw _privateConstructorUsedError;
   List<Group> get groups => throw _privateConstructorUsedError;
-  Map<String, String> get map => throw _privateConstructorUsedError;
+  Map<String, String> get selectedMap => throw _privateConstructorUsedError;
 
   /// Create a copy of TrayState
   /// with the given fields replaced by the non-null parameter values.
@@ -1078,7 +1028,7 @@ abstract class $TrayStateCopyWith<$Res> {
       String? locale,
       Brightness? brightness,
       List<Group> groups,
-      Map<String, String> map});
+      Map<String, String> selectedMap});
 }
 
 /// @nodoc
@@ -1105,7 +1055,7 @@ class _$TrayStateCopyWithImpl<$Res, $Val extends TrayState>
     Object? locale = freezed,
     Object? brightness = freezed,
     Object? groups = null,
-    Object? map = null,
+    Object? selectedMap = null,
   }) {
     return _then(_value.copyWith(
       mode: null == mode
@@ -1144,9 +1094,9 @@ class _$TrayStateCopyWithImpl<$Res, $Val extends TrayState>
           ? _value.groups
           : groups // ignore: cast_nullable_to_non_nullable
               as List<Group>,
-      map: null == map
-          ? _value.map
-          : map // ignore: cast_nullable_to_non_nullable
+      selectedMap: null == selectedMap
+          ? _value.selectedMap
+          : selectedMap // ignore: cast_nullable_to_non_nullable
               as Map<String, String>,
     ) as $Val);
   }
@@ -1170,7 +1120,7 @@ abstract class _$$TrayStateImplCopyWith<$Res>
       String? locale,
       Brightness? brightness,
       List<Group> groups,
-      Map<String, String> map});
+      Map<String, String> selectedMap});
 }
 
 /// @nodoc
@@ -1195,7 +1145,7 @@ class __$$TrayStateImplCopyWithImpl<$Res>
     Object? locale = freezed,
     Object? brightness = freezed,
     Object? groups = null,
-    Object? map = null,
+    Object? selectedMap = null,
   }) {
     return _then(_$TrayStateImpl(
       mode: null == mode
@@ -1234,9 +1184,9 @@ class __$$TrayStateImplCopyWithImpl<$Res>
           ? _value._groups
           : groups // ignore: cast_nullable_to_non_nullable
               as List<Group>,
-      map: null == map
-          ? _value._map
-          : map // ignore: cast_nullable_to_non_nullable
+      selectedMap: null == selectedMap
+          ? _value._selectedMap
+          : selectedMap // ignore: cast_nullable_to_non_nullable
               as Map<String, String>,
     ));
   }
@@ -1255,9 +1205,9 @@ class _$TrayStateImpl implements _TrayState {
       required this.locale,
       required this.brightness,
       required final List<Group> groups,
-      required final Map<String, String> map})
+      required final Map<String, String> selectedMap})
       : _groups = groups,
-        _map = map;
+        _selectedMap = selectedMap;
 
   @override
   final Mode mode;
@@ -1283,17 +1233,17 @@ class _$TrayStateImpl implements _TrayState {
     return EqualUnmodifiableListView(_groups);
   }
 
-  final Map<String, String> _map;
+  final Map<String, String> _selectedMap;
   @override
-  Map<String, String> get map {
-    if (_map is EqualUnmodifiableMapView) return _map;
+  Map<String, String> get selectedMap {
+    if (_selectedMap is EqualUnmodifiableMapView) return _selectedMap;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_map);
+    return EqualUnmodifiableMapView(_selectedMap);
   }
 
   @override
   String toString() {
-    return 'TrayState(mode: $mode, port: $port, autoLaunch: $autoLaunch, systemProxy: $systemProxy, tunEnable: $tunEnable, isStart: $isStart, locale: $locale, brightness: $brightness, groups: $groups, map: $map)';
+    return 'TrayState(mode: $mode, port: $port, autoLaunch: $autoLaunch, systemProxy: $systemProxy, tunEnable: $tunEnable, isStart: $isStart, locale: $locale, brightness: $brightness, groups: $groups, selectedMap: $selectedMap)';
   }
 
   @override
@@ -1314,7 +1264,8 @@ class _$TrayStateImpl implements _TrayState {
             (identical(other.brightness, brightness) ||
                 other.brightness == brightness) &&
             const DeepCollectionEquality().equals(other._groups, _groups) &&
-            const DeepCollectionEquality().equals(other._map, _map));
+            const DeepCollectionEquality()
+                .equals(other._selectedMap, _selectedMap));
   }
 
   @override
@@ -1329,7 +1280,7 @@ class _$TrayStateImpl implements _TrayState {
       locale,
       brightness,
       const DeepCollectionEquality().hash(_groups),
-      const DeepCollectionEquality().hash(_map));
+      const DeepCollectionEquality().hash(_selectedMap));
 
   /// Create a copy of TrayState
   /// with the given fields replaced by the non-null parameter values.
@@ -1351,7 +1302,7 @@ abstract class _TrayState implements TrayState {
       required final String? locale,
       required final Brightness? brightness,
       required final List<Group> groups,
-      required final Map<String, String> map}) = _$TrayStateImpl;
+      required final Map<String, String> selectedMap}) = _$TrayStateImpl;
 
   @override
   Mode get mode;
@@ -1372,7 +1323,7 @@ abstract class _TrayState implements TrayState {
   @override
   List<Group> get groups;
   @override
-  Map<String, String> get map;
+  Map<String, String> get selectedMap;
 
   /// Create a copy of TrayState
   /// with the given fields replaced by the non-null parameter values.
@@ -3575,25 +3526,8 @@ abstract class _HttpOverridesState implements HttpOverridesState {
 
 /// @nodoc
 mixin _$ClashConfigState {
-  int get mixedPort => throw _privateConstructorUsedError;
-  bool get allowLan => throw _privateConstructorUsedError;
-  bool get ipv6 => throw _privateConstructorUsedError;
   bool get overrideDns => throw _privateConstructorUsedError;
-  GeodataLoader get geodataLoader => throw _privateConstructorUsedError;
-  LogLevel get logLevel => throw _privateConstructorUsedError;
-  ExternalControllerStatus get externalController =>
-      throw _privateConstructorUsedError;
-  Mode get mode => throw _privateConstructorUsedError;
-  FindProcessMode get findProcessMode => throw _privateConstructorUsedError;
-  int get keepAliveInterval => throw _privateConstructorUsedError;
-  bool get unifiedDelay => throw _privateConstructorUsedError;
-  bool get tcpConcurrent => throw _privateConstructorUsedError;
-  Map<String, String> get hosts => throw _privateConstructorUsedError;
-  Tun get tun => throw _privateConstructorUsedError;
-  Dns get dns => throw _privateConstructorUsedError;
-  GeoXUrl get geoXUrl => throw _privateConstructorUsedError;
-  List<String> get rules => throw _privateConstructorUsedError;
-  String? get globalUa => throw _privateConstructorUsedError;
+  ClashConfig get clashConfig => throw _privateConstructorUsedError;
 
   /// Create a copy of ClashConfigState
   /// with the given fields replaced by the non-null parameter values.
@@ -3608,29 +3542,9 @@ abstract class $ClashConfigStateCopyWith<$Res> {
           ClashConfigState value, $Res Function(ClashConfigState) then) =
       _$ClashConfigStateCopyWithImpl<$Res, ClashConfigState>;
   @useResult
-  $Res call(
-      {int mixedPort,
-      bool allowLan,
-      bool ipv6,
-      bool overrideDns,
-      GeodataLoader geodataLoader,
-      LogLevel logLevel,
-      ExternalControllerStatus externalController,
-      Mode mode,
-      FindProcessMode findProcessMode,
-      int keepAliveInterval,
-      bool unifiedDelay,
-      bool tcpConcurrent,
-      Map<String, String> hosts,
-      Tun tun,
-      Dns dns,
-      GeoXUrl geoXUrl,
-      List<String> rules,
-      String? globalUa});
+  $Res call({bool overrideDns, ClashConfig clashConfig});
 
-  $TunCopyWith<$Res> get tun;
-  $DnsCopyWith<$Res> get dns;
-  $GeoXUrlCopyWith<$Res> get geoXUrl;
+  $ClashConfigCopyWith<$Res> get clashConfig;
 }
 
 /// @nodoc
@@ -3648,98 +3562,18 @@ class _$ClashConfigStateCopyWithImpl<$Res, $Val extends ClashConfigState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mixedPort = null,
-    Object? allowLan = null,
-    Object? ipv6 = null,
     Object? overrideDns = null,
-    Object? geodataLoader = null,
-    Object? logLevel = null,
-    Object? externalController = null,
-    Object? mode = null,
-    Object? findProcessMode = null,
-    Object? keepAliveInterval = null,
-    Object? unifiedDelay = null,
-    Object? tcpConcurrent = null,
-    Object? hosts = null,
-    Object? tun = null,
-    Object? dns = null,
-    Object? geoXUrl = null,
-    Object? rules = null,
-    Object? globalUa = freezed,
+    Object? clashConfig = null,
   }) {
     return _then(_value.copyWith(
-      mixedPort: null == mixedPort
-          ? _value.mixedPort
-          : mixedPort // ignore: cast_nullable_to_non_nullable
-              as int,
-      allowLan: null == allowLan
-          ? _value.allowLan
-          : allowLan // ignore: cast_nullable_to_non_nullable
-              as bool,
-      ipv6: null == ipv6
-          ? _value.ipv6
-          : ipv6 // ignore: cast_nullable_to_non_nullable
-              as bool,
       overrideDns: null == overrideDns
           ? _value.overrideDns
           : overrideDns // ignore: cast_nullable_to_non_nullable
               as bool,
-      geodataLoader: null == geodataLoader
-          ? _value.geodataLoader
-          : geodataLoader // ignore: cast_nullable_to_non_nullable
-              as GeodataLoader,
-      logLevel: null == logLevel
-          ? _value.logLevel
-          : logLevel // ignore: cast_nullable_to_non_nullable
-              as LogLevel,
-      externalController: null == externalController
-          ? _value.externalController
-          : externalController // ignore: cast_nullable_to_non_nullable
-              as ExternalControllerStatus,
-      mode: null == mode
-          ? _value.mode
-          : mode // ignore: cast_nullable_to_non_nullable
-              as Mode,
-      findProcessMode: null == findProcessMode
-          ? _value.findProcessMode
-          : findProcessMode // ignore: cast_nullable_to_non_nullable
-              as FindProcessMode,
-      keepAliveInterval: null == keepAliveInterval
-          ? _value.keepAliveInterval
-          : keepAliveInterval // ignore: cast_nullable_to_non_nullable
-              as int,
-      unifiedDelay: null == unifiedDelay
-          ? _value.unifiedDelay
-          : unifiedDelay // ignore: cast_nullable_to_non_nullable
-              as bool,
-      tcpConcurrent: null == tcpConcurrent
-          ? _value.tcpConcurrent
-          : tcpConcurrent // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hosts: null == hosts
-          ? _value.hosts
-          : hosts // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      tun: null == tun
-          ? _value.tun
-          : tun // ignore: cast_nullable_to_non_nullable
-              as Tun,
-      dns: null == dns
-          ? _value.dns
-          : dns // ignore: cast_nullable_to_non_nullable
-              as Dns,
-      geoXUrl: null == geoXUrl
-          ? _value.geoXUrl
-          : geoXUrl // ignore: cast_nullable_to_non_nullable
-              as GeoXUrl,
-      rules: null == rules
-          ? _value.rules
-          : rules // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      globalUa: freezed == globalUa
-          ? _value.globalUa
-          : globalUa // ignore: cast_nullable_to_non_nullable
-              as String?,
+      clashConfig: null == clashConfig
+          ? _value.clashConfig
+          : clashConfig // ignore: cast_nullable_to_non_nullable
+              as ClashConfig,
     ) as $Val);
   }
 
@@ -3747,29 +3581,9 @@ class _$ClashConfigStateCopyWithImpl<$Res, $Val extends ClashConfigState>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $TunCopyWith<$Res> get tun {
-    return $TunCopyWith<$Res>(_value.tun, (value) {
-      return _then(_value.copyWith(tun: value) as $Val);
-    });
-  }
-
-  /// Create a copy of ClashConfigState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DnsCopyWith<$Res> get dns {
-    return $DnsCopyWith<$Res>(_value.dns, (value) {
-      return _then(_value.copyWith(dns: value) as $Val);
-    });
-  }
-
-  /// Create a copy of ClashConfigState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $GeoXUrlCopyWith<$Res> get geoXUrl {
-    return $GeoXUrlCopyWith<$Res>(_value.geoXUrl, (value) {
-      return _then(_value.copyWith(geoXUrl: value) as $Val);
+  $ClashConfigCopyWith<$Res> get clashConfig {
+    return $ClashConfigCopyWith<$Res>(_value.clashConfig, (value) {
+      return _then(_value.copyWith(clashConfig: value) as $Val);
     });
   }
 }
@@ -3782,32 +3596,10 @@ abstract class _$$ClashConfigStateImplCopyWith<$Res>
       __$$ClashConfigStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int mixedPort,
-      bool allowLan,
-      bool ipv6,
-      bool overrideDns,
-      GeodataLoader geodataLoader,
-      LogLevel logLevel,
-      ExternalControllerStatus externalController,
-      Mode mode,
-      FindProcessMode findProcessMode,
-      int keepAliveInterval,
-      bool unifiedDelay,
-      bool tcpConcurrent,
-      Map<String, String> hosts,
-      Tun tun,
-      Dns dns,
-      GeoXUrl geoXUrl,
-      List<String> rules,
-      String? globalUa});
+  $Res call({bool overrideDns, ClashConfig clashConfig});
 
   @override
-  $TunCopyWith<$Res> get tun;
-  @override
-  $DnsCopyWith<$Res> get dns;
-  @override
-  $GeoXUrlCopyWith<$Res> get geoXUrl;
+  $ClashConfigCopyWith<$Res> get clashConfig;
 }
 
 /// @nodoc
@@ -3823,98 +3615,18 @@ class __$$ClashConfigStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? mixedPort = null,
-    Object? allowLan = null,
-    Object? ipv6 = null,
     Object? overrideDns = null,
-    Object? geodataLoader = null,
-    Object? logLevel = null,
-    Object? externalController = null,
-    Object? mode = null,
-    Object? findProcessMode = null,
-    Object? keepAliveInterval = null,
-    Object? unifiedDelay = null,
-    Object? tcpConcurrent = null,
-    Object? hosts = null,
-    Object? tun = null,
-    Object? dns = null,
-    Object? geoXUrl = null,
-    Object? rules = null,
-    Object? globalUa = freezed,
+    Object? clashConfig = null,
   }) {
     return _then(_$ClashConfigStateImpl(
-      mixedPort: null == mixedPort
-          ? _value.mixedPort
-          : mixedPort // ignore: cast_nullable_to_non_nullable
-              as int,
-      allowLan: null == allowLan
-          ? _value.allowLan
-          : allowLan // ignore: cast_nullable_to_non_nullable
-              as bool,
-      ipv6: null == ipv6
-          ? _value.ipv6
-          : ipv6 // ignore: cast_nullable_to_non_nullable
-              as bool,
       overrideDns: null == overrideDns
           ? _value.overrideDns
           : overrideDns // ignore: cast_nullable_to_non_nullable
               as bool,
-      geodataLoader: null == geodataLoader
-          ? _value.geodataLoader
-          : geodataLoader // ignore: cast_nullable_to_non_nullable
-              as GeodataLoader,
-      logLevel: null == logLevel
-          ? _value.logLevel
-          : logLevel // ignore: cast_nullable_to_non_nullable
-              as LogLevel,
-      externalController: null == externalController
-          ? _value.externalController
-          : externalController // ignore: cast_nullable_to_non_nullable
-              as ExternalControllerStatus,
-      mode: null == mode
-          ? _value.mode
-          : mode // ignore: cast_nullable_to_non_nullable
-              as Mode,
-      findProcessMode: null == findProcessMode
-          ? _value.findProcessMode
-          : findProcessMode // ignore: cast_nullable_to_non_nullable
-              as FindProcessMode,
-      keepAliveInterval: null == keepAliveInterval
-          ? _value.keepAliveInterval
-          : keepAliveInterval // ignore: cast_nullable_to_non_nullable
-              as int,
-      unifiedDelay: null == unifiedDelay
-          ? _value.unifiedDelay
-          : unifiedDelay // ignore: cast_nullable_to_non_nullable
-              as bool,
-      tcpConcurrent: null == tcpConcurrent
-          ? _value.tcpConcurrent
-          : tcpConcurrent // ignore: cast_nullable_to_non_nullable
-              as bool,
-      hosts: null == hosts
-          ? _value._hosts
-          : hosts // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
-      tun: null == tun
-          ? _value.tun
-          : tun // ignore: cast_nullable_to_non_nullable
-              as Tun,
-      dns: null == dns
-          ? _value.dns
-          : dns // ignore: cast_nullable_to_non_nullable
-              as Dns,
-      geoXUrl: null == geoXUrl
-          ? _value.geoXUrl
-          : geoXUrl // ignore: cast_nullable_to_non_nullable
-              as GeoXUrl,
-      rules: null == rules
-          ? _value._rules
-          : rules // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      globalUa: freezed == globalUa
-          ? _value.globalUa
-          : globalUa // ignore: cast_nullable_to_non_nullable
-              as String?,
+      clashConfig: null == clashConfig
+          ? _value.clashConfig
+          : clashConfig // ignore: cast_nullable_to_non_nullable
+              as ClashConfig,
     ));
   }
 }
@@ -3923,79 +3635,16 @@ class __$$ClashConfigStateImplCopyWithImpl<$Res>
 
 class _$ClashConfigStateImpl implements _ClashConfigState {
   const _$ClashConfigStateImpl(
-      {required this.mixedPort,
-      required this.allowLan,
-      required this.ipv6,
-      required this.overrideDns,
-      required this.geodataLoader,
-      required this.logLevel,
-      required this.externalController,
-      required this.mode,
-      required this.findProcessMode,
-      required this.keepAliveInterval,
-      required this.unifiedDelay,
-      required this.tcpConcurrent,
-      required final Map<String, String> hosts,
-      required this.tun,
-      required this.dns,
-      required this.geoXUrl,
-      required final List<String> rules,
-      required this.globalUa})
-      : _hosts = hosts,
-        _rules = rules;
+      {required this.overrideDns, required this.clashConfig});
 
-  @override
-  final int mixedPort;
-  @override
-  final bool allowLan;
-  @override
-  final bool ipv6;
   @override
   final bool overrideDns;
   @override
-  final GeodataLoader geodataLoader;
-  @override
-  final LogLevel logLevel;
-  @override
-  final ExternalControllerStatus externalController;
-  @override
-  final Mode mode;
-  @override
-  final FindProcessMode findProcessMode;
-  @override
-  final int keepAliveInterval;
-  @override
-  final bool unifiedDelay;
-  @override
-  final bool tcpConcurrent;
-  final Map<String, String> _hosts;
-  @override
-  Map<String, String> get hosts {
-    if (_hosts is EqualUnmodifiableMapView) return _hosts;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_hosts);
-  }
-
-  @override
-  final Tun tun;
-  @override
-  final Dns dns;
-  @override
-  final GeoXUrl geoXUrl;
-  final List<String> _rules;
-  @override
-  List<String> get rules {
-    if (_rules is EqualUnmodifiableListView) return _rules;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_rules);
-  }
-
-  @override
-  final String? globalUa;
+  final ClashConfig clashConfig;
 
   @override
   String toString() {
-    return 'ClashConfigState(mixedPort: $mixedPort, allowLan: $allowLan, ipv6: $ipv6, overrideDns: $overrideDns, geodataLoader: $geodataLoader, logLevel: $logLevel, externalController: $externalController, mode: $mode, findProcessMode: $findProcessMode, keepAliveInterval: $keepAliveInterval, unifiedDelay: $unifiedDelay, tcpConcurrent: $tcpConcurrent, hosts: $hosts, tun: $tun, dns: $dns, geoXUrl: $geoXUrl, rules: $rules, globalUa: $globalUa)';
+    return 'ClashConfigState(overrideDns: $overrideDns, clashConfig: $clashConfig)';
   }
 
   @override
@@ -4003,58 +3652,14 @@ class _$ClashConfigStateImpl implements _ClashConfigState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ClashConfigStateImpl &&
-            (identical(other.mixedPort, mixedPort) ||
-                other.mixedPort == mixedPort) &&
-            (identical(other.allowLan, allowLan) ||
-                other.allowLan == allowLan) &&
-            (identical(other.ipv6, ipv6) || other.ipv6 == ipv6) &&
             (identical(other.overrideDns, overrideDns) ||
                 other.overrideDns == overrideDns) &&
-            (identical(other.geodataLoader, geodataLoader) ||
-                other.geodataLoader == geodataLoader) &&
-            (identical(other.logLevel, logLevel) ||
-                other.logLevel == logLevel) &&
-            (identical(other.externalController, externalController) ||
-                other.externalController == externalController) &&
-            (identical(other.mode, mode) || other.mode == mode) &&
-            (identical(other.findProcessMode, findProcessMode) ||
-                other.findProcessMode == findProcessMode) &&
-            (identical(other.keepAliveInterval, keepAliveInterval) ||
-                other.keepAliveInterval == keepAliveInterval) &&
-            (identical(other.unifiedDelay, unifiedDelay) ||
-                other.unifiedDelay == unifiedDelay) &&
-            (identical(other.tcpConcurrent, tcpConcurrent) ||
-                other.tcpConcurrent == tcpConcurrent) &&
-            const DeepCollectionEquality().equals(other._hosts, _hosts) &&
-            (identical(other.tun, tun) || other.tun == tun) &&
-            (identical(other.dns, dns) || other.dns == dns) &&
-            (identical(other.geoXUrl, geoXUrl) || other.geoXUrl == geoXUrl) &&
-            const DeepCollectionEquality().equals(other._rules, _rules) &&
-            (identical(other.globalUa, globalUa) ||
-                other.globalUa == globalUa));
+            (identical(other.clashConfig, clashConfig) ||
+                other.clashConfig == clashConfig));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      mixedPort,
-      allowLan,
-      ipv6,
-      overrideDns,
-      geodataLoader,
-      logLevel,
-      externalController,
-      mode,
-      findProcessMode,
-      keepAliveInterval,
-      unifiedDelay,
-      tcpConcurrent,
-      const DeepCollectionEquality().hash(_hosts),
-      tun,
-      dns,
-      geoXUrl,
-      const DeepCollectionEquality().hash(_rules),
-      globalUa);
+  int get hashCode => Object.hash(runtimeType, overrideDns, clashConfig);
 
   /// Create a copy of ClashConfigState
   /// with the given fields replaced by the non-null parameter values.
@@ -4068,61 +3673,13 @@ class _$ClashConfigStateImpl implements _ClashConfigState {
 
 abstract class _ClashConfigState implements ClashConfigState {
   const factory _ClashConfigState(
-      {required final int mixedPort,
-      required final bool allowLan,
-      required final bool ipv6,
-      required final bool overrideDns,
-      required final GeodataLoader geodataLoader,
-      required final LogLevel logLevel,
-      required final ExternalControllerStatus externalController,
-      required final Mode mode,
-      required final FindProcessMode findProcessMode,
-      required final int keepAliveInterval,
-      required final bool unifiedDelay,
-      required final bool tcpConcurrent,
-      required final Map<String, String> hosts,
-      required final Tun tun,
-      required final Dns dns,
-      required final GeoXUrl geoXUrl,
-      required final List<String> rules,
-      required final String? globalUa}) = _$ClashConfigStateImpl;
+      {required final bool overrideDns,
+      required final ClashConfig clashConfig}) = _$ClashConfigStateImpl;
 
-  @override
-  int get mixedPort;
-  @override
-  bool get allowLan;
-  @override
-  bool get ipv6;
   @override
   bool get overrideDns;
   @override
-  GeodataLoader get geodataLoader;
-  @override
-  LogLevel get logLevel;
-  @override
-  ExternalControllerStatus get externalController;
-  @override
-  Mode get mode;
-  @override
-  FindProcessMode get findProcessMode;
-  @override
-  int get keepAliveInterval;
-  @override
-  bool get unifiedDelay;
-  @override
-  bool get tcpConcurrent;
-  @override
-  Map<String, String> get hosts;
-  @override
-  Tun get tun;
-  @override
-  Dns get dns;
-  @override
-  GeoXUrl get geoXUrl;
-  @override
-  List<String> get rules;
-  @override
-  String? get globalUa;
+  ClashConfig get clashConfig;
 
   /// Create a copy of ClashConfigState
   /// with the given fields replaced by the non-null parameter values.
@@ -4294,22 +3851,22 @@ abstract class _DashboardState implements DashboardState {
 }
 
 /// @nodoc
-mixin _$VPNState {
+mixin _$VpnState {
   AccessControl? get accessControl => throw _privateConstructorUsedError;
   TunStack get stack => throw _privateConstructorUsedError;
   VpnProps get vpnProps => throw _privateConstructorUsedError;
 
-  /// Create a copy of VPNState
+  /// Create a copy of VpnState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $VPNStateCopyWith<VPNState> get copyWith =>
+  $VpnStateCopyWith<VpnState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $VPNStateCopyWith<$Res> {
-  factory $VPNStateCopyWith(VPNState value, $Res Function(VPNState) then) =
-      _$VPNStateCopyWithImpl<$Res, VPNState>;
+abstract class $VpnStateCopyWith<$Res> {
+  factory $VpnStateCopyWith(VpnState value, $Res Function(VpnState) then) =
+      _$VpnStateCopyWithImpl<$Res, VpnState>;
   @useResult
   $Res call({AccessControl? accessControl, TunStack stack, VpnProps vpnProps});
 
@@ -4318,16 +3875,16 @@ abstract class $VPNStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$VPNStateCopyWithImpl<$Res, $Val extends VPNState>
-    implements $VPNStateCopyWith<$Res> {
-  _$VPNStateCopyWithImpl(this._value, this._then);
+class _$VpnStateCopyWithImpl<$Res, $Val extends VpnState>
+    implements $VpnStateCopyWith<$Res> {
+  _$VpnStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of VPNState
+  /// Create a copy of VpnState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -4352,7 +3909,7 @@ class _$VPNStateCopyWithImpl<$Res, $Val extends VPNState>
     ) as $Val);
   }
 
-  /// Create a copy of VPNState
+  /// Create a copy of VpnState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -4366,7 +3923,7 @@ class _$VPNStateCopyWithImpl<$Res, $Val extends VPNState>
     });
   }
 
-  /// Create a copy of VPNState
+  /// Create a copy of VpnState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -4378,11 +3935,11 @@ class _$VPNStateCopyWithImpl<$Res, $Val extends VPNState>
 }
 
 /// @nodoc
-abstract class _$$VPNStateImplCopyWith<$Res>
-    implements $VPNStateCopyWith<$Res> {
-  factory _$$VPNStateImplCopyWith(
-          _$VPNStateImpl value, $Res Function(_$VPNStateImpl) then) =
-      __$$VPNStateImplCopyWithImpl<$Res>;
+abstract class _$$VpnStateImplCopyWith<$Res>
+    implements $VpnStateCopyWith<$Res> {
+  factory _$$VpnStateImplCopyWith(
+          _$VpnStateImpl value, $Res Function(_$VpnStateImpl) then) =
+      __$$VpnStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({AccessControl? accessControl, TunStack stack, VpnProps vpnProps});
@@ -4394,14 +3951,14 @@ abstract class _$$VPNStateImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$VPNStateImplCopyWithImpl<$Res>
-    extends _$VPNStateCopyWithImpl<$Res, _$VPNStateImpl>
-    implements _$$VPNStateImplCopyWith<$Res> {
-  __$$VPNStateImplCopyWithImpl(
-      _$VPNStateImpl _value, $Res Function(_$VPNStateImpl) _then)
+class __$$VpnStateImplCopyWithImpl<$Res>
+    extends _$VpnStateCopyWithImpl<$Res, _$VpnStateImpl>
+    implements _$$VpnStateImplCopyWith<$Res> {
+  __$$VpnStateImplCopyWithImpl(
+      _$VpnStateImpl _value, $Res Function(_$VpnStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of VPNState
+  /// Create a copy of VpnState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -4410,7 +3967,7 @@ class __$$VPNStateImplCopyWithImpl<$Res>
     Object? stack = null,
     Object? vpnProps = null,
   }) {
-    return _then(_$VPNStateImpl(
+    return _then(_$VpnStateImpl(
       accessControl: freezed == accessControl
           ? _value.accessControl
           : accessControl // ignore: cast_nullable_to_non_nullable
@@ -4429,8 +3986,8 @@ class __$$VPNStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$VPNStateImpl implements _VPNState {
-  const _$VPNStateImpl(
+class _$VpnStateImpl implements _VpnState {
+  const _$VpnStateImpl(
       {required this.accessControl,
       required this.stack,
       required this.vpnProps});
@@ -4444,14 +4001,14 @@ class _$VPNStateImpl implements _VPNState {
 
   @override
   String toString() {
-    return 'VPNState(accessControl: $accessControl, stack: $stack, vpnProps: $vpnProps)';
+    return 'VpnState(accessControl: $accessControl, stack: $stack, vpnProps: $vpnProps)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$VPNStateImpl &&
+            other is _$VpnStateImpl &&
             (identical(other.accessControl, accessControl) ||
                 other.accessControl == accessControl) &&
             (identical(other.stack, stack) || other.stack == stack) &&
@@ -4462,20 +4019,20 @@ class _$VPNStateImpl implements _VPNState {
   @override
   int get hashCode => Object.hash(runtimeType, accessControl, stack, vpnProps);
 
-  /// Create a copy of VPNState
+  /// Create a copy of VpnState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$VPNStateImplCopyWith<_$VPNStateImpl> get copyWith =>
-      __$$VPNStateImplCopyWithImpl<_$VPNStateImpl>(this, _$identity);
+  _$$VpnStateImplCopyWith<_$VpnStateImpl> get copyWith =>
+      __$$VpnStateImplCopyWithImpl<_$VpnStateImpl>(this, _$identity);
 }
 
-abstract class _VPNState implements VPNState {
-  const factory _VPNState(
+abstract class _VpnState implements VpnState {
+  const factory _VpnState(
       {required final AccessControl? accessControl,
       required final TunStack stack,
-      required final VpnProps vpnProps}) = _$VPNStateImpl;
+      required final VpnProps vpnProps}) = _$VpnStateImpl;
 
   @override
   AccessControl? get accessControl;
@@ -4484,10 +4041,10 @@ abstract class _VPNState implements VPNState {
   @override
   VpnProps get vpnProps;
 
-  /// Create a copy of VPNState
+  /// Create a copy of VpnState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$VPNStateImplCopyWith<_$VPNStateImpl> get copyWith =>
+  _$$VpnStateImplCopyWith<_$VpnStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

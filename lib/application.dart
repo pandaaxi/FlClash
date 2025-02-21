@@ -12,7 +12,6 @@ import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 import 'controller.dart';
 import 'models/models.dart';
@@ -151,15 +150,11 @@ class ApplicationState extends ConsumerState<Application> {
   Widget build(context) {
     return _buildPlatformWrap(
       _buildWrap(
-        Selector2<AppState, Config, ApplicationSelectorState>(
-          selector: (_, appState, config) => ApplicationSelectorState(
-            locale: config.appSetting.locale,
-            themeMode: config.themeProps.themeMode,
-            primaryColor: config.themeProps.primaryColor,
-            prueBlack: config.themeProps.prueBlack,
-            fontFamily: config.themeProps.fontFamily,
-          ),
-          builder: (_, state, child) {
+        Consumer(
+          builder: (_, ref, child) {
+            final locale =
+                ref.watch(appSettingProvider.select((state) => state.locale));
+            final themeProps = ref.watch(themeSettingProvider);
             return DynamicColorBuilder(
               builder: (lightDynamic, darkDynamic) {
                 _updateSystemColorSchemes(lightDynamic, darkDynamic);
@@ -175,11 +170,9 @@ class ApplicationState extends ConsumerState<Application> {
                     return MessageManager(
                       child: LayoutBuilder(
                         builder: (_, container) {
-                          final appController = globalState.appController;
-                          final maxWidth = container.maxWidth;
-                          if (appController.appState.viewWidth != maxWidth) {
-                            globalState.appController.updateViewWidth(maxWidth);
-                          }
+                          globalState.appController.updateViewWidth(
+                            container.maxWidth,
+                          );
                           return _buildPage(child!);
                         },
                       ),
@@ -187,28 +180,28 @@ class ApplicationState extends ConsumerState<Application> {
                   },
                   scrollBehavior: BaseScrollBehavior(),
                   title: appName,
-                  locale: other.getLocaleForString(state.locale),
+                  locale: other.getLocaleForString(locale),
                   supportedLocales: AppLocalizations.delegate.supportedLocales,
-                  themeMode: state.themeMode,
+                  themeMode: themeProps.themeMode,
                   theme: ThemeData(
                     useMaterial3: true,
-                    fontFamily: state.fontFamily.value,
+                    fontFamily: themeProps.fontFamily.value,
                     pageTransitionsTheme: _pageTransitionsTheme,
                     colorScheme: _getAppColorScheme(
                       brightness: Brightness.light,
                       systemColorSchemes: systemColorSchemes,
-                      primaryColor: state.primaryColor,
+                      primaryColor: themeProps.primaryColor,
                     ),
                   ),
                   darkTheme: ThemeData(
                     useMaterial3: true,
-                    fontFamily: state.fontFamily.value,
+                    fontFamily: themeProps.fontFamily.value,
                     pageTransitionsTheme: _pageTransitionsTheme,
                     colorScheme: _getAppColorScheme(
                       brightness: Brightness.dark,
                       systemColorSchemes: systemColorSchemes,
-                      primaryColor: state.primaryColor,
-                    ).toPrueBlack(state.prueBlack),
+                      primaryColor: themeProps.primaryColor,
+                    ).toPrueBlack(themeProps.prueBlack),
                   ),
                   home: child,
                 );

@@ -229,7 +229,7 @@ class AppController {
     await updateProviders();
   }
 
-  Future applyProfile({bool silence = true}) async {
+  Future applyProfile({bool silence = false}) async {
     if (silence) {
       await _applyProfile();
     } else {
@@ -240,6 +240,15 @@ class AppController {
       });
     }
     addCheckIpNumDebounce();
+  }
+
+  handleChangeProfile() {
+    ref.read(delayDataSourceProvider.notifier).state = {};
+    applyProfile();
+  }
+
+  updateBrightness(Brightness brightness) {
+    ref.read(appBrightnessProvider.notifier).state = brightness;
   }
 
   autoUpdateProfiles() async {
