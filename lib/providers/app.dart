@@ -1,15 +1,50 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/app.g.dart';
 
 @riverpod
+List<NavigationItem> navigations(Ref ref) {
+  final openLogs = ref.watch(appSettingProvider).openLogs;
+  final hasProxies = ref.watch(currentProfileIdProvider) != null;
+  return navigation.getItems(
+    openLogs: openLogs,
+    hasProxies: hasProxies,
+  );
+}
+
+@riverpod
+List<NavigationItem> currentNavigations(Ref ref) {
+  final viewWidth = ref.watch(viewWidthProvider);
+  final navigations = ref.watch(navigationsProvider);
+  final navigationItemMode = switch (viewWidth <= maxMobileWidth) {
+    true => NavigationItemMode.mobile,
+    false => NavigationItemMode.desktop,
+  };
+  return navigations
+      .where(
+        (element) => element.modes.contains(navigationItemMode),
+      )
+      .toList();
+}
+
+@riverpod
 class Logs extends _$Logs {
   @override
   FixedList<Log> build() {
-    return FixedList<Log>(1000);
+    return globalState.appState.logs ?? FixedList(1000);
+  }
+
+  @override
+  set state(FixedList<Log> value) {
+    super.state = value;
+    globalState.appState = globalState.appState.copyWith(logs: state);
   }
 
   addLog(Log value) {
@@ -21,7 +56,13 @@ class Logs extends _$Logs {
 class Requests extends _$Requests {
   @override
   FixedList<Connection> build() {
-    return FixedList<Connection>(1000);
+    return globalState.appState.requests ?? FixedList(1000);
+  }
+
+  @override
+  set state(FixedList<Connection> value) {
+    super.state = value;
+    globalState.appState = globalState.appState.copyWith(requests: state);
   }
 
   addRequest(Connection value) {
@@ -33,11 +74,20 @@ class Requests extends _$Requests {
 class Providers extends _$Providers {
   @override
   List<ExternalProvider> build() {
-    return [];
+    return globalState.appState.providers;
   }
 
-  setState(List<ExternalProvider> value) {
+  @override
+  set state(List<ExternalProvider> value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(providers: state);
+  }
+
+  setProvider(ExternalProvider? provider) {
+    if (provider == null) return;
+    final index = state.indexWhere((item) => item.name == provider.name);
+    if (index == -1) return;
+    state = List.from(state)..[index] = provider;
   }
 }
 
@@ -45,11 +95,15 @@ class Providers extends _$Providers {
 class Packages extends _$Packages {
   @override
   List<Package> build() {
-    return [];
+    return globalState.appState.packages;
   }
 
-  setState(List<Package> value) {
-    state = value;
+  @override
+  set state(List<Package> value) {
+    super.state = value;
+    globalState.appState = globalState.appState.copyWith(
+      packages: value,
+    );
   }
 }
 
@@ -57,7 +111,13 @@ class Packages extends _$Packages {
 class AppBrightness extends _$AppBrightness {
   @override
   Brightness? build() {
-    return null;
+    return globalState.appState.brightness;
+  }
+
+  @override
+  set state(Brightness? value) {
+    super.state = value;
+    globalState.appState = globalState.appState.copyWith(brightness: state);
   }
 
   setState(Brightness? value) {
@@ -69,11 +129,21 @@ class AppBrightness extends _$AppBrightness {
 class Traffics extends _$Traffics {
   @override
   FixedList<Traffic> build() {
-    return FixedList<Traffic>(30);
+    return globalState.appState.traffics ?? FixedList(1000);
+  }
+
+  @override
+  set state(FixedList<Traffic> value) {
+    super.state = value;
+    globalState.appState = globalState.appState.copyWith(traffics: state);
   }
 
   addTraffic(Traffic value) {
     state = state..add(value);
+  }
+
+  clear() {
+    state = state..clear();
   }
 }
 
@@ -81,11 +151,15 @@ class Traffics extends _$Traffics {
 class TotalTraffic extends _$TotalTraffic {
   @override
   Traffic build() {
-    return Traffic();
+    return globalState.appState.totalTraffic ?? Traffic();
   }
 
-  setState(Traffic newTraffic) {
+  @override
+  set state(Traffic newTraffic) {
     state = newTraffic;
+    globalState.appState = globalState.appState.copyWith(
+      totalTraffic: state,
+    );
   }
 }
 
@@ -93,11 +167,15 @@ class TotalTraffic extends _$TotalTraffic {
 class LocalIp extends _$LocalIp {
   @override
   String? build() {
-    return "";
+    return globalState.appState.localIp;
   }
 
-  setState(String? value) {
-    state = value;
+  @override
+  set state(String? value) {
+    super.state = value;
+    globalState.appState = globalState.appState.copyWith(
+      localIp: state,
+    );
   }
 }
 
@@ -105,11 +183,15 @@ class LocalIp extends _$LocalIp {
 class RunTime extends _$RunTime {
   @override
   int? build() {
-    return null;
+    return globalState.appState.runTime;
   }
 
-  setState(int? value) {
-    state = value;
+  @override
+  set state(int? value) {
+    super.state = value;
+    globalState.appState = globalState.appState.copyWith(
+      runTime: value,
+    );
   }
 
   bool get isStart {
@@ -121,23 +203,35 @@ class RunTime extends _$RunTime {
 class ViewWidth extends _$ViewWidth {
   @override
   double build() {
-    return other.getScreenSize().width;
+    return globalState.appState.viewWidth ?? other.getScreenSize().width;
   }
 
-  setState(double value) {
+  @override
+  set state(double value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      viewWidth: state,
+    );
   }
+
+  ViewMode get viewMode => other.getViewMode(state);
+
+  bool get isMobileView => viewMode == ViewMode.mobile;
 }
 
 @riverpod
 class Init extends _$Init {
   @override
   bool build() {
-    return false;
+    return globalState.appState.isInit;
   }
 
-  setState(bool value) {
+  @override
+  set state(bool value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      isInit: state,
+    );
   }
 }
 
@@ -145,23 +239,31 @@ class Init extends _$Init {
 class PageLabel extends _$PageLabel {
   @override
   String build() {
-    return "dashboard";
+    return globalState.appState.pageLabel ?? "dashboard";
   }
 
-  setState(String value) {
+  @override
+  set state(String value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      pageLabel: state,
+    );
   }
 }
 
 @riverpod
 class AppSchemes extends _$AppSchemes {
   @override
-  ColorSchemes? build() {
-    return null;
+  ColorSchemes build() {
+    return globalState.appState.colorSchemes;
   }
 
-  setState(ColorSchemes? value) {
+  @override
+  set state(ColorSchemes value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      colorSchemes: value,
+    );
   }
 }
 
@@ -169,7 +271,15 @@ class AppSchemes extends _$AppSchemes {
 class SortNum extends _$SortNum {
   @override
   int build() {
-    return 0;
+    return globalState.appState.sortNum;
+  }
+
+  @override
+  set state(int value) {
+    state = value;
+    globalState.appState = globalState.appState.copyWith(
+      sortNum: value,
+    );
   }
 
   add() => state++;
@@ -179,7 +289,15 @@ class SortNum extends _$SortNum {
 class CheckIpNum extends _$CheckIpNum {
   @override
   int build() {
-    return 0;
+    return globalState.appState.checkIpNum;
+  }
+
+  @override
+  set state(int value) {
+    state = value;
+    globalState.appState = globalState.appState.copyWith(
+      checkIpNum: value,
+    );
   }
 
   add() => state++;
@@ -189,11 +307,15 @@ class CheckIpNum extends _$CheckIpNum {
 class Version extends _$Version {
   @override
   int build() {
-    return 0;
+    return globalState.appState.version;
   }
 
-  setState(int value) {
+  @override
+  set state(int value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      version: value,
+    );
   }
 }
 
@@ -201,11 +323,20 @@ class Version extends _$Version {
 class Groups extends _$Groups {
   @override
   List<Group> build() {
-    return [];
+    return globalState.appState.groups;
   }
 
-  setState(List<Group> value) {
+  @override
+  set state(List<Group> value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      groups: value,
+    );
+  }
+
+  Group? getGroupWithName(String groupName) {
+    final index = state.indexWhere((element) => element.name == groupName);
+    return index != -1 ? state[index] : null;
   }
 }
 
@@ -213,11 +344,15 @@ class Groups extends _$Groups {
 class SelectedDataSource extends _$SelectedDataSource {
   @override
   Map<String, String> build() {
-    return {};
+    return globalState.appState.selectedMap;
   }
 
-  setState(Map<String, String> value) {
+  @override
+  set state(Map<String, String> value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      selectedMap: value,
+    );
   }
 }
 
@@ -225,10 +360,25 @@ class SelectedDataSource extends _$SelectedDataSource {
 class DelayDataSource extends _$DelayDataSource {
   @override
   DelayMap build() {
-    return {};
+    return globalState.appState.delayMap;
   }
 
-  setState(DelayMap value) {
+  @override
+  set state(DelayMap value) {
     state = value;
+    globalState.appState = globalState.appState.copyWith(
+      delayMap: value,
+    );
+  }
+
+  setDelay(Delay delay) {
+    if (state[delay.url]?[delay.name] != delay.value) {
+      final DelayMap newDelayMap = Map.from(state);
+      if (newDelayMap[delay.url] == null) {
+        newDelayMap[delay.url] = {};
+      }
+      newDelayMap[delay.url]![delay.name] = delay.value;
+      state = newDelayMap;
+    }
   }
 }

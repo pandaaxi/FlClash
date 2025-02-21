@@ -24,21 +24,11 @@ import 'models/models.dart';
 Future<void> main() async {
   globalState.isService = false;
   WidgetsFlutterBinding.ensureInitialized();
-  await clashCore.preload();
   final version = await system.version;
-  await globalState.init();
+  await clashCore.preload();
+  await globalState.init(version);
   await android?.init();
   await window?.init(version);
-  // final appState = AppState(
-  //   mode: config.patchClashConfig.mode,
-  //   version: version,
-  //   selectedMap: config.currentSelectedMap,
-  // );
-  final appFlowingState = AppFlowingState();
-  // appState.navigationItems = navigation.getItems(
-  //   openLogs: config.appSetting.openLogs,
-  //   hasProxies: false,
-  // );
   // tray.update(
   //   appState: appState,
   //   appFlowingState: appFlowingState,

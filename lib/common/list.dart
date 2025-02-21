@@ -13,6 +13,10 @@ class FixedList<T> {
     _list.add(item);
   }
 
+  clear() {
+    _list.clear();
+  }
+
   List<T> get list => List.unmodifiable(_list);
 
   int get length => _list.length;
@@ -36,7 +40,7 @@ class FixedMap<K, V> {
     _queue.add(key);
   }
 
-  clear(){
+  clear() {
     _map.clear();
     _queue.clear();
   }

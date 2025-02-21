@@ -5,10 +5,8 @@ import 'package:animations/animations.dart';
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/plugins/service.dart';
-import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/widgets/scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,6 +22,7 @@ class GlobalState {
   Timer? timer;
   Timer? groupsUpdateTimer;
   late Config config;
+  late AppState appState;
   late PackageInfo packageInfo;
   Function? updateCurrentDelayDebounce;
   PageController? pageController;
@@ -44,9 +43,12 @@ class GlobalState {
     return _instance!;
   }
 
-  init() async {
+  init(int version) async {
     packageInfo = await PackageInfo.fromPlatform();
     config = await preferences.getConfig() ?? Config();
+    appState = AppState(
+      version: version,
+    );
     await globalState.migrateOldData(config);
   }
 
@@ -88,7 +90,6 @@ class GlobalState {
     );
   }
 
-
   handleStart([UpdateTasks? tasks]) async {
     startTime ??= DateTime.now();
     await clashCore.startListener();
@@ -122,10 +123,6 @@ class GlobalState {
     await clashLib?.stopTun();
     await service?.stopVpn();
     stopUpdateTasks();
-  }
-
-  updateProviders(AppState appState) async {
-    appState.providers = await clashCore.getExternalProviders();
   }
 
   CoreState getCoreState(Profile? profile) {
@@ -226,18 +223,6 @@ class GlobalState {
       builder: (_) => child,
       filter: filter,
     );
-  }
-
-  updateTraffic({
-    required Config config,
-    AppFlowingState? appFlowingState,
-  }) async {
-    final traffic = await clashCore.getTraffic();
-    if (appFlowingState != null) {
-      appFlowingState.addTraffic(traffic);
-      tray.updateTrayTitle(traffic);
-      appFlowingState.totalTraffic = await clashCore.getTotalTraffic();
-    }
   }
 
   Future<T?> safeRun<T>(

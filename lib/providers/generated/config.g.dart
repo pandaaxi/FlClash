@@ -23,7 +23,7 @@ final currentProfileProvider = AutoDisposeProvider<Profile?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentProfileRef = AutoDisposeProviderRef<Profile?>;
-String _$appSettingHash() => r'73bc27863009dbc7f76a6f11f87a91b5be14eb3d';
+String _$appSettingHash() => r'7bb49266022ad812ba0caf81fec4aaacbc242165';
 
 /// See also [AppSetting].
 @ProviderFor(AppSetting)
@@ -38,7 +38,7 @@ final appSettingProvider =
 );
 
 typedef _$AppSetting = AutoDisposeNotifier<AppSettingProps>;
-String _$windowSettingHash() => r'0a8f629667e91ba087824684ce2b16e1db99a03f';
+String _$windowSettingHash() => r'a0ddbd13b54b790845f3596479a96cae0920aae6';
 
 /// See also [WindowSetting].
 @ProviderFor(WindowSetting)
@@ -54,7 +54,7 @@ final windowSettingProvider =
 );
 
 typedef _$WindowSetting = AutoDisposeNotifier<WindowProps>;
-String _$vpnSettingHash() => r'f822e0033f5ece6385de934eb0f218987e71e6ed';
+String _$vpnSettingHash() => r'577d578ee2b84a798bb34e6e60396c9f40cbfb26';
 
 /// See also [VpnSetting].
 @ProviderFor(VpnSetting)
@@ -69,7 +69,7 @@ final vpnSettingProvider =
 );
 
 typedef _$VpnSetting = AutoDisposeNotifier<VpnProps>;
-String _$networkSettingHash() => r'6852b15d865f6ef80514afe8cffa06c1830b14d5';
+String _$networkSettingHash() => r'8df788a9d7c714e1f57e8eac556941f0e9f9f298';
 
 /// See also [NetworkSetting].
 @ProviderFor(NetworkSetting)
@@ -85,7 +85,7 @@ final networkSettingProvider =
 );
 
 typedef _$NetworkSetting = AutoDisposeNotifier<NetworkProps>;
-String _$themeSettingHash() => r'25447a269c24f6abab26e26783f0f5bb5e5bc7f7';
+String _$themeSettingHash() => r'6d73892dc53342a06dfbf824848011f6c1a3ad17';
 
 /// See also [ThemeSetting].
 @ProviderFor(ThemeSetting)
@@ -100,7 +100,7 @@ final themeSettingProvider =
 );
 
 typedef _$ThemeSetting = AutoDisposeNotifier<ThemeProps>;
-String _$profilesHash() => r'75ad3c216b1cc36518471ba8108021696442249f';
+String _$profilesHash() => r'4e0f227f45d3891058072a95fc069e12e6c93ce6';
 
 /// See also [Profiles].
 @ProviderFor(Profiles)
@@ -115,7 +115,7 @@ final profilesProvider =
 );
 
 typedef _$Profiles = AutoDisposeNotifier<List<Profile>>;
-String _$currentProfileIdHash() => r'd3bfb99dfae24dd1df612a97a2cfe4755aeb74f0';
+String _$currentProfileIdHash() => r'b9a21197b6969f5ba638a3b4fc7f5e545cd03d34';
 
 /// See also [CurrentProfileId].
 @ProviderFor(CurrentProfileId)
@@ -131,7 +131,7 @@ final currentProfileIdProvider =
 );
 
 typedef _$CurrentProfileId = AutoDisposeNotifier<String?>;
-String _$dAVSettingHash() => r'd779d060ab98f9930289ae800710960afc9e40a2';
+String _$dAVSettingHash() => r'f46ac0f1b4317ec14fcd5a6a5af7e0e80c4cc44e';
 
 /// See also [DAVSetting].
 @ProviderFor(DAVSetting)
@@ -146,7 +146,7 @@ final dAVSettingProvider =
 );
 
 typedef _$DAVSetting = AutoDisposeNotifier<DAV?>;
-String _$overrideDnsHash() => r'ab0b1dc7ca7eeb3a418fe4d13dc01e27fab27065';
+String _$overrideDnsHash() => r'cee354c88eaf29d3ba2a8669177d300c420799ec';
 
 /// See also [OverrideDns].
 @ProviderFor(OverrideDns)
@@ -161,7 +161,7 @@ final overrideDnsProvider =
 );
 
 typedef _$OverrideDns = AutoDisposeNotifier<bool>;
-String _$isAccessControlHash() => r'37346c2c7de32fb46294d30b2ae1d8532d3fc1b1';
+String _$isAccessControlHash() => r'816896179693e8552e32ee343bb47034333259c3';
 
 /// See also [IsAccessControl].
 @ProviderFor(IsAccessControl)
@@ -178,7 +178,7 @@ final isAccessControlProvider =
 
 typedef _$IsAccessControl = AutoDisposeNotifier<bool>;
 String _$accessControlSettingHash() =>
-    r'e8dcb340977bb9dfb95d7fa62ed12427d93770e6';
+    r'1f22cb3db3706bbd679dce154991c85c8dfcfafa';
 
 /// See also [AccessControlSetting].
 @ProviderFor(AccessControlSetting)
@@ -194,7 +194,7 @@ final accessControlSettingProvider =
 );
 
 typedef _$AccessControlSetting = AutoDisposeNotifier<AccessControl>;
-String _$hotKeyActionsHash() => r'3450a245e91fd3bd1c670593a8e26ec4d0335adc';
+String _$hotKeyActionsHash() => r'5cf49d7bf2b445f74a74a5fcf3e7ffe8daf6353f';
 
 /// See also [HotKeyActions].
 @ProviderFor(HotKeyActions)
@@ -211,7 +211,7 @@ final hotKeyActionsProvider =
 
 typedef _$HotKeyActions = AutoDisposeNotifier<List<HotKeyAction>>;
 String _$proxiesStyleSettingHash() =>
-    r'1a5425a4bae28b3e9b70fcc988fedb246f187273';
+    r'54baf60e3e858bb385332e0e680417c28f30e909';
 
 /// See also [ProxiesStyleSetting].
 @ProviderFor(ProxiesStyleSetting)
@@ -227,5 +227,21 @@ final proxiesStyleSettingProvider =
 );
 
 typedef _$ProxiesStyleSetting = AutoDisposeNotifier<ProxiesStyle>;
+String _$patchClashConfigHash() => r'30284ff51a2caf59502688f22bf094afb0aa3683';
+
+/// See also [PatchClashConfig].
+@ProviderFor(PatchClashConfig)
+final patchClashConfigProvider =
+    AutoDisposeNotifierProvider<PatchClashConfig, ClashConfig>.internal(
+  PatchClashConfig.new,
+  name: r'patchClashConfigProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$patchClashConfigHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$PatchClashConfig = AutoDisposeNotifier<ClashConfig>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

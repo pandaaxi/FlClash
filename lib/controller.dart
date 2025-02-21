@@ -9,13 +9,10 @@ import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/archive.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/app.dart';
-import 'package:fl_clash/providers/clash_config.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart';
-import 'package:re_highlight/styles/base16/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common/common.dart';
@@ -46,7 +43,7 @@ class AppController {
 
   applyProfileDebounce() {
     debouncer.call(DebounceTag.addCheckIpNum, () {
-      applyProfile(isPrue: true);
+      applyProfile();
     });
   }
 
@@ -81,13 +78,12 @@ class AppController {
         updateTraffic,
       ]);
       final currentLastModified =
-          await config.getCurrentProfile()?.profileLastModified;
-      if (currentLastModified == null ||
-          globalState.lastProfileModified == null) {
+          await ref.read(currentProfileProvider)?.profileLastModified;
+      if (currentLastModified == null || lastProfileModified == null) {
         addCheckIpNumDebounce();
         return;
       }
-      if (currentLastModified <= (globalState.lastProfileModified ?? 0)) {
+      if (currentLastModified <= (lastProfileModified ?? 0)) {
         addCheckIpNumDebounce();
         return;
       }
@@ -95,9 +91,9 @@ class AppController {
     } else {
       await globalState.handleStop();
       await clashCore.resetTraffic();
-      appFlowingState.traffics = [];
-      appFlowingState.totalTraffic = Traffic();
-      appFlowingState.runTime = null;
+      ref.read(trafficsProvider.notifier).clear();
+      ref.read(totalTrafficProvider.notifier).state = Traffic();
+      ref.read(runTimeProvider.notifier).state = null;
       tray.updateTrayTitle(null);
       addCheckIpNumDebounce();
     }
@@ -108,62 +104,66 @@ class AppController {
     if (startTime != null) {
       final startTimeStamp = startTime.millisecondsSinceEpoch;
       final nowTimeStamp = DateTime.now().millisecondsSinceEpoch;
-      appFlowingState.runTime = nowTimeStamp - startTimeStamp;
+      ref.read(runTimeProvider.notifier).state = nowTimeStamp - startTimeStamp;
     } else {
-      appFlowingState.runTime = null;
+      ref.read(runTimeProvider.notifier).state = null;
     }
   }
 
-  updateTraffic() {
-    globalState.updateTraffic(
-      config: config,
-      appFlowingState: appFlowingState,
-    );
+  updateTraffic() async {
+    final traffic = await clashCore.getTraffic();
+    ref.read(trafficsProvider).add(traffic);
+    tray.updateTrayTitle(traffic);
+    ref.read(totalTrafficProvider.notifier).state =
+        await clashCore.getTotalTraffic();
   }
 
   addProfile(Profile profile) async {
-    config.setProfile(profile);
-    if (config.currentProfileId != null) return;
-    await changeProfile(profile.id);
+    ref.read(profilesProvider.notifier).setProfile(profile);
+    if (ref.read(currentProfileIdProvider) != null) return;
+    ref.read(currentProfileIdProvider.notifier).state = profile.id;
   }
 
   deleteProfile(String id) async {
-    config.deleteProfileById(id);
+    ref.read(profilesProvider.notifier).deleteProfileById(id);
     clearEffect(id);
-    if (config.currentProfileId == id) {
-      if (config.profiles.isNotEmpty) {
-        final updateId = config.profiles.first.id;
-        changeProfile(updateId);
+    if (globalState.config.currentProfileId == id) {
+      final profiles = globalState.config.profiles;
+      final currentProfileId = ref.read(currentProfileIdProvider.notifier);
+      if (profiles.isNotEmpty) {
+        final updateId = profiles.first.id;
+        currentProfileId.state = updateId;
       } else {
-        changeProfile(null);
+        currentProfileId.state = null;
         updateStatus(false);
       }
     }
   }
 
   updateProviders() async {
-    await globalState.updateProviders(appState);
+    ref.read(providersProvider.notifier).state =
+        await clashCore.getExternalProviders();
   }
 
   updateLocalIp() async {
-    appFlowingState.localIp = null;
+    ref.read(localIpProvider.notifier).state = null;
     await Future.delayed(commonDuration);
-    appFlowingState.localIp = await other.getLocalIpAddress();
+    ref.read(localIpProvider.notifier).state = await other.getLocalIpAddress();
   }
 
   Future<void> updateProfile(Profile profile) async {
     final newProfile = await profile.update();
-    config.setProfile(
-      newProfile.copyWith(isUpdating: false),
-    );
-    if (profile.id == config.currentProfile?.id) {
+    ref
+        .read(profilesProvider.notifier)
+        .setProfile(newProfile.copyWith(isUpdating: false));
+    if (profile.id == ref.read(currentProfileIdProvider)) {
       applyProfileDebounce();
     }
   }
 
   setProfile(Profile profile) {
-    config.setProfile(profile);
-    if (profile.id == config.currentProfile?.id) {
+    ref.read(profilesProvider.notifier).setProfile(profile);
+    if (profile.id == ref.read(currentProfileIdProvider)) {
       applyProfileDebounce();
     }
   }
@@ -225,11 +225,11 @@ class AppController {
   Future _applyProfile() async {
     await clashCore.requestGc();
     await updateClashConfig();
-    await updateGroups(appState);
-    await updateProviders(appState);
+    await updateGroups();
+    await updateProviders();
   }
 
-  Future applyProfile({bool silence = false}) async {
+  Future applyProfile({bool silence = true}) async {
     if (silence) {
       await _applyProfile();
     } else {
@@ -242,9 +242,8 @@ class AppController {
     addCheckIpNumDebounce();
   }
 
-
   autoUpdateProfiles() async {
-    for (final profile in config.profiles) {
+    for (final profile in ref.read(profilesProvider)) {
       if (!profile.autoUpdate) continue;
       final isNotNeedUpdate = profile.lastUpdateDate
           ?.add(
@@ -257,18 +256,23 @@ class AppController {
       try {
         updateProfile(profile);
       } catch (e) {
-        appFlowingState.addLog(
-          Log(
-            logLevel: LogLevel.info,
-            payload: e.toString(),
-          ),
-        );
+        ref.read(logsProvider.notifier).addLog(
+              Log(
+                logLevel: LogLevel.info,
+                payload: e.toString(),
+              ),
+            );
       }
     }
   }
 
+  Future<void> updateGroups() async {
+    ref.read(groupsProvider.notifier).state =
+        await clashCore.getProxiesGroups();
+  }
+
   updateProfiles() async {
-    for (final profile in config.profiles) {
+    for (final profile in ref.read(profilesProvider)) {
       if (profile.type == ProfileType.file) {
         continue;
       }
@@ -276,14 +280,8 @@ class AppController {
     }
   }
 
-  Future<void> updateGroups() async {
-    ref.read(groupsProvider.notifier).setState(
-          await clashCore.getProxiesGroups(),
-        );
-  }
-
   updateSystemColorSchemes(ColorSchemes colorSchemes) {
-    ref.read(appSchemesProvider.notifier).setState(colorSchemes);
+    ref.read(appSchemesProvider.notifier).state = colorSchemes;
   }
 
   savePreferences() async {
@@ -409,39 +407,34 @@ class AppController {
       );
       await clashCore.init();
     }
-    await applyProfile(
-      appState: appState,
-      config: config,
-    );
+    await applyProfile();
   }
 
   init() async {
     await _handlePreference();
     await _handlerDisclaimer();
-    await globalState.initCore(
-      appState: appState,
-      config: config,
-    );
+    await initCore();
     await _initStatus();
     autoLaunch?.updateStatus(
-      config.appSetting.autoLaunch,
+      ref.read(appSettingProvider).autoLaunch,
     );
     autoUpdateProfiles();
     autoCheckUpdate();
-    if (!config.appSetting.silentLaunch) {
+    if (!ref.read(appSettingProvider).silentLaunch) {
       window?.show();
     } else {
       window?.hide();
     }
-    appState.isInit = true;
+    ref.read(initProvider.notifier).state = true;
   }
 
   _initStatus() async {
     if (Platform.isAndroid) {
       await globalState.updateStartTime();
     }
-    final status =
-        globalState.isStart == true ? true : config.appSetting.autoRun;
+    final status = globalState.isStart == true
+        ? true
+        : ref.read(appSettingProvider).autoLaunch;
 
     await updateStatus(status);
     if (!status) {
@@ -450,18 +443,22 @@ class AppController {
   }
 
   setDelay(Delay delay) {
-    appState.setDelay(delay);
+    ref.read(delayDataSourceProvider.notifier).setDelay(delay);
   }
 
   toPage(
     int index, {
     bool hasAnimate = false,
   }) {
-    if (index > appState.currentNavigationItems.length - 1) {
+    final navigations = ref.read(currentNavigationsProvider);
+    if (index > navigations.length - 1) {
       return;
     }
-    appState.currentLabel = appState.currentNavigationItems[index].label;
-    if ((config.appSetting.isAnimateToPage || hasAnimate)) {
+    ref.read(pageLabelProvider.notifier).state = navigations[index].label;
+    final isAnimateToPage = ref.read(appSettingProvider).isAnimateToPage;
+    final isMobile =
+        ref.read(viewWidthProvider.notifier).viewMode == ViewMode.mobile;
+    if (isAnimateToPage && isMobile) {
       globalState.pageController?.animateToPage(
         index,
         duration: kTabScrollDuration,
@@ -473,9 +470,9 @@ class AppController {
   }
 
   toProfiles() {
-    final index = appState.currentNavigationItems.indexWhere(
-      (element) => element.label == "profiles",
-    );
+    final index = ref.read(currentNavigationsProvider).indexWhere(
+          (element) => element.label == "profiles",
+        );
     if (index != -1) {
       toPage(index);
     }
@@ -535,9 +532,9 @@ class AppController {
               ),
               TextButton(
                 onPressed: () {
-                  config.appSetting = config.appSetting.copyWith(
-                    disclaimerAccepted: true,
-                  );
+                  ref.read(appSettingProvider.notifier).updateState(
+                        (state) => state.copyWith(disclaimerAccepted: true),
+                      );
                   Navigator.of(context).pop<bool>(true);
                 },
                 child: Text(appLocalizations.agree),
@@ -549,7 +546,7 @@ class AppController {
   }
 
   _handlerDisclaimer() async {
-    if (config.appSetting.disclaimerAccepted) {
+    if (ref.read(appSettingProvider).disclaimerAccepted) {
       return;
     }
     final isDisclaimerAccepted = await showDisclaimer();
@@ -610,18 +607,19 @@ class AppController {
 
   updateViewWidth(double width) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      appState.viewWidth = width;
+      ref.read(viewWidthProvider.notifier).state = width;
     });
   }
 
   int? getDelay(String proxyName, [String? url]) {
-    final currentDelayMap = appState.delayMap[getRealTestUrl(url)];
-    return currentDelayMap?[appState.getRealProxyName(proxyName)];
+    final currentDelayMap =
+        ref.read(delayDataSourceProvider)[getRealTestUrl(url)];
+    return currentDelayMap?[getRealProxyName(proxyName)];
   }
 
   String getRealTestUrl(String? url) {
     if (url == null || url.isEmpty) {
-      return config.appSetting.testUrl;
+      return ref.read(appSettingProvider).testUrl;
     }
     return url;
   }
@@ -657,7 +655,7 @@ class AppController {
   }
 
   List<Proxy> getSortProxies(List<Proxy> proxies, [String? url]) {
-    return switch (config.proxiesStyle.sortType) {
+    return switch (ref.read(proxiesStyleSettingProvider).sortType) {
       ProxiesSortType.none => proxies,
       ProxiesSortType.delay => _sortOfDelay(getRealTestUrl(url), proxies),
       ProxiesSortType.name => _sortOfName(proxies),
@@ -665,9 +663,9 @@ class AppController {
   }
 
   String getCurrentSelectedName(String groupName) {
-    final group = appState.getGroupWithName(groupName);
+    final group = ref.read(groupsProvider.notifier).getGroupWithName(groupName);
     return group?.getCurrentSelectedName(
-            config.currentSelectedMap[groupName] ?? '') ??
+            ref.read(currentProfileProvider)?.selectedMap[groupName] ?? '') ??
         '';
   }
 
@@ -684,40 +682,94 @@ class AppController {
     });
   }
 
-  bool get isMobileView {
-    return appState.viewMode == ViewMode.mobile;
-  }
-
   updateTun() {
-    config.patchClashConfig = config.patchClashConfig.copyWith.tun(
-      enable: !config.patchClashConfig.tun.enable,
-    );
+    ref.read(patchClashConfigProvider.notifier).updateState(
+          (state) => state.copyWith.tun(enable: !state.tun.enable),
+        );
   }
 
   updateSystemProxy() {
-    config.networkProps = config.networkProps.copyWith(
-      systemProxy: !config.networkProps.systemProxy,
-    );
+    ref.read(networkSettingProvider.notifier).updateState(
+          (state) => state.copyWith(
+            systemProxy: state.systemProxy,
+          ),
+        );
   }
 
   updateStart() {
-    updateStatus(!appFlowingState.isStart);
+    updateStatus(ref.read(runTimeProvider.notifier).isStart);
+  }
+
+  updateCurrentGroupName(String groupName) {
+    final currentProfile = ref.watch(currentProfileProvider);
+    if (currentProfile != null &&
+        currentProfile.currentGroupName != groupName) {
+      ref.read(profilesProvider.notifier).setProfile(
+            currentProfile.copyWith(
+              currentGroupName: groupName,
+            ),
+          );
+    }
+  }
+
+  updateCurrentSelectedMap(String groupName, String proxyName) {
+    final currentProfile = ref.watch(currentProfileProvider);
+    if (currentProfile != null &&
+        currentProfile.selectedMap[groupName] != proxyName) {
+      final SelectedMap selectedMap = Map.from(
+        currentProfile.selectedMap,
+      )..[groupName] = proxyName;
+      ref.read(profilesProvider.notifier).setProfile(
+            currentProfile.copyWith(
+              selectedMap: selectedMap,
+            ),
+          );
+    }
+  }
+
+  String getRealProxyName(String proxyName) {
+    final groups = ref.read(groupsProvider);
+    final selectedMap = ref.read(selectedDataSourceProvider);
+    return _getRealProxyName(groups, selectedMap, proxyName);
+  }
+
+  String _getRealProxyName(
+    List<Group> groups,
+    SelectedMap selectedMap,
+    String proxyName,
+  ) {
+    if (proxyName.isEmpty) return proxyName;
+    final index = groups.indexWhere((element) => element.name == proxyName);
+    if (index == -1) return proxyName;
+    final group = groups[index];
+    final currentSelectedName =
+        group.getCurrentSelectedName(selectedMap[proxyName] ?? '');
+    if (currentSelectedName.isEmpty) return proxyName;
+    return _getRealProxyName(
+      groups,
+      selectedMap,
+      proxyName,
+    );
   }
 
   changeMode(Mode mode) {
-    config.patchClashConfig = config.patchClashConfig.copyWith(
-      mode: mode,
-    );
+    ref.read(patchClashConfigProvider.notifier).updateState(
+          (state) => state.copyWith(mode: mode),
+        );
     if (mode == Mode.global) {
-      config.updateCurrentGroupName(GroupName.GLOBAL.name);
+      ref.read(
+        updateCurrentGroupName(GroupName.GLOBAL.name),
+      );
     }
     addCheckIpNumDebounce();
   }
 
   updateAutoLaunch() {
-    config.appSetting = config.appSetting.copyWith(
-      autoLaunch: !config.appSetting.autoLaunch,
-    );
+    ref.read(appSettingProvider.notifier).updateState(
+          (state) => state.copyWith(
+            autoLaunch: !state.autoLaunch,
+          ),
+        );
   }
 
   updateVisible() async {
@@ -730,21 +782,24 @@ class AppController {
   }
 
   updateMode() {
-    final index =
-        Mode.values.indexWhere((item) => item == config.patchClashConfig.mode);
-    if (index == -1) {
-      return;
-    }
-    final nextIndex = index + 1 > Mode.values.length - 1 ? 0 : index + 1;
-    config.patchClashConfig = config.patchClashConfig.copyWith(
-      mode: Mode.values[nextIndex],
+    ref.read(patchClashConfigProvider.notifier).updateState(
+      (state) {
+        final index = Mode.values.indexWhere((item) => item == state.mode);
+        if (index == -1) {
+          return null;
+        }
+        final nextIndex = index + 1 > Mode.values.length - 1 ? 0 : index + 1;
+        return state.copyWith(
+          mode: Mode.values[nextIndex],
+        );
+      },
     );
   }
 
   Future<bool> exportLogs() async {
-    final logsRaw = appFlowingState.logs.map(
-      (item) => item.toString(),
-    );
+    final logsRaw = ref.read(logsProvider).list.map(
+          (item) => item.toString(),
+        );
     final data = await Isolate.run<List<int>>(() async {
       final logsRawString = logsRaw.join("\n");
       return utf8.encode(logsRawString);
@@ -759,7 +814,7 @@ class AppController {
   Future<List<int>> backupData() async {
     final homeDirPath = await appPath.homeDirPath;
     final profilesPath = await appPath.profilesPath;
-    final configJson = config.toJson();
+    final configJson = globalState.config.toJson();
     return Isolate.run<List<int>>(() async {
       final archive = Archive();
       archive.add("config.json", configJson);
@@ -770,55 +825,55 @@ class AppController {
   }
 
   updateTray([bool focus = false]) async {
-    tray.update(
-      appState: appState,
-      appFlowingState: appFlowingState,
-      config: config,
-      focus: focus,
-    );
+    // tray.update(
+    //   appState: appState,
+    //   appFlowingState: appFlowingState,
+    //   config: config,
+    //   focus: focus,
+    // );
   }
 
   recoveryData(
     List<int> data,
     RecoveryOption recoveryOption,
   ) async {
-    final archive = await Isolate.run<Archive>(() {
-      final zipDecoder = ZipDecoder();
-      return zipDecoder.decodeBytes(data);
-    });
-    final homeDirPath = await appPath.homeDirPath;
-    final configs =
-        archive.files.where((item) => item.name.endsWith(".json")).toList();
-    final profiles =
-        archive.files.where((item) => !item.name.endsWith(".json"));
-    final configIndex =
-        configs.indexWhere((config) => config.name == "config.json");
-    if (configIndex == -1) throw "invalid backup.zip";
-    final configFile = configs[configIndex];
-    final tempConfig = Config.fromJson(
-      json.decode(
-        utf8.decode(configFile.content),
-      ),
-    );
-    for (final profile in profiles) {
-      final filePath = join(homeDirPath, profile.name);
-      final file = File(filePath);
-      await file.create(recursive: true);
-      await file.writeAsBytes(profile.content);
-    }
-    config.update(tempConfig, recoveryOption);
-    final clashConfigIndex =
-        configs.indexWhere((config) => config.name == "clashConfig.json");
-    if (clashConfigIndex == -1) {
-      return;
-    }
-    final clashConfigFile = configs[clashConfigIndex];
-    config.patchClashConfig = ClashConfig.fromJson(
-      json.decode(
-        utf8.decode(
-          clashConfigFile.content,
-        ),
-      ),
-    );
+    // final archive = await Isolate.run<Archive>(() {
+    //   final zipDecoder = ZipDecoder();
+    //   return zipDecoder.decodeBytes(data);
+    // });
+    // final homeDirPath = await appPath.homeDirPath;
+    // final configs =
+    //     archive.files.where((item) => item.name.endsWith(".json")).toList();
+    // final profiles =
+    //     archive.files.where((item) => !item.name.endsWith(".json"));
+    // final configIndex =
+    //     configs.indexWhere((config) => config.name == "config.json");
+    // if (configIndex == -1) throw "invalid backup.zip";
+    // final configFile = configs[configIndex];
+    // final tempConfig = Config.fromJson(
+    //   json.decode(
+    //     utf8.decode(configFile.content),
+    //   ),
+    // );
+    // for (final profile in profiles) {
+    //   final filePath = join(homeDirPath, profile.name);
+    //   final file = File(filePath);
+    //   await file.create(recursive: true);
+    //   await file.writeAsBytes(profile.content);
+    // }
+    // config.update(tempConfig, recoveryOption);
+    // final clashConfigIndex =
+    //     configs.indexWhere((config) => config.name == "clashConfig.json");
+    // if (clashConfigIndex == -1) {
+    //   return;
+    // }
+    // final clashConfigFile = configs[clashConfigIndex];
+    // config.patchClashConfig = ClashConfig.fromJson(
+    //   json.decode(
+    //     utf8.decode(
+    //       clashConfigFile.content,
+    //     ),
+    //   ),
+    // );
   }
 }

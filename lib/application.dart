@@ -61,12 +61,12 @@ class ApplicationState extends ConsumerState<Application> {
     super.initState();
     _autoUpdateGroupTask();
     _autoUpdateProfilesTask();
-    globalState.appController = AppController(context,ref);
+    globalState.appController = AppController(context, ref);
     globalState.measure = Measure.of(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final currentContext = globalState.navigatorKey.currentContext;
       if (currentContext != null) {
-        globalState.appController = AppController(currentContext);
+        globalState.appController = AppController(currentContext, ref);
       }
       await globalState.appController.init();
       globalState.appController.initLink();

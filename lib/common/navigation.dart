@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class Navigation {
   static Navigation? _instance;
 
-  getItems({
+  List<NavigationItem> getItems({
     bool openLogs = false,
     bool hasProxies = false,
   }) {

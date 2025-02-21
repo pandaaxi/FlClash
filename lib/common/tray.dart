@@ -40,7 +40,6 @@ class Tray {
 
   update({
     required AppState appState,
-    required AppFlowingState appFlowingState,
     required Config config,
     bool focus = false,
   }) async {
@@ -62,7 +61,7 @@ class Tray {
     );
     menuItems.add(showMenuItem);
     final startMenuItem = MenuItem.checkbox(
-      label: appFlowingState.isStart
+      label: appState.isStart
           ? appLocalizations.stop
           : appLocalizations.start,
       onClick: (_) async {
@@ -95,7 +94,7 @@ class Tray {
               checked: appState.selectedMap[group.name] == proxy.name,
               onClick: (_) {
                 final appController = globalState.appController;
-                appController.config.updateCurrentSelectedMap(
+                appController.updateCurrentSelectedMap(
                   group.name,
                   proxy.name,
                 );
@@ -120,7 +119,7 @@ class Tray {
         menuItems.add(MenuItem.separator());
       }
     }
-    if (appFlowingState.isStart) {
+    if (appState.runTime != null) {
       menuItems.add(
         MenuItem.checkbox(
           label: appLocalizations.tun,
