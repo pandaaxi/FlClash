@@ -35,6 +35,21 @@ List<NavigationItem> currentNavigations(Ref ref) {
 }
 
 @riverpod
+List<Group> currentGroups(Ref ref) {
+  final mode =
+      ref.watch(patchClashConfigProvider.select((state) => state.mode));
+  final groups = ref.watch(groupsProvider);
+  return switch (mode) {
+    Mode.direct => [],
+    Mode.global => groups.toList(),
+    Mode.rule => groups
+        .where((item) => item.hidden == false)
+        .where((element) => element.name != GroupName.GLOBAL.name)
+        .toList(),
+  };
+}
+
+@riverpod
 CoreState coreState(Ref ref) {
   final vpnProps = ref.watch(vpnSettingProvider);
   final currentProfile = ref.watch(currentProfileProvider);
