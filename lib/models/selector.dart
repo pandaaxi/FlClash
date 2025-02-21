@@ -83,7 +83,7 @@ class UpdateNavigationsSelector with _$UpdateNavigationsSelector {
 @freezed
 class HomeState with _$HomeState {
   const factory HomeState({
-    required String currentLabel,
+    required String pageLabel,
     required List<NavigationItem> navigationItems,
     required ViewMode viewMode,
     required String? locale,

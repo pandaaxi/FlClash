@@ -122,6 +122,22 @@ final vpnStateProvider = AutoDisposeProvider<VpnState>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef VpnStateRef = AutoDisposeProviderRef<VpnState>;
+String _$homeStateHash() => r'ab1be48034af65c7aff9dc0e54df260125c0839a';
+
+/// See also [homeState].
+@ProviderFor(homeState)
+final homeStateProvider = AutoDisposeProvider<HomeState>.internal(
+  homeState,
+  name: r'homeStateProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$homeStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef HomeStateRef = AutoDisposeProviderRef<HomeState>;
 String _$logsHash() => r'643d60bb9eb69624e11b5d605c66f78b5746c6d8';
 
 /// See also [Logs].

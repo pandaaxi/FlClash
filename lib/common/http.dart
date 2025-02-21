@@ -13,9 +13,8 @@ class FlClashHttpOverrides extends HttpOverrides {
       if ([localhost].contains(url.host)) {
         return "DIRECT";
       }
-      final appController = globalState.appController;
-      final port = appController.config.patchClashConfig.mixedPort;
-      final isStart = appController.appFlowingState.isStart;
+      final port = globalState.config.patchClashConfig.mixedPort;
+      final isStart = globalState.appState.runTime != null;
       commonPrint.log("find $url proxy:$isStart");
       if (!isStart) return "DIRECT";
       return "PROXY localhost:$port";

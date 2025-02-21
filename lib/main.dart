@@ -12,7 +12,6 @@ import 'package:fl_clash/plugins/vpn.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'application.dart';
 import 'clash/core.dart';
@@ -29,11 +28,6 @@ Future<void> main() async {
   await globalState.init(version);
   await android?.init();
   await window?.init(version);
-  // tray.update(
-  //   appState: appState,
-  //   appFlowingState: appFlowingState,
-  //   config: config,
-  // );
   HttpOverrides.global = FlClashHttpOverrides();
   runApp(ProviderScope(
     child: const Application(),

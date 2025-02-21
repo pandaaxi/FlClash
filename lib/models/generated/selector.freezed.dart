@@ -1489,7 +1489,7 @@ abstract class _UpdateNavigationsSelector implements UpdateNavigationsSelector {
 
 /// @nodoc
 mixin _$HomeState {
-  String get currentLabel => throw _privateConstructorUsedError;
+  String get pageLabel => throw _privateConstructorUsedError;
   List<NavigationItem> get navigationItems =>
       throw _privateConstructorUsedError;
   ViewMode get viewMode => throw _privateConstructorUsedError;
@@ -1508,7 +1508,7 @@ abstract class $HomeStateCopyWith<$Res> {
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
   $Res call(
-      {String currentLabel,
+      {String pageLabel,
       List<NavigationItem> navigationItems,
       ViewMode viewMode,
       String? locale});
@@ -1529,15 +1529,15 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentLabel = null,
+    Object? pageLabel = null,
     Object? navigationItems = null,
     Object? viewMode = null,
     Object? locale = freezed,
   }) {
     return _then(_value.copyWith(
-      currentLabel: null == currentLabel
-          ? _value.currentLabel
-          : currentLabel // ignore: cast_nullable_to_non_nullable
+      pageLabel: null == pageLabel
+          ? _value.pageLabel
+          : pageLabel // ignore: cast_nullable_to_non_nullable
               as String,
       navigationItems: null == navigationItems
           ? _value.navigationItems
@@ -1564,7 +1564,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String currentLabel,
+      {String pageLabel,
       List<NavigationItem> navigationItems,
       ViewMode viewMode,
       String? locale});
@@ -1583,15 +1583,15 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? currentLabel = null,
+    Object? pageLabel = null,
     Object? navigationItems = null,
     Object? viewMode = null,
     Object? locale = freezed,
   }) {
     return _then(_$HomeStateImpl(
-      currentLabel: null == currentLabel
-          ? _value.currentLabel
-          : currentLabel // ignore: cast_nullable_to_non_nullable
+      pageLabel: null == pageLabel
+          ? _value.pageLabel
+          : pageLabel // ignore: cast_nullable_to_non_nullable
               as String,
       navigationItems: null == navigationItems
           ? _value._navigationItems
@@ -1613,14 +1613,14 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
-      {required this.currentLabel,
+      {required this.pageLabel,
       required final List<NavigationItem> navigationItems,
       required this.viewMode,
       required this.locale})
       : _navigationItems = navigationItems;
 
   @override
-  final String currentLabel;
+  final String pageLabel;
   final List<NavigationItem> _navigationItems;
   @override
   List<NavigationItem> get navigationItems {
@@ -1636,7 +1636,7 @@ class _$HomeStateImpl implements _HomeState {
 
   @override
   String toString() {
-    return 'HomeState(currentLabel: $currentLabel, navigationItems: $navigationItems, viewMode: $viewMode, locale: $locale)';
+    return 'HomeState(pageLabel: $pageLabel, navigationItems: $navigationItems, viewMode: $viewMode, locale: $locale)';
   }
 
   @override
@@ -1644,8 +1644,8 @@ class _$HomeStateImpl implements _HomeState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HomeStateImpl &&
-            (identical(other.currentLabel, currentLabel) ||
-                other.currentLabel == currentLabel) &&
+            (identical(other.pageLabel, pageLabel) ||
+                other.pageLabel == pageLabel) &&
             const DeepCollectionEquality()
                 .equals(other._navigationItems, _navigationItems) &&
             (identical(other.viewMode, viewMode) ||
@@ -1654,7 +1654,7 @@ class _$HomeStateImpl implements _HomeState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, currentLabel,
+  int get hashCode => Object.hash(runtimeType, pageLabel,
       const DeepCollectionEquality().hash(_navigationItems), viewMode, locale);
 
   /// Create a copy of HomeState
@@ -1668,13 +1668,13 @@ class _$HomeStateImpl implements _HomeState {
 
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
-      {required final String currentLabel,
+      {required final String pageLabel,
       required final List<NavigationItem> navigationItems,
       required final ViewMode viewMode,
       required final String? locale}) = _$HomeStateImpl;
 
   @override
-  String get currentLabel;
+  String get pageLabel;
   @override
   List<NavigationItem> get navigationItems;
   @override

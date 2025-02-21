@@ -834,12 +834,9 @@ class AppController {
   }
 
   updateTray([bool focus = false]) async {
-    // tray.update(
-    //   appState: appState,
-    //   appFlowingState: appFlowingState,
-    //   config: config,
-    //   focus: focus,
-    // );
+    tray.update(
+      trayState: ref.read(trayStateProvider),
+    );
   }
 
   recoveryData(

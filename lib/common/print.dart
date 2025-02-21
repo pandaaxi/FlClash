@@ -1,5 +1,6 @@
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -19,10 +20,12 @@ class CommonPrint {
     if (globalState.isService) {
       return;
     }
-    globalState.appController.appFlowingState.addLog(Log(
-      logLevel: LogLevel.info,
-      payload: payload,
-    ));
+    globalState.appController.ref.read(logsProvider).add(
+          Log(
+            logLevel: LogLevel.info,
+            payload: payload,
+          ),
+        );
   }
 }
 

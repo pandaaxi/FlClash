@@ -1,12 +1,13 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
+import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
+import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
-import '../enum/enum.dart';
-import '../widgets/widgets.dart';
 
 typedef OnSelected = void Function(int index);
 
@@ -14,33 +15,30 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   _updatePageController(List<NavigationItem> navigationItems) {
-    final currentLabel = globalState.appController.appState.currentLabel;
+    final pageLabel = globalState.appState.pageLabel;
     final index = navigationItems.lastIndexWhere(
-      (element) => element.label == currentLabel,
+      (element) => element.label == pageLabel,
     );
-    final currentIndex = index == -1 ? 0 : index;
+    final pageIndex = index == -1 ? 0 : index;
     if (globalState.pageController != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         globalState.appController.toPage(
-          currentIndex,
+          pageIndex,
           hasAnimate: true,
         );
       });
     } else {
       globalState.pageController = PageController(
-        initialPage: currentIndex,
+        initialPage: pageIndex,
         keepPage: true,
       );
     }
   }
 
   Widget _buildPageView() {
-    return Selector<AppState, List<NavigationItem>>(
-      selector: (_, appState) => appState.currentNavigationItems,
-      shouldRebuild: (prev, next) {
-        return prev.length != next.length;
-      },
-      builder: (_, navigationItems, __) {
+    return Consumer(
+      builder: (_, ref, __) {
+        final navigationItems = ref.watch(currentNavigationsProvider);
         _updatePageController(navigationItems);
         return PageView.builder(
           controller: globalState.pageController,
@@ -62,24 +60,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackScope(
-      child: Selector2<AppState, Config, HomeState>(
-        selector: (_, appState, config) {
-          return HomeState(
-            currentLabel: appState.currentLabel,
-            navigationItems: appState.currentNavigationItems,
-            viewMode: appState.viewMode,
-            locale: config.appSetting.locale,
-          );
-        },
-        shouldRebuild: (prev, next) {
-          return prev != next;
-        },
-        builder: (_, state, child) {
+      child: Consumer(
+        builder: (_, ref, child) {
+          final state = ref.watch(homeStateProvider);
           final viewMode = state.viewMode;
           final navigationItems = state.navigationItems;
-          final currentLabel = state.currentLabel;
+          final pageLabel = state.pageLabel;
           final index = navigationItems.lastIndexWhere(
-            (element) => element.label == currentLabel,
+            (element) => element.label == pageLabel,
           );
           final currentIndex = index == -1 ? 0 : index;
           final navigationBar = CommonNavigationBar(
@@ -94,7 +82,7 @@ class HomePage extends StatelessWidget {
           return CommonScaffold(
             key: globalState.homeScaffoldKey,
             title: Intl.message(
-              currentLabel,
+              pageLabel,
             ),
             sideNavigationBar: sideNavigationBar,
             body: child!,
@@ -107,7 +95,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class CommonNavigationBar extends StatelessWidget {
+class CommonNavigationBar extends ConsumerWidget {
   final ViewMode viewMode;
   final List<NavigationItem> navigationItems;
   final int currentIndex;
@@ -137,7 +125,7 @@ class CommonNavigationBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     _updateSafeMessageOffset(context);
     if (viewMode == ViewMode.mobile) {
       return NavigationBar(
@@ -153,6 +141,7 @@ class CommonNavigationBar extends StatelessWidget {
         selectedIndex: currentIndex,
       );
     }
+    final showLabel = ref.watch(appSettingProvider).showLabel;
     return Material(
       color: context.colorScheme.surfaceContainer,
       child: Column(
@@ -160,43 +149,38 @@ class CommonNavigationBar extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: IntrinsicHeight(
-                child: Selector<Config, bool>(
-                  selector: (_, config) => config.appSetting.showLabel,
-                  builder: (_, showLabel, __) {
-                    return NavigationRail(
-                      backgroundColor: context.colorScheme.surfaceContainer,
-                      selectedIconTheme: IconThemeData(
-                        color: context.colorScheme.onSurfaceVariant,
-                      ),
-                      unselectedIconTheme: IconThemeData(
-                        color: context.colorScheme.onSurfaceVariant,
-                      ),
-                      selectedLabelTextStyle:
-                          context.textTheme.labelLarge!.copyWith(
-                        color: context.colorScheme.onSurface,
-                      ),
-                      unselectedLabelTextStyle:
-                          context.textTheme.labelLarge!.copyWith(
-                        color: context.colorScheme.onSurface,
-                      ),
-                      destinations: navigationItems
-                          .map(
-                            (e) => NavigationRailDestination(
-                              icon: e.icon,
-                              label: Text(
-                                Intl.message(e.label),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      onDestinationSelected: globalState.appController.toPage,
-                      extended: false,
-                      selectedIndex: currentIndex,
-                      labelType: showLabel
-                          ? NavigationRailLabelType.all
-                          : NavigationRailLabelType.none,
-                    );
-                  },
+                child: NavigationRail(
+                  backgroundColor: context.colorScheme.surfaceContainer,
+                  selectedIconTheme: IconThemeData(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                  unselectedIconTheme: IconThemeData(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
+                  selectedLabelTextStyle:
+                      context.textTheme.labelLarge!.copyWith(
+                    color: context.colorScheme.onSurface,
+                  ),
+                  unselectedLabelTextStyle:
+                      context.textTheme.labelLarge!.copyWith(
+                    color: context.colorScheme.onSurface,
+                  ),
+                  destinations: navigationItems
+                      .map(
+                        (e) => NavigationRailDestination(
+                          icon: e.icon,
+                          label: Text(
+                            Intl.message(e.label),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onDestinationSelected: globalState.appController.toPage,
+                  extended: false,
+                  selectedIndex: currentIndex,
+                  labelType: showLabel
+                      ? NavigationRailLabelType.all
+                      : NavigationRailLabelType.none,
                 ),
               ),
             ),
@@ -206,11 +190,11 @@ class CommonNavigationBar extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              final config = globalState.appController.config;
-              final appSetting = config.appSetting;
-              config.appSetting = appSetting.copyWith(
-                showLabel: !appSetting.showLabel,
-              );
+              ref.read(appSettingProvider.notifier).updateState(
+                    (state) => state.copyWith(
+                      showLabel: !state.showLabel,
+                    ),
+                  );
             },
             icon: const Icon(Icons.menu),
           ),

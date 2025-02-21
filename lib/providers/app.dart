@@ -120,6 +120,20 @@ VpnState vpnState(Ref ref) {
 }
 
 @riverpod
+HomeState homeState(Ref ref) {
+  final pageLabel = ref.watch(pageLabelProvider);
+  final navigationItems = ref.watch(currentNavigationsProvider);
+  final viewMode = ref.watch(viewWidthProvider.notifier).viewMode;
+  final locale = ref.watch(appSettingProvider).locale;
+  return HomeState(
+    pageLabel: pageLabel,
+    navigationItems: navigationItems,
+    viewMode: viewMode,
+    locale: locale,
+  );
+}
+
+@riverpod
 class Logs extends _$Logs {
   @override
   FixedList<Log> build() {
