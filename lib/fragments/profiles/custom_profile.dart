@@ -27,12 +27,12 @@ class _CustomProfileState extends State<CustomProfile> {
   }
 
   _initCurrentClashConfig() async {
-    final currentProfileId = globalState.appController.config.currentProfileId;
-    if (currentProfileId == null) {
-      return;
-    }
-    _currentClashConfigNotifier.value =
-        await clashCore.getProfile(currentProfileId);
+    // final currentProfileId = globalState.config.currentProfileId;
+    // if (currentProfileId == null) {
+    //   return;
+    // }
+    // _currentClashConfigNotifier.value =
+    //     await clashCore.getProfile(currentProfileId);
   }
 
   @override

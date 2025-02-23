@@ -28,11 +28,11 @@ class AppState with _$AppState {
     int? runTime,
     @Default([]) List<ExternalProvider> providers,
     String? localIp,
-    FixedList<Connection>? requests,
+    required FixedList<Connection> requests,
     required int version,
-    FixedList<Log>? logs,
-    FixedList<Traffic>? traffics,
-    Traffic? totalTraffic,
+    required FixedList<Log> logs,
+    required FixedList<Traffic> traffics,
+    required Traffic totalTraffic,
   }) = _AppState;
 }
 

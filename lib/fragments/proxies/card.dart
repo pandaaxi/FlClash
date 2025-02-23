@@ -2,10 +2,11 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/fragments/proxies/common.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProxyCard extends StatelessWidget {
   final String groupName;
@@ -35,10 +36,9 @@ class ProxyCard extends StatelessWidget {
   Widget _buildDelayText() {
     return SizedBox(
       height: measure.labelSmallHeight,
-      child: Selector<AppState, int?>(
-        selector: (context, appState) =>
-            globalState.appController.getDelay(proxy.name,testUrl),
-        builder: (context, delay, __) {
+      child: Consumer(
+        builder: (context, ref, __) {
+          final delay = ref.watch(getDelayProvider(proxyName: proxy.name));
           return FadeBox(
             child: Builder(
               builder: (_) {
@@ -103,26 +103,26 @@ class ProxyCard extends StatelessWidget {
   }
 
   _changeProxy(BuildContext context) async {
-    final appController = globalState.appController;
-    final isURLTestOrFallback = groupType.isURLTestOrFallback;
-    final isSelector = groupType == GroupType.Selector;
-    if (isURLTestOrFallback || isSelector) {
-      final currentProxyName =
-          appController.config.currentSelectedMap[groupName];
-      final nextProxyName = switch (isURLTestOrFallback) {
-        true => currentProxyName == proxy.name ? "" : proxy.name,
-        false => proxy.name,
-      };
-      appController.config.updateCurrentSelectedMap(
-        groupName,
-        nextProxyName,
-      );
-      await appController.changeProxyDebounce(groupName, nextProxyName);
-      return;
-    }
-    globalState.showNotifier(
-      appLocalizations.notSelectedTip,
-    );
+    // final appController = globalState.appController;
+    // final isURLTestOrFallback = groupType.isURLTestOrFallback;
+    // final isSelector = groupType == GroupType.Selector;
+    // if (isURLTestOrFallback || isSelector) {
+    //   final currentProxyName =
+    //       appController.config.currentSelectedMap[groupName];
+    //   final nextProxyName = switch (isURLTestOrFallback) {
+    //     true => currentProxyName == proxy.name ? "" : proxy.name,
+    //     false => proxy.name,
+    //   };
+    //   appController.config.updateCurrentSelectedMap(
+    //     groupName,
+    //     nextProxyName,
+    //   );
+    //   await appController.changeProxyDebounce(groupName, nextProxyName);
+    //   return;
+    // }
+    // globalState.showNotifier(
+    //   appLocalizations.notSelectedTip,
+    // );
   }
 
   @override
@@ -154,21 +154,8 @@ class ProxyCard extends StatelessWidget {
                     if (type == ProxyCardType.expand) ...[
                       SizedBox(
                         height: measure.bodySmallHeight,
-                        child: Selector<AppState, String>(
-                          selector: (context, appState) => appState.getDesc(
-                            proxy.type,
-                            proxy.name,
-                          ),
-                          builder: (_, desc, __) {
-                            return EmojiText(
-                              desc,
-                              overflow: TextOverflow.ellipsis,
-                              style: context.textTheme.bodySmall?.copyWith(
-                                color:
-                                    context.textTheme.bodySmall?.color?.toLight,
-                              ),
-                            );
-                          },
+                        child: _ProxyDesc(
+                          proxy: proxy,
                         ),
                       ),
                       const SizedBox(
@@ -203,35 +190,72 @@ class ProxyCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (groupType.isURLTestOrFallback)
-              Selector<Config, String>(
-                selector: (_, config) {
-                  final selectedProxyName =
-                      config.currentSelectedMap[groupName];
-                  return selectedProxyName ?? '';
-                },
-                builder: (_, value, child) {
-                  if (value != proxy.name) return Container();
-                  return child!;
-                },
-                child: Positioned.fill(
-                  child: Container(
-                    alignment: Alignment.topRight,
-                    margin: const EdgeInsets.all(8),
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                      ),
-                      child: const SelectIcon(),
-                    ),
-                  ),
+            if (groupType.isComputedSelected)
+              Positioned(
+                top: 0,
+                right: 0,
+                child: _ProxyComputedMark(
+                  groupName: groupName,
+                  proxy: proxy,
                 ),
               )
           ],
         );
       },
+    );
+  }
+}
+
+class _ProxyDesc extends ConsumerWidget {
+  final Proxy proxy;
+
+  const _ProxyDesc({
+    required this.proxy,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final desc = ref.watch(
+      getProxyDescProvider(proxy),
+    );
+    return EmojiText(
+      desc,
+      overflow: TextOverflow.ellipsis,
+      style: context.textTheme.bodySmall?.copyWith(
+        color: context.textTheme.bodySmall?.color?.toLight,
+      ),
+    );
+  }
+}
+
+class _ProxyComputedMark extends ConsumerWidget {
+  final String groupName;
+  final Proxy proxy;
+
+  const _ProxyComputedMark({
+    required this.groupName,
+    required this.proxy,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final proxyName = ref.watch(
+      getSelectedProxyNameProvider(groupName),
+    );
+    if (proxyName != proxy.name) {
+      return SizedBox();
+    }
+    return Container(
+      alignment: Alignment.topRight,
+      margin: const EdgeInsets.all(8),
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Theme.of(context).colorScheme.secondaryContainer,
+        ),
+        child: const SelectIcon(),
+      ),
     );
   }
 }

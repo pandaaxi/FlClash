@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'item.dart';
 
@@ -100,15 +100,13 @@ class _ConnectionsFragmentState extends State<ConnectionsFragment>
 
   @override
   Widget build(BuildContext context) {
-    return Selector<AppState, bool?>(
-      selector: (_, appState) =>
-          appState.currentLabel == 'connections' ||
-          appState.viewMode == ViewMode.mobile &&
-              appState.currentLabel == "tools",
-      builder: (_, isCurrent, child) {
-        if (isCurrent == null || isCurrent) {
-          _initActions();
-        }
+    return Consumer(
+      builder: (_, ref, child) {
+        ref.listen(pageLabelProvider, (prev, next) {
+          if (prev == next && next == "connections") {
+            _initActions();
+          }
+        });
         return child!;
       },
       child: ValueListenableBuilder<ConnectionsState>(

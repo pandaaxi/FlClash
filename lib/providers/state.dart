@@ -1,3 +1,5 @@
+import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -121,9 +123,80 @@ DashboardState dashboardState(Ref ref) {
 StartButtonSelectorState startButtonSelectorState(Ref ref) {
   final isInit = ref.watch(initProvider);
   final hasProfile =
-  ref.watch(profilesProvider.select((state) => state.isEmpty));
+      ref.watch(profilesProvider.select((state) => state.isEmpty));
   return StartButtonSelectorState(
     isInit: isInit,
     hasProfile: hasProfile,
   );
+}
+
+@riverpod
+ProfilesSelectorState profilesSelectorState(Ref ref) {
+  final currentProfileId = ref.watch(currentProfileIdProvider);
+  final profiles = ref.watch(profilesProvider);
+  final columns = ref.watch(
+      viewWidthProvider.select((state) => other.getProfilesColumns(state)));
+  return ProfilesSelectorState(
+    profiles: profiles,
+    currentProfileId: currentProfileId,
+    columns: columns,
+  );
+}
+
+String _getRealProxyName(
+  List<Group> groups,
+  SelectedMap selectedMap,
+  String proxyName,
+) {
+  if (proxyName.isEmpty) return proxyName;
+  final index = groups.indexWhere((element) => element.name == proxyName);
+  if (index == -1) return proxyName;
+  final group = groups[index];
+  final currentSelectedName =
+      group.getCurrentSelectedName(selectedMap[proxyName] ?? '');
+  if (currentSelectedName.isEmpty) return proxyName;
+  return _getRealProxyName(
+    groups,
+    selectedMap,
+    proxyName,
+  );
+}
+
+@riverpod
+String getRealProxyName(Ref ref, String proxyName) {
+  final groups = ref.watch(groupsProvider);
+  final selectedMap = ref.watch(selectedDataSourceProvider);
+  return _getRealProxyName(groups, selectedMap, proxyName);
+}
+
+@riverpod
+int? getDelay(
+  Ref ref, {
+  required String proxyName,
+  String? testUrl,
+}) {
+  final currentTestUrl = ref.watch(appSettingProvider).testUrl;
+  final delayMap = ref.watch(delayDataSourceProvider);
+  final currentDelayMap = delayMap[testUrl.getSafeValue(currentTestUrl)];
+  return currentDelayMap?[proxyName];
+}
+
+@riverpod
+String? getSelectedProxyName(Ref ref, String groupName) {
+  final selectedMap = ref.watch(
+      currentProfileProvider.select((state) => state?.selectedMap ?? {}));
+  return selectedMap[groupName];
+}
+
+@riverpod
+String getProxyDesc(Ref ref, Proxy proxy) {
+  final groupTypeNamesList = GroupType.values.map((e) => e.name).toList();
+  if (!groupTypeNamesList.contains(proxy.type)) {
+    return proxy.type;
+  } else {
+    final groups = ref.watch(groupsProvider);
+    final index = groups.indexWhere((element) => element.name == proxy.name);
+    if (index == -1) return proxy.type;
+    return "${proxy.type}(${groups[index].now ?? '*'})";
+  }
 }

@@ -62,7 +62,7 @@ extension GroupTypeExtension on GroupType {
       )
       .toList();
 
-  bool get isURLTestOrFallback {
+  bool get isComputedSelected {
     return [GroupType.URLTest, GroupType.Fallback].contains(this);
   }
 

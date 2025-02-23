@@ -58,7 +58,7 @@ final currentGroupsProvider = AutoDisposeProvider<List<Group>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentGroupsRef = AutoDisposeProviderRef<List<Group>>;
-String _$logsHash() => r'643d60bb9eb69624e11b5d605c66f78b5746c6d8';
+String _$logsHash() => r'045f75f484186253423271d7cfd4a5d196bc8373';
 
 /// See also [Logs].
 @ProviderFor(Logs)
@@ -72,7 +72,7 @@ final logsProvider = AutoDisposeNotifierProvider<Logs, FixedList<Log>>.internal(
 );
 
 typedef _$Logs = AutoDisposeNotifier<FixedList<Log>>;
-String _$requestsHash() => r'575934e5600424c510430ffece82d1c84a4b8fb8';
+String _$requestsHash() => r'f5e129cf2821884f626f4f7ca7b2e99e3cbe6ade';
 
 /// See also [Requests].
 @ProviderFor(Requests)
@@ -133,7 +133,7 @@ final appBrightnessProvider =
 );
 
 typedef _$AppBrightness = AutoDisposeNotifier<Brightness?>;
-String _$trafficsHash() => r'5f6e3bf84336308d664253dbfb7199eb97d85f35';
+String _$trafficsHash() => r'4c19f6bc7b0ecd75ba621d866e639cd3f31029ff';
 
 /// See also [Traffics].
 @ProviderFor(Traffics)
@@ -148,7 +148,7 @@ final trafficsProvider =
 );
 
 typedef _$Traffics = AutoDisposeNotifier<FixedList<Traffic>>;
-String _$totalTrafficHash() => r'0e5015e8b71a178b28ba03dcda45466e7ea36ea1';
+String _$totalTrafficHash() => r'7307b83a91ab0ba3aa58a2b309037f0fbc24f329';
 
 /// See also [TotalTraffic].
 @ProviderFor(TotalTraffic)

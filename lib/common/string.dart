@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-
 import 'print.dart';
 
 extension StringExtension on String {
@@ -47,5 +46,14 @@ extension StringExtension on String {
       commonPrint.log(e.toString());
       return false;
     }
+  }
+}
+
+extension StringExtensionSafe on String? {
+  String getSafeValue(String defaultValue) {
+    if (this == null || this!.isEmpty) {
+      return defaultValue;
+    }
+    return this!;
   }
 }

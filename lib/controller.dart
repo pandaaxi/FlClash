@@ -619,19 +619,6 @@ class AppController {
     });
   }
 
-  int? getDelay(String proxyName, [String? url]) {
-    final currentDelayMap =
-        ref.read(delayDataSourceProvider)[getRealTestUrl(url)];
-    return currentDelayMap?[getRealProxyName(proxyName)];
-  }
-
-  String getRealTestUrl(String? url) {
-    if (url == null || url.isEmpty) {
-      return ref.read(appSettingProvider).testUrl;
-    }
-    return url;
-  }
-
   List<Proxy> _sortOfName(List<Proxy> proxies) {
     return List.of(proxies)
       ..sort(
@@ -642,12 +629,17 @@ class AppController {
       );
   }
 
-  List<Proxy> _sortOfDelay(String url, List<Proxy> proxies) {
+  List<Proxy> _sortOfDelay({
+    required List<Proxy> proxies,
+    String? testUrl,
+  }) {
     return List.of(proxies)
       ..sort(
         (a, b) {
-          final aDelay = getDelay(a.name, url);
-          final bDelay = getDelay(b.name, url);
+          final aDelay =
+              ref.read(getDelayProvider(proxyName: a.name, testUrl: testUrl));
+          final bDelay =
+              ref.read(getDelayProvider(proxyName: b.name, testUrl: testUrl));
           if (aDelay == null && bDelay == null) {
             return 0;
           }
@@ -665,7 +657,10 @@ class AppController {
   List<Proxy> getSortProxies(List<Proxy> proxies, [String? url]) {
     return switch (ref.read(proxiesStyleSettingProvider).sortType) {
       ProxiesSortType.none => proxies,
-      ProxiesSortType.delay => _sortOfDelay(getRealTestUrl(url), proxies),
+      ProxiesSortType.delay => _sortOfDelay(
+          proxies: proxies,
+          testUrl: url,
+        ),
       ProxiesSortType.name => _sortOfName(proxies),
     };
   }
@@ -733,31 +728,6 @@ class AppController {
             ),
           );
     }
-  }
-
-  String getRealProxyName(String proxyName) {
-    final groups = ref.read(groupsProvider);
-    final selectedMap = ref.read(selectedDataSourceProvider);
-    return _getRealProxyName(groups, selectedMap, proxyName);
-  }
-
-  String _getRealProxyName(
-    List<Group> groups,
-    SelectedMap selectedMap,
-    String proxyName,
-  ) {
-    if (proxyName.isEmpty) return proxyName;
-    final index = groups.indexWhere((element) => element.name == proxyName);
-    if (index == -1) return proxyName;
-    final group = groups[index];
-    final currentSelectedName =
-        group.getCurrentSelectedName(selectedMap[proxyName] ?? '');
-    if (currentSelectedName.isEmpty) return proxyName;
-    return _getRealProxyName(
-      groups,
-      selectedMap,
-      proxyName,
-    );
   }
 
   changeMode(Mode mode) {

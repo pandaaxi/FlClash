@@ -1,10 +1,10 @@
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'item.dart';
 
@@ -46,10 +46,8 @@ class _RequestsFragmentState extends State<RequestsFragment> with ViewMixin {
   @override
   void initState() {
     super.initState();
-    final appController = globalState.appController;
-    final appState = appController.appState;
     _requestsStateNotifier.value = _requestsStateNotifier.value.copyWith(
-      connections: appState.requests,
+      connections: globalState.appState.requests.list,
     );
   }
 
@@ -106,22 +104,6 @@ class _RequestsFragmentState extends State<RequestsFragment> with ViewMixin {
     super.dispose();
   }
 
-  Widget _wrapPage(Widget child) {
-    return Selector<AppState, bool?>(
-      selector: (_, appState) =>
-          appState.currentLabel == 'requests' ||
-          appState.viewMode == ViewMode.mobile &&
-              appState.currentLabel == "tools",
-      builder: (_, isCurrent, child) {
-        if (isCurrent == null || isCurrent) {
-          _initActions();
-        }
-        return child!;
-      },
-      child: child,
-    );
-  }
-
   updateRequestsThrottler() {
     throttler.call("request", () {
       final isEquality = connectionListEquality.equals(
@@ -139,92 +121,87 @@ class _RequestsFragmentState extends State<RequestsFragment> with ViewMixin {
     }, duration: commonDuration);
   }
 
-  Widget _wrapRequestsUpdate(Widget child) {
-    return Selector<AppState, List<Connection>>(
-      selector: (_, appState) => appState.requests,
-      shouldRebuild: (prev, next) {
-        final isEquality = connectionListEquality.equals(prev, next);
-        if (!isEquality) {
-          _requests = next;
-          updateRequestsThrottler();
-        }
-        return !isEquality;
-      },
-      builder: (_, next, child) {
-        return child!;
-      },
-      child: child,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) {
         return FindProcessBuilder(builder: (value) {
           _handleTryClearCache(constraints.maxWidth - 40 - (value ? 60 : 0));
-          return _wrapPage(
-            _wrapRequestsUpdate(
-              ValueListenableBuilder<ConnectionsState>(
-                valueListenable: _requestsStateNotifier,
-                builder: (_, state, __) {
-                  final connections = state.list;
-                  if (connections.isEmpty) {
-                    return NullStatus(
-                      label: appLocalizations.nullRequestsDesc,
-                    );
-                  }
-                  final items = connections
-                      .map<Widget>(
-                        (connection) => ConnectionItem(
-                          key: Key(connection.id),
-                          connection: connection,
-                          onClick: (value) {
-                            context.commonScaffoldState?.addKeyword(value);
-                          },
-                        ),
-                      )
-                      .separated(
-                        const Divider(
-                          height: 0,
-                        ),
-                      )
-                      .toList();
-                  return Align(
-                    alignment: Alignment.topCenter,
-                    child: NotificationListener<ScrollEndNotification>(
-                      onNotification: (details) {
-                        _preOffset = details.metrics.pixels;
-                        return false;
-                      },
-                      child: CommonScrollBar(
+          return Consumer(
+            builder: (_, ref, child) {
+              ref.listen(pageLabelProvider, (prev, next) {
+                if (prev == next && next == "requests") {
+                  _initActions();
+                }
+              });
+              ref.listen(requestsProvider.select((state) => state.list),
+                  (prev, next) {
+                if (!connectionListEquality.equals(prev, next)) {
+                  _requests = next;
+                  updateRequestsThrottler();
+                }
+              });
+              return child!;
+            },
+            child: ValueListenableBuilder<ConnectionsState>(
+              valueListenable: _requestsStateNotifier,
+              builder: (_, state, __) {
+                final connections = state.list;
+                if (connections.isEmpty) {
+                  return NullStatus(
+                    label: appLocalizations.nullRequestsDesc,
+                  );
+                }
+                final items = connections
+                    .map<Widget>(
+                      (connection) => ConnectionItem(
+                        key: Key(connection.id),
+                        connection: connection,
+                        onClick: (value) {
+                          context.commonScaffoldState?.addKeyword(value);
+                        },
+                      ),
+                    )
+                    .separated(
+                      const Divider(
+                        height: 0,
+                      ),
+                    )
+                    .toList();
+                return Align(
+                  alignment: Alignment.topCenter,
+                  child: NotificationListener<ScrollEndNotification>(
+                    onNotification: (details) {
+                      _preOffset = details.metrics.pixels;
+                      return false;
+                    },
+                    child: CommonScrollBar(
+                      controller: _scrollController,
+                      child: ListView.builder(
+                        reverse: true,
+                        shrinkWrap: true,
+                        physics: NextClampingScrollPhysics(),
                         controller: _scrollController,
-                        child: ListView.builder(
-                          reverse: true,
-                          shrinkWrap: true,
-                          physics: NextClampingScrollPhysics(),
-                          controller: _scrollController,
-                          itemExtentBuilder: (index, __) {
-                            final widget = items[index];
-                            if (widget.runtimeType == Divider) {
-                              return 0;
-                            }
-                            final measure = globalState.measure;
-                            final bodyMediumHeight = measure.bodyMediumHeight;
-                            final connection = connections[(index / 2).floor()];
-                            final height = _calcCacheHeight(connection);
-                            return height + bodyMediumHeight + 32;
-                          },
-                          itemBuilder: (_, index) {
-                            return items[index];
-                          },
-                          itemCount: items.length,
-                        ),
+                        itemExtentBuilder: (index, __) {
+                          final widget = items[index];
+                          if (widget.runtimeType == Divider) {
+                            return 0;
+                          }
+                          final measure = globalState.measure;
+                          final bodyMediumHeight = measure.bodyMediumHeight;
+                          final connection = connections[(index / 2).floor()];
+                          final height = _calcCacheHeight(connection);
+                          return height + bodyMediumHeight + 32;
+                        },
+                        itemBuilder: (_, index) {
+                          return items[index];
+                        },
+                        itemCount: items.length,
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           );
         });

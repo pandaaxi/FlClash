@@ -49,6 +49,10 @@ class GlobalState {
     appState = AppState(
       version: version,
       viewWidth: other.getScreenSize().width,
+      requests: FixedList(1000),
+      logs: FixedList(1000),
+      traffics: FixedList(30),
+      totalTraffic: Traffic(),
     );
     await globalState.migrateOldData(config);
   }

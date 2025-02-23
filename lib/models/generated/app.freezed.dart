@@ -31,11 +31,11 @@ mixin _$AppState {
   int? get runTime => throw _privateConstructorUsedError;
   List<ExternalProvider> get providers => throw _privateConstructorUsedError;
   String? get localIp => throw _privateConstructorUsedError;
-  FixedList<Connection>? get requests => throw _privateConstructorUsedError;
+  FixedList<Connection> get requests => throw _privateConstructorUsedError;
   int get version => throw _privateConstructorUsedError;
-  FixedList<Log>? get logs => throw _privateConstructorUsedError;
-  FixedList<Traffic>? get traffics => throw _privateConstructorUsedError;
-  Traffic? get totalTraffic => throw _privateConstructorUsedError;
+  FixedList<Log> get logs => throw _privateConstructorUsedError;
+  FixedList<Traffic> get traffics => throw _privateConstructorUsedError;
+  Traffic get totalTraffic => throw _privateConstructorUsedError;
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -64,11 +64,11 @@ abstract class $AppStateCopyWith<$Res> {
       int? runTime,
       List<ExternalProvider> providers,
       String? localIp,
-      FixedList<Connection>? requests,
+      FixedList<Connection> requests,
       int version,
-      FixedList<Log>? logs,
-      FixedList<Traffic>? traffics,
-      Traffic? totalTraffic});
+      FixedList<Log> logs,
+      FixedList<Traffic> traffics,
+      Traffic totalTraffic});
 
   $ColorSchemesCopyWith<$Res> get colorSchemes;
 }
@@ -102,11 +102,11 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? runTime = freezed,
     Object? providers = null,
     Object? localIp = freezed,
-    Object? requests = freezed,
+    Object? requests = null,
     Object? version = null,
-    Object? logs = freezed,
-    Object? traffics = freezed,
-    Object? totalTraffic = freezed,
+    Object? logs = null,
+    Object? traffics = null,
+    Object? totalTraffic = null,
   }) {
     return _then(_value.copyWith(
       isInit: null == isInit
@@ -165,26 +165,26 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.localIp
           : localIp // ignore: cast_nullable_to_non_nullable
               as String?,
-      requests: freezed == requests
+      requests: null == requests
           ? _value.requests
           : requests // ignore: cast_nullable_to_non_nullable
-              as FixedList<Connection>?,
+              as FixedList<Connection>,
       version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as int,
-      logs: freezed == logs
+      logs: null == logs
           ? _value.logs
           : logs // ignore: cast_nullable_to_non_nullable
-              as FixedList<Log>?,
-      traffics: freezed == traffics
+              as FixedList<Log>,
+      traffics: null == traffics
           ? _value.traffics
           : traffics // ignore: cast_nullable_to_non_nullable
-              as FixedList<Traffic>?,
-      totalTraffic: freezed == totalTraffic
+              as FixedList<Traffic>,
+      totalTraffic: null == totalTraffic
           ? _value.totalTraffic
           : totalTraffic // ignore: cast_nullable_to_non_nullable
-              as Traffic?,
+              as Traffic,
     ) as $Val);
   }
 
@@ -222,11 +222,11 @@ abstract class _$$AppStateImplCopyWith<$Res>
       int? runTime,
       List<ExternalProvider> providers,
       String? localIp,
-      FixedList<Connection>? requests,
+      FixedList<Connection> requests,
       int version,
-      FixedList<Log>? logs,
-      FixedList<Traffic>? traffics,
-      Traffic? totalTraffic});
+      FixedList<Log> logs,
+      FixedList<Traffic> traffics,
+      Traffic totalTraffic});
 
   @override
   $ColorSchemesCopyWith<$Res> get colorSchemes;
@@ -259,11 +259,11 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? runTime = freezed,
     Object? providers = null,
     Object? localIp = freezed,
-    Object? requests = freezed,
+    Object? requests = null,
     Object? version = null,
-    Object? logs = freezed,
-    Object? traffics = freezed,
-    Object? totalTraffic = freezed,
+    Object? logs = null,
+    Object? traffics = null,
+    Object? totalTraffic = null,
   }) {
     return _then(_$AppStateImpl(
       isInit: null == isInit
@@ -322,26 +322,26 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.localIp
           : localIp // ignore: cast_nullable_to_non_nullable
               as String?,
-      requests: freezed == requests
+      requests: null == requests
           ? _value.requests
           : requests // ignore: cast_nullable_to_non_nullable
-              as FixedList<Connection>?,
+              as FixedList<Connection>,
       version: null == version
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as int,
-      logs: freezed == logs
+      logs: null == logs
           ? _value.logs
           : logs // ignore: cast_nullable_to_non_nullable
-              as FixedList<Log>?,
-      traffics: freezed == traffics
+              as FixedList<Log>,
+      traffics: null == traffics
           ? _value.traffics
           : traffics // ignore: cast_nullable_to_non_nullable
-              as FixedList<Traffic>?,
-      totalTraffic: freezed == totalTraffic
+              as FixedList<Traffic>,
+      totalTraffic: null == totalTraffic
           ? _value.totalTraffic
           : totalTraffic // ignore: cast_nullable_to_non_nullable
-              as Traffic?,
+              as Traffic,
     ));
   }
 }
@@ -364,11 +364,11 @@ class _$AppStateImpl implements _AppState {
       this.runTime,
       final List<ExternalProvider> providers = const [],
       this.localIp,
-      this.requests,
+      required this.requests,
       required this.version,
-      this.logs,
-      this.traffics,
-      this.totalTraffic})
+      required this.logs,
+      required this.traffics,
+      required this.totalTraffic})
       : _packages = packages,
         _delayMap = delayMap,
         _selectedMap = selectedMap,
@@ -443,15 +443,15 @@ class _$AppStateImpl implements _AppState {
   @override
   final String? localIp;
   @override
-  final FixedList<Connection>? requests;
+  final FixedList<Connection> requests;
   @override
   final int version;
   @override
-  final FixedList<Log>? logs;
+  final FixedList<Log> logs;
   @override
-  final FixedList<Traffic>? traffics;
+  final FixedList<Traffic> traffics;
   @override
-  final Traffic? totalTraffic;
+  final Traffic totalTraffic;
 
   @override
   String toString() {
@@ -543,11 +543,11 @@ abstract class _AppState implements AppState {
       final int? runTime,
       final List<ExternalProvider> providers,
       final String? localIp,
-      final FixedList<Connection>? requests,
+      required final FixedList<Connection> requests,
       required final int version,
-      final FixedList<Log>? logs,
-      final FixedList<Traffic>? traffics,
-      final Traffic? totalTraffic}) = _$AppStateImpl;
+      required final FixedList<Log> logs,
+      required final FixedList<Traffic> traffics,
+      required final Traffic totalTraffic}) = _$AppStateImpl;
 
   @override
   bool get isInit;
@@ -578,15 +578,15 @@ abstract class _AppState implements AppState {
   @override
   String? get localIp;
   @override
-  FixedList<Connection>? get requests;
+  FixedList<Connection> get requests;
   @override
   int get version;
   @override
-  FixedList<Log>? get logs;
+  FixedList<Log> get logs;
   @override
-  FixedList<Traffic>? get traffics;
+  FixedList<Traffic> get traffics;
   @override
-  Traffic? get totalTraffic;
+  Traffic get totalTraffic;
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.

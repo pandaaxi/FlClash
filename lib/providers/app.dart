@@ -53,7 +53,7 @@ List<Group> currentGroups(Ref ref) {
 class Logs extends _$Logs {
   @override
   FixedList<Log> build() {
-    return globalState.appState.logs ?? FixedList(1000);
+    return globalState.appState.logs;
   }
 
   @override
@@ -71,7 +71,7 @@ class Logs extends _$Logs {
 class Requests extends _$Requests {
   @override
   FixedList<Connection> build() {
-    return globalState.appState.requests ?? FixedList(1000);
+    return globalState.appState.requests;
   }
 
   @override
@@ -144,7 +144,7 @@ class AppBrightness extends _$AppBrightness {
 class Traffics extends _$Traffics {
   @override
   FixedList<Traffic> build() {
-    return globalState.appState.traffics ?? FixedList(1000);
+    return globalState.appState.traffics;
   }
 
   @override
@@ -166,7 +166,7 @@ class Traffics extends _$Traffics {
 class TotalTraffic extends _$TotalTraffic {
   @override
   Traffic build() {
-    return globalState.appState.totalTraffic ?? Traffic();
+    return globalState.appState.totalTraffic;
   }
 
   @override
