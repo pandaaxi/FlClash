@@ -724,6 +724,18 @@ class AppController {
     }
   }
 
+  updateCurrentUnfoldSet(Set<String> value) {
+    final currentProfile = ref.read(currentProfileProvider);
+    if (currentProfile == null) {
+      return;
+    }
+    ref.read(profilesProvider.notifier).setProfile(
+          currentProfile.copyWith(
+            unfoldSet: value,
+          ),
+        );
+  }
+
   changeMode(Mode mode) {
     ref.read(patchClashConfigProvider.notifier).updateState(
           (state) => state.copyWith(mode: mode),

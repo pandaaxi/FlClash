@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/state.dart';
@@ -80,7 +81,7 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
     } else {
       tempUnfoldSet.add(groupName);
     }
-    globalState.appController.config.updateCurrentUnfoldSet(
+    globalState.appController.updateCurrentUnfoldSet(
       tempUnfoldSet,
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -107,7 +108,8 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
     return itemHeightList;
   }
 
-  List<Widget> _buildItems({
+  List<Widget> _buildItems(
+    WidgetRef ref, {
     required List<String> groupNames,
     required int columns,
     required Set<String> currentUnfoldSet,
@@ -116,7 +118,11 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
     final items = <Widget>[];
     final GroupNameProxiesMap groupNameProxiesMap = {};
     for (final groupName in groupNames) {
-      final group = globalState.appController.getGroupWithName(groupName)!;
+      final group =
+          ref.read(groupsProvider.select((state) => state.getGroup(groupName)));
+      if (group == null) {
+        continue;
+      }
       final isExpand = currentUnfoldSet.contains(groupName);
       items.addAll([
         ListHeader(
@@ -187,12 +193,16 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
     return items;
   }
 
-  _buildHeader({
+  _buildHeader(
+    WidgetRef ref, {
     required String groupName,
     required Set<String> currentUnfoldSet,
   }) {
     final group =
-        globalState.appController.appState.getGroupWithName(groupName)!;
+        ref.read(groupsProvider.select((state) => state.getGroup(groupName)));
+    if (group == null) {
+      return SizedBox();
+    }
     final isExpand = currentUnfoldSet.contains(groupName);
     return SizedBox(
       height: listHeaderHeight,
@@ -213,7 +223,7 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
       return;
     }
     final appController = globalState.appController;
-    final currentGroups = appController.appState.currentGroups;
+    final currentGroups = appController.ref.read(currentGroupsProvider);
     final groupNames = currentGroups.map((e) => e.name).toList();
     final findIndex = groupNames.indexWhere((item) => item == groupName);
     final index = findIndex != -1 ? findIndex : 0;
@@ -236,38 +246,16 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector2<AppState, Config, ProxiesListSelectorState>(
-      selector: (_, appState, config) {
-        final currentGroups = appState.currentGroups;
-        final groupNames = currentGroups.map((e) => e.name).toList();
-        return ProxiesListSelectorState(
-          groupNames: groupNames,
-          currentUnfoldSet: config.currentUnfoldSet,
-          proxyCardType: config.proxiesStyle.cardType,
-          proxiesSortType: config.proxiesStyle.sortType,
-          columns: other.getProxiesColumns(
-            appState.viewWidth,
-            config.proxiesStyle.layout,
-          ),
-          sortNum: appState.sortNum,
-        );
-      },
-      shouldRebuild: (prev, next) {
-        if (!stringListEquality.equals(prev.groupNames, next.groupNames)) {
-          _headerStateNotifier.value = const ProxiesListHeaderSelectorState(
-            offset: 0,
-            currentIndex: 0,
-          );
-        }
-        return prev != next;
-      },
-      builder: (_, state, __) {
+    return Consumer(
+      builder: (_, ref, __) {
+        final state = ref.watch(proxiesListSelectorStateProvider);
         if (state.groupNames.isEmpty) {
           return NullStatus(
             label: appLocalizations.nullProxies,
           );
         }
         final items = _buildItems(
+          ref,
           groupNames: state.groupNames,
           currentUnfoldSet: state.currentUnfoldSet,
           columns: state.columns,
@@ -319,6 +307,7 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
                               bottom: 8,
                             ),
                             child: _buildHeader(
+                              ref,
                               groupName: state.groupNames[index],
                               currentUnfoldSet: state.currentUnfoldSet,
                             ),

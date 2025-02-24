@@ -120,6 +120,85 @@ final dashboardStateProvider = AutoDisposeProvider<DashboardState>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DashboardStateRef = AutoDisposeProviderRef<DashboardState>;
+String _$proxiesActionsStateHash() =>
+    r'931a3ece44732522c3e3804f940522bea748931f';
+
+/// See also [proxiesActionsState].
+@ProviderFor(proxiesActionsState)
+final proxiesActionsStateProvider =
+    AutoDisposeProvider<ProxiesActionsState>.internal(
+  proxiesActionsState,
+  name: r'proxiesActionsStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$proxiesActionsStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ProxiesActionsStateRef = AutoDisposeProviderRef<ProxiesActionsState>;
+String _$startButtonSelectorStateHash() =>
+    r'fadbbc8f063444d3c221b9dcd50f636ded38f2af';
+
+/// See also [startButtonSelectorState].
+@ProviderFor(startButtonSelectorState)
+final startButtonSelectorStateProvider =
+    AutoDisposeProvider<StartButtonSelectorState>.internal(
+  startButtonSelectorState,
+  name: r'startButtonSelectorStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$startButtonSelectorStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef StartButtonSelectorStateRef
+    = AutoDisposeProviderRef<StartButtonSelectorState>;
+String _$profilesSelectorStateHash() =>
+    r'9fa4447dace0322e888efb38cbee1dabd33e0e71';
+
+/// See also [profilesSelectorState].
+@ProviderFor(profilesSelectorState)
+final profilesSelectorStateProvider =
+    AutoDisposeProvider<ProfilesSelectorState>.internal(
+  profilesSelectorState,
+  name: r'profilesSelectorStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$profilesSelectorStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ProfilesSelectorStateRef
+    = AutoDisposeProviderRef<ProfilesSelectorState>;
+String _$proxiesListSelectorStateHash() =>
+    r'8ff85964c38e6db9f0988c4deea3102d99043595';
+
+/// See also [proxiesListSelectorState].
+@ProviderFor(proxiesListSelectorState)
+final proxiesListSelectorStateProvider =
+    AutoDisposeProvider<ProxiesListSelectorState>.internal(
+  proxiesListSelectorState,
+  name: r'proxiesListSelectorStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$proxiesListSelectorStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ProxiesListSelectorStateRef
+    = AutoDisposeProviderRef<ProxiesListSelectorState>;
 String _$isCurrentPageHash() => r'a9ec62dbf568221efd5842159ea14e23e7084944';
 
 /// Copied from Dart SDK
@@ -289,65 +368,6 @@ class _IsCurrentPageProviderElement extends AutoDisposeProviderElement<bool>
       (origin as IsCurrentPageProvider).handler;
 }
 
-String _$proxiesActionsStateHash() =>
-    r'931a3ece44732522c3e3804f940522bea748931f';
-
-/// See also [proxiesActionsState].
-@ProviderFor(proxiesActionsState)
-final proxiesActionsStateProvider =
-    AutoDisposeProvider<ProxiesActionsState>.internal(
-  proxiesActionsState,
-  name: r'proxiesActionsStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$proxiesActionsStateHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ProxiesActionsStateRef = AutoDisposeProviderRef<ProxiesActionsState>;
-String _$startButtonSelectorStateHash() =>
-    r'fadbbc8f063444d3c221b9dcd50f636ded38f2af';
-
-/// See also [startButtonSelectorState].
-@ProviderFor(startButtonSelectorState)
-final startButtonSelectorStateProvider =
-    AutoDisposeProvider<StartButtonSelectorState>.internal(
-  startButtonSelectorState,
-  name: r'startButtonSelectorStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$startButtonSelectorStateHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef StartButtonSelectorStateRef
-    = AutoDisposeProviderRef<StartButtonSelectorState>;
-String _$profilesSelectorStateHash() =>
-    r'9fa4447dace0322e888efb38cbee1dabd33e0e71';
-
-/// See also [profilesSelectorState].
-@ProviderFor(profilesSelectorState)
-final profilesSelectorStateProvider =
-    AutoDisposeProvider<ProfilesSelectorState>.internal(
-  profilesSelectorState,
-  name: r'profilesSelectorStateProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$profilesSelectorStateHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ProfilesSelectorStateRef
-    = AutoDisposeProviderRef<ProfilesSelectorState>;
 String _$navigationsHash() => r'09270afa940238ce49a0683989a2ac31d4ad92ad';
 
 /// See also [navigations].
@@ -675,6 +695,22 @@ final selectedMapProvider = AutoDisposeProvider<SelectedMap>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SelectedMapRef = AutoDisposeProviderRef<SelectedMap>;
+String _$unfoldSetHash() => r'59a5b417611533069462ddf31eca080ab2f74ac9';
+
+/// See also [unfoldSet].
+@ProviderFor(unfoldSet)
+final unfoldSetProvider = AutoDisposeProvider<Set<String>>.internal(
+  unfoldSet,
+  name: r'unfoldSetProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$unfoldSetHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UnfoldSetRef = AutoDisposeProviderRef<Set<String>>;
 String _$currentProfileHash() => r'55f3cb9570a0aa6b9e0b83a36693b69d52e753ab';
 
 /// See also [currentProfile].

@@ -120,23 +120,6 @@ DashboardState dashboardState(Ref ref) {
 }
 
 @riverpod
-bool isCurrentPage(
-  Ref ref,
-  PageLabel pageLabel, {
-  bool Function(PageLabel pageLabel, ViewMode viewMode)? handler,
-}) {
-  final pageLabel = ref.watch(currentPageLabelProvider);
-  if (pageLabel == pageLabel) {
-    return true;
-  }
-  if (handler != null) {
-    final viewMode = ref.watch(viewWidthProvider.notifier).viewMode;
-    return handler(pageLabel, viewMode);
-  }
-  return false;
-}
-
-@riverpod
 ProxiesActionsState proxiesActionsState(Ref ref) {
   final isCurrent = ref.watch(currentPageLabelProvider.select(
     (state) => state == PageLabel.proxies,
@@ -172,6 +155,42 @@ ProfilesSelectorState profilesSelectorState(Ref ref) {
     currentProfileId: currentProfileId,
     columns: columns,
   );
+}
+
+@riverpod
+ProxiesListSelectorState proxiesListSelectorState(Ref ref) {
+  final groupNames = ref.watch(currentGroupsProvider.select((state) {
+    return state.map((e) => e.name).toList();
+  }));
+  final currentUnfoldSet = ref.watch(unfoldSetProvider);
+  final proxiesStyle = ref.watch(proxiesStyleSettingProvider);
+  final sortNum = ref.watch(sortNumProvider);
+  final columns = ref.watch(getProxiesColumnsProvider);
+  return ProxiesListSelectorState(
+    groupNames: groupNames,
+    currentUnfoldSet: currentUnfoldSet,
+    proxiesSortType: proxiesStyle.sortType,
+    proxyCardType: proxiesStyle.cardType,
+    sortNum: sortNum,
+    columns: columns,
+  );
+}
+
+@riverpod
+bool isCurrentPage(
+  Ref ref,
+  PageLabel pageLabel, {
+  bool Function(PageLabel pageLabel, ViewMode viewMode)? handler,
+}) {
+  final pageLabel = ref.watch(currentPageLabelProvider);
+  if (pageLabel == pageLabel) {
+    return true;
+  }
+  if (handler != null) {
+    final viewMode = ref.watch(viewWidthProvider.notifier).viewMode;
+    return handler(pageLabel, viewMode);
+  }
+  return false;
 }
 
 @riverpod
@@ -223,6 +242,14 @@ SelectedMap selectedMap(Ref ref) {
     currentProfileProvider.select((state) => state?.selectedMap ?? {}),
   );
   return selectedMap;
+}
+
+@riverpod
+Set<String> unfoldSet(Ref ref) {
+  final unfoldSet = ref.watch(
+    currentProfileProvider.select((state) => state?.unfoldSet ?? {}),
+  );
+  return unfoldSet;
 }
 
 @riverpod
