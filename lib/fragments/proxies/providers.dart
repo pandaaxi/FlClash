@@ -8,7 +8,6 @@ import 'package:fl_clash/models/core.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 typedef UpdatingMap = Map<String, bool>;
 

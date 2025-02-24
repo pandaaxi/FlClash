@@ -194,7 +194,7 @@ final hotKeyActionsProvider =
 
 typedef _$HotKeyActions = AutoDisposeNotifier<List<HotKeyAction>>;
 String _$proxiesStyleSettingHash() =>
-    r'54baf60e3e858bb385332e0e680417c28f30e909';
+    r'4dd77efa87d33f504f44c543fe6daa8537d52b72';
 
 /// See also [ProxiesStyleSetting].
 @ProviderFor(ProxiesStyleSetting)

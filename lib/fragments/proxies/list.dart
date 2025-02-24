@@ -3,9 +3,12 @@ import 'dart:math';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/config.dart';
+import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'card.dart';
 import 'common.dart';
@@ -113,8 +116,7 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
     final items = <Widget>[];
     final GroupNameProxiesMap groupNameProxiesMap = {};
     for (final groupName in groupNames) {
-      final group =
-          globalState.appController.appState.getGroupWithName(groupName)!;
+      final group = globalState.appController.getGroupWithName(groupName)!;
       final isExpand = currentUnfoldSet.contains(groupName);
       items.addAll([
         ListHeader(
@@ -416,57 +418,53 @@ class _ListHeaderState extends State<ListHeader>
   }
 
   Widget _buildIcon() {
-    return Selector<Config, ProxiesIconStyle>(
-      selector: (_, config) => config.proxiesStyle.iconStyle,
-      builder: (_, iconStyle, child) {
-        return Selector<Config, String>(
-          selector: (_, config) {
-            final iconMapEntryList =
-                config.proxiesStyle.iconMap.entries.toList();
-            final index = iconMapEntryList.indexWhere((item) {
-              try {
-                return RegExp(item.key).hasMatch(groupName);
-              } catch (_) {
-                return false;
-              }
-            });
-            if (index != -1) {
-              return iconMapEntryList[index].value;
+    return Consumer(
+      builder: (_, ref, child) {
+        final iconStyle = ref.watch(
+            proxiesStyleSettingProvider.select((state) => state.iconStyle));
+        final icon = ref.watch(proxiesStyleSettingProvider.select((state) {
+          final iconMapEntryList = state.iconMap.entries.toList();
+          final index = iconMapEntryList.indexWhere((item) {
+            try {
+              return RegExp(item.key).hasMatch(groupName);
+            } catch (_) {
+              return false;
             }
-            return icon;
-          },
-          builder: (_, icon, __) {
-            return switch (iconStyle) {
-              ProxiesIconStyle.standard => Container(
-                  height: 48,
-                  width: 48,
-                  margin: const EdgeInsets.only(
-                    right: 16,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: context.colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: CommonTargetIcon(
-                    src: icon,
-                    size: 32,
-                  ),
-                ),
-              ProxiesIconStyle.icon => Container(
-                  margin: const EdgeInsets.only(
-                    right: 16,
-                  ),
-                  child: CommonTargetIcon(
-                    src: icon,
-                    size: 42,
-                  ),
-                ),
-              ProxiesIconStyle.none => Container(),
-            };
-          },
-        );
+          });
+          if (index != -1) {
+            return iconMapEntryList[index].value;
+          }
+          return this.icon;
+        }));
+        return switch (iconStyle) {
+          ProxiesIconStyle.standard => Container(
+              height: 48,
+              width: 48,
+              margin: const EdgeInsets.only(
+                right: 16,
+              ),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: context.colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: CommonTargetIcon(
+                src: icon,
+                size: 32,
+              ),
+            ),
+          ProxiesIconStyle.icon => Container(
+              margin: const EdgeInsets.only(
+                right: 16,
+              ),
+              child: CommonTargetIcon(
+                src: icon,
+                size: 42,
+              ),
+            ),
+          ProxiesIconStyle.none => Container(),
+        };
       },
     );
   }
@@ -517,9 +515,13 @@ class _ListHeaderState extends State<ListHeader>
                               ),
                               Flexible(
                                 flex: 1,
-                                child: currentSelectedProxyNameBuilder(
-                                  groupName: groupName,
-                                  builder: (currentGroupName) {
+                                child: Consumer(
+                                  builder: (_, ref, __) {
+                                    final proxyName = ref
+                                        .watch(getSelectedProxyNameProvider(
+                                          groupName,
+                                        ))
+                                        .getSafeValue("");
                                     return Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
@@ -527,12 +529,12 @@ class _ListHeaderState extends State<ListHeader>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        if (currentGroupName.isNotEmpty) ...[
+                                        if (proxyName.isNotEmpty) ...[
                                           Flexible(
                                             flex: 1,
                                             child: EmojiText(
                                               overflow: TextOverflow.ellipsis,
-                                              " · $currentGroupName",
+                                              " · $proxyName",
                                               style: context.textTheme
                                                   .labelMedium?.toLight,
                                             ),
