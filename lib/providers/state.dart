@@ -176,6 +176,14 @@ Profile? currentProfile(Ref ref) {
       .watch(profilesProvider.select((state) => state.getProfile(profileId)));
 }
 
+@riverpod
+int getProxiesColumns(Ref ref) {
+  final viewWidth = ref.watch(viewWidthProvider);
+  final proxiesLayout =
+  ref.watch(proxiesStyleSettingProvider.select((state) => state.layout));
+  return other.getProxiesColumns(viewWidth, proxiesLayout);
+}
+
 String _getRealProxyName(
   List<Group> groups,
   SelectedMap selectedMap,

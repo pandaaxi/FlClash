@@ -44,21 +44,22 @@ proxyDelayTest(Proxy proxy, [String? testUrl]) async {
 delayTest(List<Proxy> proxies, [String? testUrl]) async {
   final appController = globalState.appController;
   final proxyNames = proxies
-      .map((proxy) => appController.appState.getRealProxyName(proxy.name))
+      .map((proxy) =>
+          appController.ref.read(getRealProxyNameProvider(proxy.name)))
       .toSet()
       .toList();
 
-  final url = appController.getRealTestUrl(testUrl);
+  final url = appController.ref.read(getRealTestUrlProvider(testUrl));
 
   final delayProxies = proxyNames.map<Future>((proxyName) async {
-    globalState.appController.setDelay(
+    appController.setDelay(
       Delay(
         url: url,
         name: proxyName,
         value: 0,
       ),
     );
-    globalState.appController.setDelay(
+    appController.setDelay(
       await clashCore.getDelay(
         url,
         proxyName,
@@ -70,7 +71,7 @@ delayTest(List<Proxy> proxies, [String? testUrl]) async {
   for (final batchDelayProxies in batchesDelayProxies) {
     await Future.wait(batchDelayProxies);
   }
-  appController.appState.sortNum++;
+  appController.ref.read(sortNumProvider.notifier).add();
 }
 
 double getScrollToSelectedOffset({
@@ -78,14 +79,13 @@ double getScrollToSelectedOffset({
   required List<Proxy> proxies,
 }) {
   final appController = globalState.appController;
-  final columns = other.getProxiesColumns(
-    appController.appState.viewWidth,
-    appController.config.proxiesStyle.layout,
-  );
-  final proxyCardType = appController.config.proxiesStyle.cardType;
-  final selectedName = appController.getCurrentSelectedName(groupName);
+  final columns = appController.ref.read(getProxiesColumnsProvider);
+  final proxyCardType = appController.ref
+      .read(proxiesStyleSettingProvider.select((state) => state.cardType));
+  final selectedProxyName =
+      appController.ref.read(getSelectedProxyNameProvider(groupName));
   final findSelectedIndex = proxies.indexWhere(
-    (proxy) => proxy.name == selectedName,
+    (proxy) => proxy.name == selectedProxyName,
   );
   final selectedIndex = findSelectedIndex != -1 ? findSelectedIndex : 0;
   final rows = (selectedIndex / columns).floor();

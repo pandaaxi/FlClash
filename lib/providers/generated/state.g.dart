@@ -490,6 +490,23 @@ final currentProfileProvider = AutoDisposeProvider<Profile?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentProfileRef = AutoDisposeProviderRef<Profile?>;
+String _$getProxiesColumnsHash() => r'895705381fe361fa40f16da2f9cb26e8da3293e8';
+
+/// See also [getProxiesColumns].
+@ProviderFor(getProxiesColumns)
+final getProxiesColumnsProvider = AutoDisposeProvider<int>.internal(
+  getProxiesColumns,
+  name: r'getProxiesColumnsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$getProxiesColumnsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef GetProxiesColumnsRef = AutoDisposeProviderRef<int>;
 String _$getRealProxyNameHash() => r'47be6d115aa170f9bff610ec2cf7669e168bf472';
 
 /// See also [getRealProxyName].
