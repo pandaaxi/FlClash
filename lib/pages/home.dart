@@ -1,7 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
-import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/state.dart';
 import 'package:fl_clash/state.dart';
@@ -49,7 +48,7 @@ class HomePage extends StatelessWidget {
             final navigationItem = navigationItems[index];
             return KeepScope(
               keep: navigationItem.keep,
-              key: Key(navigationItem.label),
+              key: Key(navigationItem.label.name),
               child: navigationItem.fragment,
             );
           },
@@ -83,7 +82,7 @@ class HomePage extends StatelessWidget {
           return CommonScaffold(
             key: globalState.homeScaffoldKey,
             title: Intl.message(
-              pageLabel,
+              pageLabel.name,
             ),
             sideNavigationBar: sideNavigationBar,
             body: child!,
@@ -134,7 +133,7 @@ class CommonNavigationBar extends ConsumerWidget {
             .map(
               (e) => NavigationDestination(
                 icon: e.icon,
-                label: Intl.message(e.label),
+                label: Intl.message(e.label.name),
               ),
             )
             .toList(),
@@ -171,7 +170,7 @@ class CommonNavigationBar extends ConsumerWidget {
                         (e) => NavigationRailDestination(
                           icon: e.icon,
                           label: Text(
-                            Intl.message(e.label),
+                            Intl.message(e.label.name),
                           ),
                         ),
                       )

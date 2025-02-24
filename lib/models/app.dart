@@ -15,7 +15,7 @@ typedef DelayMap = Map<String, Map<String, int?>>;
 class AppState with _$AppState {
   const factory AppState({
     @Default(false) bool isInit,
-    String? pageLabel,
+    @Default(PageLabel.dashboard) PageLabel pageLabel,
     @Default([]) List<Package> packages,
     @Default(ColorSchemes()) ColorSchemes colorSchemes,
     @Default(0) int sortNum,

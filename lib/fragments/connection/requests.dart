@@ -1,6 +1,8 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/app.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -129,8 +131,14 @@ class _RequestsFragmentState extends State<RequestsFragment> with ViewMixin {
           _handleTryClearCache(constraints.maxWidth - 40 - (value ? 60 : 0));
           return Consumer(
             builder: (_, ref, child) {
-              ref.listen(pageLabelProvider, (prev, next) {
-                if (prev == next && next == "requests") {
+              ref.listen(
+                  isCurrentPageProvider(
+                    PageLabel.requests,
+                    handler: (pageLabel, viewMode) =>
+                        pageLabel == PageLabel.tools &&
+                        viewMode == ViewMode.mobile,
+                  ), (prev, next) {
+                if (prev != next) {
                   _initActions();
                 }
               });

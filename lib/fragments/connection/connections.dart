@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/app.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -102,8 +104,13 @@ class _ConnectionsFragmentState extends State<ConnectionsFragment>
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, child) {
-        ref.listen(pageLabelProvider, (prev, next) {
-          if (prev == next && next == "connections") {
+        ref.listen(
+            isCurrentPageProvider(
+              PageLabel.connections,
+              handler: (pageLabel, viewMode) =>
+                  pageLabel == PageLabel.tools && viewMode == ViewMode.mobile,
+            ), (prev, next) {
+          if (prev != next) {
             _initActions();
           }
         });

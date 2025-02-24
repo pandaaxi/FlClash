@@ -6,41 +6,6 @@ part of '../app.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$navigationsHash() => r'09270afa940238ce49a0683989a2ac31d4ad92ad';
-
-/// See also [navigations].
-@ProviderFor(navigations)
-final navigationsProvider = AutoDisposeProvider<List<NavigationItem>>.internal(
-  navigations,
-  name: r'navigationsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$navigationsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef NavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
-String _$currentNavigationsHash() =>
-    r'c5b85dfaf045803381150870337170b703c46489';
-
-/// See also [currentNavigations].
-@ProviderFor(currentNavigations)
-final currentNavigationsProvider =
-    AutoDisposeProvider<List<NavigationItem>>.internal(
-  currentNavigations,
-  name: r'currentNavigationsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentNavigationsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CurrentNavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
 String _$currentGroupsHash() => r'7d8d3603f9251408e4a59c21e85c528de44c29da';
 
 /// See also [currentGroups].
@@ -220,21 +185,22 @@ final initProvider = AutoDisposeNotifierProvider<Init, bool>.internal(
 );
 
 typedef _$Init = AutoDisposeNotifier<bool>;
-String _$pageLabelHash() => r'67ff8f2aba4cf6cf8f1dc1094174934c678da0c0';
+String _$currentPageLabelHash() => r'2271c2ca1d2975c6e57d9a0d549ee6942370d245';
 
-/// See also [PageLabel].
-@ProviderFor(PageLabel)
-final pageLabelProvider =
-    AutoDisposeNotifierProvider<PageLabel, String>.internal(
-  PageLabel.new,
-  name: r'pageLabelProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$pageLabelHash,
+/// See also [CurrentPageLabel].
+@ProviderFor(CurrentPageLabel)
+final currentPageLabelProvider =
+    AutoDisposeNotifierProvider<CurrentPageLabel, PageLabel>.internal(
+  CurrentPageLabel.new,
+  name: r'currentPageLabelProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentPageLabelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$PageLabel = AutoDisposeNotifier<String>;
+typedef _$CurrentPageLabel = AutoDisposeNotifier<PageLabel>;
 String _$appSchemesHash() => r'c8f4cdc39a49fd5d61596584ddfb8b806f7ef33d';
 
 /// See also [AppSchemes].

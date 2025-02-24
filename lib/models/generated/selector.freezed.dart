@@ -1489,7 +1489,7 @@ abstract class _UpdateNavigationsSelector implements UpdateNavigationsSelector {
 
 /// @nodoc
 mixin _$HomeState {
-  String get pageLabel => throw _privateConstructorUsedError;
+  PageLabel get pageLabel => throw _privateConstructorUsedError;
   List<NavigationItem> get navigationItems =>
       throw _privateConstructorUsedError;
   ViewMode get viewMode => throw _privateConstructorUsedError;
@@ -1508,7 +1508,7 @@ abstract class $HomeStateCopyWith<$Res> {
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
   $Res call(
-      {String pageLabel,
+      {PageLabel pageLabel,
       List<NavigationItem> navigationItems,
       ViewMode viewMode,
       String? locale});
@@ -1538,7 +1538,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       pageLabel: null == pageLabel
           ? _value.pageLabel
           : pageLabel // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PageLabel,
       navigationItems: null == navigationItems
           ? _value.navigationItems
           : navigationItems // ignore: cast_nullable_to_non_nullable
@@ -1564,7 +1564,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String pageLabel,
+      {PageLabel pageLabel,
       List<NavigationItem> navigationItems,
       ViewMode viewMode,
       String? locale});
@@ -1592,7 +1592,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
       pageLabel: null == pageLabel
           ? _value.pageLabel
           : pageLabel // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PageLabel,
       navigationItems: null == navigationItems
           ? _value._navigationItems
           : navigationItems // ignore: cast_nullable_to_non_nullable
@@ -1620,7 +1620,7 @@ class _$HomeStateImpl implements _HomeState {
       : _navigationItems = navigationItems;
 
   @override
-  final String pageLabel;
+  final PageLabel pageLabel;
   final List<NavigationItem> _navigationItems;
   @override
   List<NavigationItem> get navigationItems {
@@ -1668,13 +1668,13 @@ class _$HomeStateImpl implements _HomeState {
 
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
-      {required final String pageLabel,
+      {required final PageLabel pageLabel,
       required final List<NavigationItem> navigationItems,
       required final ViewMode viewMode,
       required final String? locale}) = _$HomeStateImpl;
 
   @override
-  String get pageLabel;
+  PageLabel get pageLabel;
   @override
   List<NavigationItem> get navigationItems;
   @override
@@ -1687,6 +1687,153 @@ abstract class _HomeState implements HomeState {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HomeStateImplCopyWith<_$HomeStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$PageState {
+  PageLabel get pageLabel => throw _privateConstructorUsedError;
+  ViewMode get viewMode => throw _privateConstructorUsedError;
+
+  /// Create a copy of PageState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $PageStateCopyWith<PageState> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PageStateCopyWith<$Res> {
+  factory $PageStateCopyWith(PageState value, $Res Function(PageState) then) =
+      _$PageStateCopyWithImpl<$Res, PageState>;
+  @useResult
+  $Res call({PageLabel pageLabel, ViewMode viewMode});
+}
+
+/// @nodoc
+class _$PageStateCopyWithImpl<$Res, $Val extends PageState>
+    implements $PageStateCopyWith<$Res> {
+  _$PageStateCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of PageState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? pageLabel = null,
+    Object? viewMode = null,
+  }) {
+    return _then(_value.copyWith(
+      pageLabel: null == pageLabel
+          ? _value.pageLabel
+          : pageLabel // ignore: cast_nullable_to_non_nullable
+              as PageLabel,
+      viewMode: null == viewMode
+          ? _value.viewMode
+          : viewMode // ignore: cast_nullable_to_non_nullable
+              as ViewMode,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$PageStateImplCopyWith<$Res>
+    implements $PageStateCopyWith<$Res> {
+  factory _$$PageStateImplCopyWith(
+          _$PageStateImpl value, $Res Function(_$PageStateImpl) then) =
+      __$$PageStateImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({PageLabel pageLabel, ViewMode viewMode});
+}
+
+/// @nodoc
+class __$$PageStateImplCopyWithImpl<$Res>
+    extends _$PageStateCopyWithImpl<$Res, _$PageStateImpl>
+    implements _$$PageStateImplCopyWith<$Res> {
+  __$$PageStateImplCopyWithImpl(
+      _$PageStateImpl _value, $Res Function(_$PageStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of PageState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? pageLabel = null,
+    Object? viewMode = null,
+  }) {
+    return _then(_$PageStateImpl(
+      pageLabel: null == pageLabel
+          ? _value.pageLabel
+          : pageLabel // ignore: cast_nullable_to_non_nullable
+              as PageLabel,
+      viewMode: null == viewMode
+          ? _value.viewMode
+          : viewMode // ignore: cast_nullable_to_non_nullable
+              as ViewMode,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PageStateImpl implements _PageState {
+  const _$PageStateImpl({required this.pageLabel, required this.viewMode});
+
+  @override
+  final PageLabel pageLabel;
+  @override
+  final ViewMode viewMode;
+
+  @override
+  String toString() {
+    return 'PageState(pageLabel: $pageLabel, viewMode: $viewMode)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PageStateImpl &&
+            (identical(other.pageLabel, pageLabel) ||
+                other.pageLabel == pageLabel) &&
+            (identical(other.viewMode, viewMode) ||
+                other.viewMode == viewMode));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, pageLabel, viewMode);
+
+  /// Create a copy of PageState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PageStateImplCopyWith<_$PageStateImpl> get copyWith =>
+      __$$PageStateImplCopyWithImpl<_$PageStateImpl>(this, _$identity);
+}
+
+abstract class _PageState implements PageState {
+  const factory _PageState(
+      {required final PageLabel pageLabel,
+      required final ViewMode viewMode}) = _$PageStateImpl;
+
+  @override
+  PageLabel get pageLabel;
+  @override
+  ViewMode get viewMode;
+
+  /// Create a copy of PageState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PageStateImplCopyWith<_$PageStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

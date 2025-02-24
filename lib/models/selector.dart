@@ -83,11 +83,19 @@ class UpdateNavigationsSelector with _$UpdateNavigationsSelector {
 @freezed
 class HomeState with _$HomeState {
   const factory HomeState({
-    required String pageLabel,
+    required PageLabel pageLabel,
     required List<NavigationItem> navigationItems,
     required ViewMode viewMode,
     required String? locale,
   }) = _HomeState;
+}
+
+@freezed
+class PageState with _$PageState {
+  const factory PageState({
+    required PageLabel pageLabel,
+    required ViewMode viewMode,
+  }) = _PageState;
 }
 
 @freezed

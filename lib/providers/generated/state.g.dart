@@ -87,7 +87,7 @@ final vpnStateProvider = AutoDisposeProvider<VpnState>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef VpnStateRef = AutoDisposeProviderRef<VpnState>;
-String _$homeStateHash() => r'ab1be48034af65c7aff9dc0e54df260125c0839a';
+String _$homeStateHash() => r'e3920251949432a30f499f53bd37caf061bf4727';
 
 /// See also [homeState].
 @ProviderFor(homeState)
@@ -120,6 +120,194 @@ final dashboardStateProvider = AutoDisposeProvider<DashboardState>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DashboardStateRef = AutoDisposeProviderRef<DashboardState>;
+String _$isCurrentPageHash() => r'a9ec62dbf568221efd5842159ea14e23e7084944';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+/// See also [isCurrentPage].
+@ProviderFor(isCurrentPage)
+const isCurrentPageProvider = IsCurrentPageFamily();
+
+/// See also [isCurrentPage].
+class IsCurrentPageFamily extends Family<bool> {
+  /// See also [isCurrentPage].
+  const IsCurrentPageFamily();
+
+  /// See also [isCurrentPage].
+  IsCurrentPageProvider call(
+    PageLabel pageLabel, {
+    bool Function(PageLabel, ViewMode)? handler,
+  }) {
+    return IsCurrentPageProvider(
+      pageLabel,
+      handler: handler,
+    );
+  }
+
+  @override
+  IsCurrentPageProvider getProviderOverride(
+    covariant IsCurrentPageProvider provider,
+  ) {
+    return call(
+      provider.pageLabel,
+      handler: provider.handler,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'isCurrentPageProvider';
+}
+
+/// See also [isCurrentPage].
+class IsCurrentPageProvider extends AutoDisposeProvider<bool> {
+  /// See also [isCurrentPage].
+  IsCurrentPageProvider(
+    PageLabel pageLabel, {
+    bool Function(PageLabel, ViewMode)? handler,
+  }) : this._internal(
+          (ref) => isCurrentPage(
+            ref as IsCurrentPageRef,
+            pageLabel,
+            handler: handler,
+          ),
+          from: isCurrentPageProvider,
+          name: r'isCurrentPageProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$isCurrentPageHash,
+          dependencies: IsCurrentPageFamily._dependencies,
+          allTransitiveDependencies:
+              IsCurrentPageFamily._allTransitiveDependencies,
+          pageLabel: pageLabel,
+          handler: handler,
+        );
+
+  IsCurrentPageProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.pageLabel,
+    required this.handler,
+  }) : super.internal();
+
+  final PageLabel pageLabel;
+  final bool Function(PageLabel, ViewMode)? handler;
+
+  @override
+  Override overrideWith(
+    bool Function(IsCurrentPageRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: IsCurrentPageProvider._internal(
+        (ref) => create(ref as IsCurrentPageRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        pageLabel: pageLabel,
+        handler: handler,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<bool> createElement() {
+    return _IsCurrentPageProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is IsCurrentPageProvider &&
+        other.pageLabel == pageLabel &&
+        other.handler == handler;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, pageLabel.hashCode);
+    hash = _SystemHash.combine(hash, handler.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin IsCurrentPageRef on AutoDisposeProviderRef<bool> {
+  /// The parameter `pageLabel` of this provider.
+  PageLabel get pageLabel;
+
+  /// The parameter `handler` of this provider.
+  bool Function(PageLabel, ViewMode)? get handler;
+}
+
+class _IsCurrentPageProviderElement extends AutoDisposeProviderElement<bool>
+    with IsCurrentPageRef {
+  _IsCurrentPageProviderElement(super.provider);
+
+  @override
+  PageLabel get pageLabel => (origin as IsCurrentPageProvider).pageLabel;
+  @override
+  bool Function(PageLabel, ViewMode)? get handler =>
+      (origin as IsCurrentPageProvider).handler;
+}
+
+String _$proxiesActionsStateHash() =>
+    r'931a3ece44732522c3e3804f940522bea748931f';
+
+/// See also [proxiesActionsState].
+@ProviderFor(proxiesActionsState)
+final proxiesActionsStateProvider =
+    AutoDisposeProvider<ProxiesActionsState>.internal(
+  proxiesActionsState,
+  name: r'proxiesActionsStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$proxiesActionsStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ProxiesActionsStateRef = AutoDisposeProviderRef<ProxiesActionsState>;
 String _$startButtonSelectorStateHash() =>
     r'fadbbc8f063444d3c221b9dcd50f636ded38f2af';
 
@@ -160,28 +348,42 @@ final profilesSelectorStateProvider =
 // ignore: unused_element
 typedef ProfilesSelectorStateRef
     = AutoDisposeProviderRef<ProfilesSelectorState>;
+String _$navigationsHash() => r'09270afa940238ce49a0683989a2ac31d4ad92ad';
+
+/// See also [navigations].
+@ProviderFor(navigations)
+final navigationsProvider = AutoDisposeProvider<List<NavigationItem>>.internal(
+  navigations,
+  name: r'navigationsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$navigationsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef NavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
+String _$currentNavigationsHash() =>
+    r'c5b85dfaf045803381150870337170b703c46489';
+
+/// See also [currentNavigations].
+@ProviderFor(currentNavigations)
+final currentNavigationsProvider =
+    AutoDisposeProvider<List<NavigationItem>>.internal(
+  currentNavigations,
+  name: r'currentNavigationsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentNavigationsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef CurrentNavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
 String _$getRealTestUrlHash() => r'5c6513cabb53e5e6689cba5919f49aeaeff90247';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
 
 /// See also [getRealTestUrl].
 @ProviderFor(getRealTestUrl)

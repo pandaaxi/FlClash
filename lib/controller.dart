@@ -462,7 +462,8 @@ class AppController {
     if (index > navigations.length - 1) {
       return;
     }
-    ref.read(pageLabelProvider.notifier).state = navigations[index].label;
+    ref.read(currentPageLabelProvider.notifier).state =
+        navigations[index].label;
     final isAnimateToPage = ref.read(appSettingProvider).isAnimateToPage;
     final isMobile =
         ref.read(viewWidthProvider.notifier).viewMode == ViewMode.mobile;

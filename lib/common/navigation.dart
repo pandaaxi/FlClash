@@ -13,12 +13,12 @@ class Navigation {
     return [
       const NavigationItem(
         icon: Icon(Icons.space_dashboard),
-        label: "dashboard",
+        label: PageLabel.dashboard,
         fragment: DashboardFragment(),
       ),
       NavigationItem(
         icon: const Icon(Icons.rocket),
-        label: "proxies",
+        label: PageLabel.proxies,
         fragment: const ProxiesFragment(),
         modes: hasProxies
             ? [NavigationItemMode.mobile, NavigationItemMode.desktop]
@@ -26,26 +26,26 @@ class Navigation {
       ),
       const NavigationItem(
         icon: Icon(Icons.folder),
-        label: "profiles",
+        label: PageLabel.profiles,
         fragment: ProfilesFragment(),
       ),
       const NavigationItem(
         icon: Icon(Icons.view_timeline),
-        label: "requests",
+        label: PageLabel.requests,
         fragment: RequestsFragment(),
         description: "requestsDesc",
         modes: [NavigationItemMode.desktop, NavigationItemMode.more],
       ),
       const NavigationItem(
         icon: Icon(Icons.ballot),
-        label: "connections",
+        label: PageLabel.connections,
         fragment: ConnectionsFragment(),
         description: "connectionsDesc",
         modes: [NavigationItemMode.desktop, NavigationItemMode.more],
       ),
       const NavigationItem(
         icon: Icon(Icons.storage),
-        label: "resources",
+        label: PageLabel.resources,
         description: "resourcesDesc",
         keep: false,
         fragment: Resources(),
@@ -53,7 +53,7 @@ class Navigation {
       ),
       NavigationItem(
         icon: const Icon(Icons.adb),
-        label: "logs",
+        label: PageLabel.logs,
         fragment: const LogsFragment(),
         description: "logsDesc",
         modes: openLogs
@@ -62,7 +62,7 @@ class Navigation {
       ),
       const NavigationItem(
         icon: Icon(Icons.construction),
-        label: "tools",
+        label: PageLabel.tools,
         fragment: ToolsFragment(),
         modes: [NavigationItemMode.desktop, NavigationItemMode.mobile],
       ),

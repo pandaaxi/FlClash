@@ -258,6 +258,10 @@ class ProxiesStyleSetting extends _$ProxiesStyleSetting {
       proxiesStyle: value,
     );
   }
+
+  updateState(ProxiesStyle Function(ProxiesStyle state) builder) {
+    state = builder(state);
+  }
 }
 
 @riverpod

@@ -10,34 +10,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'generated/app.g.dart';
 
 @riverpod
-List<NavigationItem> navigations(Ref ref) {
-  final openLogs = ref.watch(appSettingProvider).openLogs;
-  final hasProxies = ref.watch(currentProfileIdProvider) != null;
-  return navigation.getItems(
-    openLogs: openLogs,
-    hasProxies: hasProxies,
-  );
-}
-
-@riverpod
-List<NavigationItem> currentNavigations(Ref ref) {
-  final viewWidth = ref.watch(viewWidthProvider);
-  final navigations = ref.watch(navigationsProvider);
-  final navigationItemMode = switch (viewWidth <= maxMobileWidth) {
-    true => NavigationItemMode.mobile,
-    false => NavigationItemMode.desktop,
-  };
-  return navigations
-      .where(
-        (element) => element.modes.contains(navigationItemMode),
-      )
-      .toList();
-}
-
-@riverpod
 List<Group> currentGroups(Ref ref) {
   final mode =
-      ref.watch(patchClashConfigProvider.select((state) => state.mode));
+  ref.watch(patchClashConfigProvider.select((state) => state.mode));
   final groups = ref.watch(groupsProvider);
   return switch (mode) {
     Mode.direct => [],
@@ -254,14 +229,14 @@ class Init extends _$Init {
 }
 
 @riverpod
-class PageLabel extends _$PageLabel {
+class CurrentPageLabel extends _$CurrentPageLabel {
   @override
-  String build() {
-    return globalState.appState.pageLabel ?? "dashboard";
+  PageLabel build() {
+    return globalState.appState.pageLabel;
   }
 
   @override
-  set state(String value) {
+  set state(PageLabel value) {
     state = value;
     globalState.appState = globalState.appState.copyWith(
       pageLabel: state,

@@ -80,8 +80,8 @@ class _DashboardFragmentState extends State<DashboardFragment> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (_, ref, ___) {
-      ref.listen(pageLabelProvider, (prev, next) {
-        if (prev != next && next == "dashboard") {
+      ref.listen(isCurrentPageProvider(PageLabel.dashboard), (prev, next) {
+        if (prev != next) {
           _initScaffold();
         }
       });

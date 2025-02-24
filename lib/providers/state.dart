@@ -96,7 +96,7 @@ VpnState vpnState(Ref ref) {
 
 @riverpod
 HomeState homeState(Ref ref) {
-  final pageLabel = ref.watch(pageLabelProvider);
+  final pageLabel = ref.watch(currentPageLabelProvider);
   final navigationItems = ref.watch(currentNavigationsProvider);
   final viewMode = ref.watch(viewWidthProvider.notifier).viewMode;
   final locale = ref.watch(appSettingProvider).locale;
@@ -116,6 +116,37 @@ DashboardState dashboardState(Ref ref) {
   return DashboardState(
     dashboardWidgets: dashboardWidgets,
     viewWidth: viewWidth,
+  );
+}
+
+@riverpod
+bool isCurrentPage(
+  Ref ref,
+  PageLabel pageLabel, {
+  bool Function(PageLabel pageLabel, ViewMode viewMode)? handler,
+}) {
+  final pageLabel = ref.watch(currentPageLabelProvider);
+  if (pageLabel == pageLabel) {
+    return true;
+  }
+  if (handler != null) {
+    final viewMode = ref.watch(viewWidthProvider.notifier).viewMode;
+    return handler(pageLabel, viewMode);
+  }
+  return false;
+}
+
+@riverpod
+ProxiesActionsState proxiesActionsState(Ref ref) {
+  final isCurrent = ref.watch(currentPageLabelProvider.select(
+    (state) => state == PageLabel.proxies,
+  ));
+  final hasProvider = ref.watch(providersProvider.select(
+    (state) => state.isNotEmpty,
+  ));
+  return ProxiesActionsState(
+    isCurrent: isCurrent,
+    hasProvider: hasProvider,
   );
 }
 
@@ -141,6 +172,31 @@ ProfilesSelectorState profilesSelectorState(Ref ref) {
     currentProfileId: currentProfileId,
     columns: columns,
   );
+}
+
+@riverpod
+List<NavigationItem> navigations(Ref ref) {
+  final openLogs = ref.watch(appSettingProvider).openLogs;
+  final hasProxies = ref.watch(currentProfileIdProvider) != null;
+  return navigation.getItems(
+    openLogs: openLogs,
+    hasProxies: hasProxies,
+  );
+}
+
+@riverpod
+List<NavigationItem> currentNavigations(Ref ref) {
+  final viewWidth = ref.watch(viewWidthProvider);
+  final navigations = ref.watch(navigationsProvider);
+  final navigationItemMode = switch (viewWidth <= maxMobileWidth) {
+    true => NavigationItemMode.mobile,
+    false => NavigationItemMode.desktop,
+  };
+  return navigations
+      .where(
+        (element) => element.modes.contains(navigationItemMode),
+      )
+      .toList();
 }
 
 @riverpod
@@ -180,7 +236,7 @@ Profile? currentProfile(Ref ref) {
 int getProxiesColumns(Ref ref) {
   final viewWidth = ref.watch(viewWidthProvider);
   final proxiesLayout =
-  ref.watch(proxiesStyleSettingProvider.select((state) => state.layout));
+      ref.watch(proxiesStyleSettingProvider.select((state) => state.layout));
   return other.getProxiesColumns(viewWidth, proxiesLayout);
 }
 

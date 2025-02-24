@@ -1,11 +1,10 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/fragments/proxies/list.dart';
-import 'package:fl_clash/models/models.dart';
-import 'package:fl_clash/state.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'providers.dart';
 import 'setting.dart';
 import 'tab.dart';
@@ -30,7 +29,7 @@ class _ProxiesFragmentState extends State<ProxiesFragment> {
                 isScaffold: true,
                 extendPageWidth: 360,
                 context,
-                body: const Providers(),
+                body: const ProvidersView(),
                 title: appLocalizations.providers,
               );
             },
@@ -55,15 +54,10 @@ class _ProxiesFragmentState extends State<ProxiesFragment> {
                 context,
                 extendPageWidth: 360,
                 title: appLocalizations.iconConfiguration,
-                body: Selector<Config, Map<String, String>>(
-                  selector: (_, config) => config.proxiesStyle.iconMap,
-                  shouldRebuild: (prev, next) {
-                    return !stringAndStringMapEntryIterableEquality.equals(
-                      prev.entries,
-                      next.entries,
-                    );
-                  },
-                  builder: (_, iconMap, __) {
+                body: Consumer(
+                  builder: (_, ref, __) {
+                    final iconMap = ref.watch(proxiesStyleSettingProvider
+                        .select((state) => state.iconMap));
                     final entries = iconMap.entries.toList();
                     return ListPage(
                       title: appLocalizations.iconConfiguration,
@@ -88,10 +82,13 @@ class _ProxiesFragmentState extends State<ProxiesFragment> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       onChange: (entries) {
-                        final config = globalState.appController.config;
-                        config.proxiesStyle = config.proxiesStyle.copyWith(
-                          iconMap: Map.fromEntries(entries),
-                        );
+                        ref
+                            .read(proxiesStyleSettingProvider.notifier)
+                            .updateState(
+                              (state) => state.copyWith(
+                                iconMap: Map.fromEntries(entries),
+                              ),
+                            );
                       },
                     );
                   },
@@ -121,23 +118,21 @@ class _ProxiesFragmentState extends State<ProxiesFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<Config, ProxiesType>(
-      selector: (_, config) => config.proxiesStyle.type,
-      builder: (_, proxiesType, __) {
-        return ProxiesActionsBuilder(
-          builder: (state, child) {
-            if (state.isCurrent) {
-              _initActions(proxiesType, state.hasProvider);
-            }
-            return child!;
-          },
-          child: switch (proxiesType) {
-            ProxiesType.tab => ProxiesTabFragment(
-                key: _proxiesTabKey,
-              ),
-            ProxiesType.list => const ProxiesListFragment(),
-          },
-        );
+    return Consumer(
+      builder: (_, ref, child) {
+        final proxiesType = ref
+            .watch(proxiesStyleSettingProvider.select((state) => state.type));
+        ref.listen(proxiesActionsStateProvider, (prev, next) {
+          if (prev != next && next.isCurrent) {
+            _initActions(proxiesType, next.hasProvider);
+          }
+        });
+        return switch (proxiesType) {
+          ProxiesType.tab => ProxiesTabFragment(
+              key: _proxiesTabKey,
+            ),
+          ProxiesType.list => const ProxiesListFragment(),
+        };
       },
     );
   }

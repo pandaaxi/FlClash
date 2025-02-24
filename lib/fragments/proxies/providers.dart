@@ -12,16 +12,16 @@ import 'package:provider/provider.dart';
 
 typedef UpdatingMap = Map<String, bool>;
 
-class Providers extends StatefulWidget {
-  const Providers({
+class ProvidersView extends StatefulWidget {
+  const ProvidersView({
     super.key,
   });
 
   @override
-  State<Providers> createState() => _ProvidersState();
+  State<ProvidersView> createState() => _ProvidersViewState();
 }
 
-class _ProvidersState extends State<Providers> {
+class _ProvidersViewState extends State<ProvidersView> {
   @override
   void initState() {
     super.initState();

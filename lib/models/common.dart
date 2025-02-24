@@ -15,7 +15,7 @@ part 'generated/common.g.dart';
 class NavigationItem with _$NavigationItem {
   const factory NavigationItem({
     required Icon icon,
-    required String label,
+    required PageLabel label,
     final String? description,
     required Widget fragment,
     @Default(true) bool keep,

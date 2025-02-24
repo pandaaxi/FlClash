@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$NavigationItem {
   Icon get icon => throw _privateConstructorUsedError;
-  String get label => throw _privateConstructorUsedError;
+  PageLabel get label => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   Widget get fragment => throw _privateConstructorUsedError;
   bool get keep => throw _privateConstructorUsedError;
@@ -39,7 +39,7 @@ abstract class $NavigationItemCopyWith<$Res> {
   @useResult
   $Res call(
       {Icon icon,
-      String label,
+      PageLabel label,
       String? description,
       Widget fragment,
       bool keep,
@@ -78,7 +78,7 @@ class _$NavigationItemCopyWithImpl<$Res, $Val extends NavigationItem>
       label: null == label
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PageLabel,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -113,7 +113,7 @@ abstract class _$$NavigationItemImplCopyWith<$Res>
   @useResult
   $Res call(
       {Icon icon,
-      String label,
+      PageLabel label,
       String? description,
       Widget fragment,
       bool keep,
@@ -150,7 +150,7 @@ class __$$NavigationItemImplCopyWithImpl<$Res>
       label: null == label
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PageLabel,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -194,7 +194,7 @@ class _$NavigationItemImpl implements _NavigationItem {
   @override
   final Icon icon;
   @override
-  final String label;
+  final PageLabel label;
   @override
   final String? description;
   @override
@@ -251,7 +251,7 @@ class _$NavigationItemImpl implements _NavigationItem {
 abstract class _NavigationItem implements NavigationItem {
   const factory _NavigationItem(
       {required final Icon icon,
-      required final String label,
+      required final PageLabel label,
       final String? description,
       required final Widget fragment,
       final bool keep,
@@ -261,7 +261,7 @@ abstract class _NavigationItem implements NavigationItem {
   @override
   Icon get icon;
   @override
-  String get label;
+  PageLabel get label;
   @override
   String? get description;
   @override

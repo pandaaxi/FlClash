@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AppState {
   bool get isInit => throw _privateConstructorUsedError;
-  String? get pageLabel => throw _privateConstructorUsedError;
+  PageLabel get pageLabel => throw _privateConstructorUsedError;
   List<Package> get packages => throw _privateConstructorUsedError;
   ColorSchemes get colorSchemes => throw _privateConstructorUsedError;
   int get sortNum => throw _privateConstructorUsedError;
@@ -50,7 +50,7 @@ abstract class $AppStateCopyWith<$Res> {
   @useResult
   $Res call(
       {bool isInit,
-      String? pageLabel,
+      PageLabel pageLabel,
       List<Package> packages,
       ColorSchemes colorSchemes,
       int sortNum,
@@ -87,7 +87,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @override
   $Res call({
     Object? isInit = null,
-    Object? pageLabel = freezed,
+    Object? pageLabel = null,
     Object? packages = null,
     Object? colorSchemes = null,
     Object? sortNum = null,
@@ -110,10 +110,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.isInit
           : isInit // ignore: cast_nullable_to_non_nullable
               as bool,
-      pageLabel: freezed == pageLabel
+      pageLabel: null == pageLabel
           ? _value.pageLabel
           : pageLabel // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as PageLabel,
       packages: null == packages
           ? _value.packages
           : packages // ignore: cast_nullable_to_non_nullable
@@ -202,7 +202,7 @@ abstract class _$$AppStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {bool isInit,
-      String? pageLabel,
+      PageLabel pageLabel,
       List<Package> packages,
       ColorSchemes colorSchemes,
       int sortNum,
@@ -238,7 +238,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isInit = null,
-    Object? pageLabel = freezed,
+    Object? pageLabel = null,
     Object? packages = null,
     Object? colorSchemes = null,
     Object? sortNum = null,
@@ -261,10 +261,10 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value.isInit
           : isInit // ignore: cast_nullable_to_non_nullable
               as bool,
-      pageLabel: freezed == pageLabel
+      pageLabel: null == pageLabel
           ? _value.pageLabel
           : pageLabel // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as PageLabel,
       packages: null == packages
           ? _value._packages
           : packages // ignore: cast_nullable_to_non_nullable
@@ -338,7 +338,7 @@ class __$$AppStateImplCopyWithImpl<$Res>
 class _$AppStateImpl implements _AppState {
   const _$AppStateImpl(
       {this.isInit = false,
-      this.pageLabel,
+      this.pageLabel = PageLabel.dashboard,
       final List<Package> packages = const [],
       this.colorSchemes = const ColorSchemes(),
       this.sortNum = 0,
@@ -364,7 +364,8 @@ class _$AppStateImpl implements _AppState {
   @JsonKey()
   final bool isInit;
   @override
-  final String? pageLabel;
+  @JsonKey()
+  final PageLabel pageLabel;
   final List<Package> _packages;
   @override
   @JsonKey()
@@ -502,7 +503,7 @@ class _$AppStateImpl implements _AppState {
 abstract class _AppState implements AppState {
   const factory _AppState(
       {final bool isInit,
-      final String? pageLabel,
+      final PageLabel pageLabel,
       final List<Package> packages,
       final ColorSchemes colorSchemes,
       final int sortNum,
@@ -523,7 +524,7 @@ abstract class _AppState implements AppState {
   @override
   bool get isInit;
   @override
-  String? get pageLabel;
+  PageLabel get pageLabel;
   @override
   List<Package> get packages;
   @override
