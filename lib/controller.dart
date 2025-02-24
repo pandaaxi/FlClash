@@ -620,6 +620,10 @@ class AppController {
     });
   }
 
+  setProvider(ExternalProvider? provider){
+    ref.read(providersProvider.notifier).setProvider(provider);
+  }
+
   List<Proxy> _sortOfName(List<Proxy> proxies) {
     return List.of(proxies)
       ..sort(
