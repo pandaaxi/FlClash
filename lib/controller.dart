@@ -214,7 +214,7 @@ class AppController {
   UpdateConfigParams getUpdateConfigParams([bool? isPatch]) {
     return globalState.getUpdateConfigParams(
       clashConfig: ref.read(patchClashConfigProvider),
-      selectedMap: ref.read(selectedDataSourceProvider),
+      selectedMap: ref.read(selectedMapProvider),
       overrideDns: ref.read(overrideDnsProvider),
       testUrl: ref.read(appSettingProvider).testUrl,
       isPatch: isPatch,
@@ -665,13 +665,6 @@ class AppController {
     };
   }
 
-  String getCurrentSelectedName(String groupName) {
-    final group = ref.read(groupsProvider.notifier).getGroupWithName(groupName);
-    return group?.getCurrentSelectedName(
-            ref.read(currentProfileProvider)?.selectedMap[groupName] ?? '') ??
-        '';
-  }
-
   clearEffect(String profileId) async {
     final profilePath = await appPath.getProfilePath(profileId);
     final providersPath = await appPath.getProvidersPath(profileId);
@@ -716,7 +709,7 @@ class AppController {
   }
 
   updateCurrentSelectedMap(String groupName, String proxyName) {
-    final currentProfile = ref.watch(currentProfileProvider);
+    final currentProfile = ref.read(currentProfileProvider);
     if (currentProfile != null &&
         currentProfile.selectedMap[groupName] != proxyName) {
       final SelectedMap selectedMap = Map.from(

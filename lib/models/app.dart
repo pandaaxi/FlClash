@@ -21,7 +21,6 @@ class AppState with _$AppState {
     @Default(0) int sortNum,
     required double viewWidth,
     @Default({}) DelayMap delayMap,
-    @Default({}) SelectedMap selectedMap,
     @Default([]) List<Group> groups,
     @Default(0) int checkIpNum,
     Brightness? brightness,

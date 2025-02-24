@@ -293,7 +293,7 @@ final versionProvider = AutoDisposeNotifierProvider<Version, int>.internal(
 );
 
 typedef _$Version = AutoDisposeNotifier<int>;
-String _$groupsHash() => r'830763049d271523a31df23d6fcf144b57e48b9d';
+String _$groupsHash() => r'094c490f8eb99cc2c5cd2ff6ffae1c2901cbde3a';
 
 /// See also [Groups].
 @ProviderFor(Groups)
@@ -308,23 +308,6 @@ final groupsProvider =
 );
 
 typedef _$Groups = AutoDisposeNotifier<List<Group>>;
-String _$selectedDataSourceHash() =>
-    r'81f5d0c4d2ab64dbeac23cd1de8f491d16b1dcb1';
-
-/// See also [SelectedDataSource].
-@ProviderFor(SelectedDataSource)
-final selectedDataSourceProvider = AutoDisposeNotifierProvider<
-    SelectedDataSource, Map<String, String>>.internal(
-  SelectedDataSource.new,
-  name: r'selectedDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$selectedDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$SelectedDataSource = AutoDisposeNotifier<Map<String, String>>;
 String _$delayDataSourceHash() => r'5e0cf42b0d0988c6341a80db4a68c042b46a5462';
 
 /// See also [DelayDataSource].

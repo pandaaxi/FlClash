@@ -63,7 +63,7 @@ TrayState trayState(Ref ref) {
     appBrightnessProvider,
   );
 
-  final selectedMap = ref.watch(selectedDataSourceProvider);
+  final selectedMap = ref.watch(selectedMapProvider);
 
   return TrayState(
     mode: clashConfig.mode,
@@ -143,6 +143,39 @@ ProfilesSelectorState profilesSelectorState(Ref ref) {
   );
 }
 
+@riverpod
+String getRealTestUrl(Ref ref, [String? testUrl]) {
+  final currentTestUrl = ref.watch(appSettingProvider).testUrl;
+  return testUrl.getSafeValue(currentTestUrl);
+}
+
+@riverpod
+int? getDelay(
+  Ref ref, {
+  required String proxyName,
+  String? testUrl,
+}) {
+  final currentTestUrl = ref.watch(getRealTestUrlProvider(testUrl));
+  final currentDelayMap = ref
+      .watch(delayDataSourceProvider.select((state) => state[currentTestUrl]));
+  return currentDelayMap?[proxyName];
+}
+
+@riverpod
+SelectedMap selectedMap(Ref ref) {
+  final selectedMap = ref.watch(
+    currentProfileProvider.select((state) => state?.selectedMap ?? {}),
+  );
+  return selectedMap;
+}
+
+@riverpod
+Profile? currentProfile(Ref ref) {
+  final profileId = ref.watch(currentProfileIdProvider);
+  return ref
+      .watch(profilesProvider.select((state) => state.getProfile(profileId)));
+}
+
 String _getRealProxyName(
   List<Group> groups,
   SelectedMap selectedMap,
@@ -165,27 +198,26 @@ String _getRealProxyName(
 @riverpod
 String getRealProxyName(Ref ref, String proxyName) {
   final groups = ref.watch(groupsProvider);
-  final selectedMap = ref.watch(selectedDataSourceProvider);
+  final selectedMap = ref.watch(selectedMapProvider);
   return _getRealProxyName(groups, selectedMap, proxyName);
 }
 
 @riverpod
-int? getDelay(
-  Ref ref, {
-  required String proxyName,
-  String? testUrl,
-}) {
-  final currentTestUrl = ref.watch(appSettingProvider).testUrl;
-  final delayMap = ref.watch(delayDataSourceProvider);
-  final currentDelayMap = delayMap[testUrl.getSafeValue(currentTestUrl)];
-  return currentDelayMap?[proxyName];
+String? getProxyName(Ref ref, String groupName) {
+  final proxyName =
+      ref.watch(selectedMapProvider.select((state) => state[groupName]));
+  return proxyName;
 }
 
 @riverpod
 String? getSelectedProxyName(Ref ref, String groupName) {
-  final selectedMap = ref.watch(
-      currentProfileProvider.select((state) => state?.selectedMap ?? {}));
-  return selectedMap[groupName];
+  final proxyName = ref.watch(getProxyNameProvider(groupName));
+  final group = ref.watch(
+    groupsProvider.select(
+      (state) => state.getGroup(groupName),
+    ),
+  );
+  return group?.getCurrentSelectedName(proxyName ?? '');
 }
 
 @riverpod

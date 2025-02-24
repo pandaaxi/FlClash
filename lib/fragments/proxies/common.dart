@@ -2,24 +2,8 @@ import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
-import 'package:flutter/material.dart';
-
-Widget currentSelectedProxyNameBuilder({
-  required String groupName,
-  required Widget Function(String currentGroupName) builder,
-}) {
-  return Selector2<AppState, Config, String>(
-    selector: (_, appState, config) {
-      final group = appState.getGroupWithName(groupName);
-      final selectedProxyName = config.currentSelectedMap[groupName];
-      return group?.getCurrentSelectedName(selectedProxyName ?? "") ?? "";
-    },
-    builder: (_, currentSelectedProxyName, ___) {
-      return builder(currentSelectedProxyName);
-    },
-  );
-}
 
 double get listHeaderHeight {
   final measure = globalState.measure;
@@ -39,18 +23,19 @@ double getItemHeight(ProxyCardType proxyCardType) {
 
 proxyDelayTest(Proxy proxy, [String? testUrl]) async {
   final appController = globalState.appController;
-  final proxyName = appController.appState.getRealProxyName(proxy.name);
-  final url = appController.getRealTestUrl(testUrl);
-  globalState.appController.setDelay(
+  final proxyName =
+      appController.ref.read(getRealProxyNameProvider(proxy.name));
+  final realTestUrl = appController.ref.read(getRealTestUrlProvider(testUrl));
+  appController.setDelay(
     Delay(
-      url: url,
+      url: realTestUrl,
       name: proxyName,
       value: 0,
     ),
   );
-  globalState.appController.setDelay(
+  appController.setDelay(
     await clashCore.getDelay(
-      url,
+      realTestUrl,
       proxyName,
     ),
   );
@@ -100,7 +85,7 @@ double getScrollToSelectedOffset({
   final proxyCardType = appController.config.proxiesStyle.cardType;
   final selectedName = appController.getCurrentSelectedName(groupName);
   final findSelectedIndex = proxies.indexWhere(
-        (proxy) => proxy.name == selectedName,
+    (proxy) => proxy.name == selectedName,
   );
   final selectedIndex = findSelectedIndex != -1 ? findSelectedIndex : 0;
   final rows = (selectedIndex / columns).floor();

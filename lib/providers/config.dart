@@ -1,5 +1,4 @@
 import 'package:fl_clash/common/other.dart';
-import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -163,14 +162,6 @@ class CurrentProfileId extends _$CurrentProfileId {
     state = value;
     globalState.config = globalState.config.copyWith(currentProfileId: value);
   }
-}
-
-@riverpod
-Profile? currentProfile(Ref ref) {
-  final profileId = ref.watch(currentProfileIdProvider);
-  final profiles = ref.watch(profilesProvider);
-  final index = profiles.indexWhere((profile) => profile.id == profileId);
-  return index == -1 ? null : profiles[index];
 }
 
 @riverpod

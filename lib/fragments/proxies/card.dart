@@ -102,27 +102,26 @@ class ProxyCard extends StatelessWidget {
     }
   }
 
-  _changeProxy(BuildContext context) async {
-    // final appController = globalState.appController;
-    // final isURLTestOrFallback = groupType.isURLTestOrFallback;
-    // final isSelector = groupType == GroupType.Selector;
-    // if (isURLTestOrFallback || isSelector) {
-    //   final currentProxyName =
-    //       appController.config.currentSelectedMap[groupName];
-    //   final nextProxyName = switch (isURLTestOrFallback) {
-    //     true => currentProxyName == proxy.name ? "" : proxy.name,
-    //     false => proxy.name,
-    //   };
-    //   appController.config.updateCurrentSelectedMap(
-    //     groupName,
-    //     nextProxyName,
-    //   );
-    //   await appController.changeProxyDebounce(groupName, nextProxyName);
-    //   return;
-    // }
-    // globalState.showNotifier(
-    //   appLocalizations.notSelectedTip,
-    // );
+  _changeProxy(WidgetRef ref) async {
+    final isComputedSelected = groupType.isComputedSelected;
+    final isSelector = groupType == GroupType.Selector;
+    if (isComputedSelected || isSelector) {
+      final currentProxyName = ref.read(getProxyNameProvider(groupName));
+      final nextProxyName = switch (isComputedSelected) {
+        true => currentProxyName == proxy.name ? "" : proxy.name,
+        false => proxy.name,
+      };
+      final appController = globalState.appController;
+      appController.updateCurrentSelectedMap(
+        groupName,
+        nextProxyName,
+      );
+      await appController.changeProxyDebounce(groupName, nextProxyName);
+      return;
+    }
+    globalState.showNotifier(
+      appLocalizations.notSelectedTip,
+    );
   }
 
   @override
@@ -130,78 +129,80 @@ class ProxyCard extends StatelessWidget {
     final measure = globalState.measure;
     final delayText = _buildDelayText();
     final proxyNameText = _buildProxyNameText(context);
-    return currentSelectedProxyNameBuilder(
-      groupName: groupName,
-      builder: (currentGroupName) {
-        return Stack(
-          children: [
-            CommonCard(
+    return Stack(
+      children: [
+        Consumer(
+          builder: (_, ref, child) {
+            final selectedProxyName =
+                ref.watch(getSelectedProxyNameProvider(groupName));
+            return CommonCard(
               key: key,
               onPressed: () {
-                _changeProxy(context);
+                _changeProxy(ref);
               },
-              isSelected: currentGroupName == proxy.name,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    proxyNameText,
-                    const SizedBox(
-                      height: 8,
+              isSelected: selectedProxyName == proxy.name,
+              child: child!,
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                proxyNameText,
+                const SizedBox(
+                  height: 8,
+                ),
+                if (type == ProxyCardType.expand) ...[
+                  SizedBox(
+                    height: measure.bodySmallHeight,
+                    child: _ProxyDesc(
+                      proxy: proxy,
                     ),
-                    if (type == ProxyCardType.expand) ...[
-                      SizedBox(
-                        height: measure.bodySmallHeight,
-                        child: _ProxyDesc(
-                          proxy: proxy,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      delayText,
-                    ] else
-                      SizedBox(
-                        height: measure.bodySmallHeight,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              flex: 1,
-                              child: TooltipText(
-                                text: Text(
-                                  proxy.type,
-                                  style: context.textTheme.bodySmall?.copyWith(
-                                    overflow: TextOverflow.ellipsis,
-                                    color: context
-                                        .textTheme.bodySmall?.color?.toLight,
-                                  ),
-                                ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  delayText,
+                ] else
+                  SizedBox(
+                    height: measure.bodySmallHeight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: TooltipText(
+                            text: Text(
+                              proxy.type,
+                              style: context.textTheme.bodySmall?.copyWith(
+                                overflow: TextOverflow.ellipsis,
+                                color:
+                                    context.textTheme.bodySmall?.color?.toLight,
                               ),
                             ),
-                            delayText,
-                          ],
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-              ),
+                        delayText,
+                      ],
+                    ),
+                  ),
+              ],
             ),
-            if (groupType.isComputedSelected)
-              Positioned(
-                top: 0,
-                right: 0,
-                child: _ProxyComputedMark(
-                  groupName: groupName,
-                  proxy: proxy,
-                ),
-              )
-          ],
-        );
-      },
+          ),
+        ),
+        if (groupType.isComputedSelected)
+          Positioned(
+            top: 0,
+            right: 0,
+            child: _ProxyComputedMark(
+              groupName: groupName,
+              proxy: proxy,
+            ),
+          )
+      ],
     );
   }
 }

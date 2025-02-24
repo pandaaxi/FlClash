@@ -351,27 +351,6 @@ class Groups extends _$Groups {
       groups: value,
     );
   }
-
-  Group? getGroupWithName(String groupName) {
-    final index = state.indexWhere((element) => element.name == groupName);
-    return index != -1 ? state[index] : null;
-  }
-}
-
-@riverpod
-class SelectedDataSource extends _$SelectedDataSource {
-  @override
-  Map<String, String> build() {
-    return globalState.appState.selectedMap;
-  }
-
-  @override
-  set state(Map<String, String> value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      selectedMap: value,
-    );
-  }
 }
 
 @riverpod

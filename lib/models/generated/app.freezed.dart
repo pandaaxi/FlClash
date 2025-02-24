@@ -24,7 +24,6 @@ mixin _$AppState {
   double get viewWidth => throw _privateConstructorUsedError;
   Map<String, Map<String, int?>> get delayMap =>
       throw _privateConstructorUsedError;
-  Map<String, String> get selectedMap => throw _privateConstructorUsedError;
   List<Group> get groups => throw _privateConstructorUsedError;
   int get checkIpNum => throw _privateConstructorUsedError;
   Brightness? get brightness => throw _privateConstructorUsedError;
@@ -57,7 +56,6 @@ abstract class $AppStateCopyWith<$Res> {
       int sortNum,
       double viewWidth,
       Map<String, Map<String, int?>> delayMap,
-      Map<String, String> selectedMap,
       List<Group> groups,
       int checkIpNum,
       Brightness? brightness,
@@ -95,7 +93,6 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? sortNum = null,
     Object? viewWidth = null,
     Object? delayMap = null,
-    Object? selectedMap = null,
     Object? groups = null,
     Object? checkIpNum = null,
     Object? brightness = freezed,
@@ -137,10 +134,6 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.delayMap
           : delayMap // ignore: cast_nullable_to_non_nullable
               as Map<String, Map<String, int?>>,
-      selectedMap: null == selectedMap
-          ? _value.selectedMap
-          : selectedMap // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
       groups: null == groups
           ? _value.groups
           : groups // ignore: cast_nullable_to_non_nullable
@@ -215,7 +208,6 @@ abstract class _$$AppStateImplCopyWith<$Res>
       int sortNum,
       double viewWidth,
       Map<String, Map<String, int?>> delayMap,
-      Map<String, String> selectedMap,
       List<Group> groups,
       int checkIpNum,
       Brightness? brightness,
@@ -252,7 +244,6 @@ class __$$AppStateImplCopyWithImpl<$Res>
     Object? sortNum = null,
     Object? viewWidth = null,
     Object? delayMap = null,
-    Object? selectedMap = null,
     Object? groups = null,
     Object? checkIpNum = null,
     Object? brightness = freezed,
@@ -294,10 +285,6 @@ class __$$AppStateImplCopyWithImpl<$Res>
           ? _value._delayMap
           : delayMap // ignore: cast_nullable_to_non_nullable
               as Map<String, Map<String, int?>>,
-      selectedMap: null == selectedMap
-          ? _value._selectedMap
-          : selectedMap // ignore: cast_nullable_to_non_nullable
-              as Map<String, String>,
       groups: null == groups
           ? _value._groups
           : groups // ignore: cast_nullable_to_non_nullable
@@ -357,7 +344,6 @@ class _$AppStateImpl implements _AppState {
       this.sortNum = 0,
       required this.viewWidth,
       final Map<String, Map<String, int?>> delayMap = const {},
-      final Map<String, String> selectedMap = const {},
       final List<Group> groups = const [],
       this.checkIpNum = 0,
       this.brightness,
@@ -371,7 +357,6 @@ class _$AppStateImpl implements _AppState {
       required this.totalTraffic})
       : _packages = packages,
         _delayMap = delayMap,
-        _selectedMap = selectedMap,
         _groups = groups,
         _providers = providers;
 
@@ -404,15 +389,6 @@ class _$AppStateImpl implements _AppState {
     if (_delayMap is EqualUnmodifiableMapView) return _delayMap;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_delayMap);
-  }
-
-  final Map<String, String> _selectedMap;
-  @override
-  @JsonKey()
-  Map<String, String> get selectedMap {
-    if (_selectedMap is EqualUnmodifiableMapView) return _selectedMap;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_selectedMap);
   }
 
   final List<Group> _groups;
@@ -455,7 +431,7 @@ class _$AppStateImpl implements _AppState {
 
   @override
   String toString() {
-    return 'AppState(isInit: $isInit, pageLabel: $pageLabel, packages: $packages, colorSchemes: $colorSchemes, sortNum: $sortNum, viewWidth: $viewWidth, delayMap: $delayMap, selectedMap: $selectedMap, groups: $groups, checkIpNum: $checkIpNum, brightness: $brightness, runTime: $runTime, providers: $providers, localIp: $localIp, requests: $requests, version: $version, logs: $logs, traffics: $traffics, totalTraffic: $totalTraffic)';
+    return 'AppState(isInit: $isInit, pageLabel: $pageLabel, packages: $packages, colorSchemes: $colorSchemes, sortNum: $sortNum, viewWidth: $viewWidth, delayMap: $delayMap, groups: $groups, checkIpNum: $checkIpNum, brightness: $brightness, runTime: $runTime, providers: $providers, localIp: $localIp, requests: $requests, version: $version, logs: $logs, traffics: $traffics, totalTraffic: $totalTraffic)';
   }
 
   @override
@@ -473,8 +449,6 @@ class _$AppStateImpl implements _AppState {
             (identical(other.viewWidth, viewWidth) ||
                 other.viewWidth == viewWidth) &&
             const DeepCollectionEquality().equals(other._delayMap, _delayMap) &&
-            const DeepCollectionEquality()
-                .equals(other._selectedMap, _selectedMap) &&
             const DeepCollectionEquality().equals(other._groups, _groups) &&
             (identical(other.checkIpNum, checkIpNum) ||
                 other.checkIpNum == checkIpNum) &&
@@ -495,28 +469,26 @@ class _$AppStateImpl implements _AppState {
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        runtimeType,
-        isInit,
-        pageLabel,
-        const DeepCollectionEquality().hash(_packages),
-        colorSchemes,
-        sortNum,
-        viewWidth,
-        const DeepCollectionEquality().hash(_delayMap),
-        const DeepCollectionEquality().hash(_selectedMap),
-        const DeepCollectionEquality().hash(_groups),
-        checkIpNum,
-        brightness,
-        runTime,
-        const DeepCollectionEquality().hash(_providers),
-        localIp,
-        requests,
-        version,
-        logs,
-        traffics,
-        totalTraffic
-      ]);
+  int get hashCode => Object.hash(
+      runtimeType,
+      isInit,
+      pageLabel,
+      const DeepCollectionEquality().hash(_packages),
+      colorSchemes,
+      sortNum,
+      viewWidth,
+      const DeepCollectionEquality().hash(_delayMap),
+      const DeepCollectionEquality().hash(_groups),
+      checkIpNum,
+      brightness,
+      runTime,
+      const DeepCollectionEquality().hash(_providers),
+      localIp,
+      requests,
+      version,
+      logs,
+      traffics,
+      totalTraffic);
 
   /// Create a copy of AppState
   /// with the given fields replaced by the non-null parameter values.
@@ -536,7 +508,6 @@ abstract class _AppState implements AppState {
       final int sortNum,
       required final double viewWidth,
       final Map<String, Map<String, int?>> delayMap,
-      final Map<String, String> selectedMap,
       final List<Group> groups,
       final int checkIpNum,
       final Brightness? brightness,
@@ -563,8 +534,6 @@ abstract class _AppState implements AppState {
   double get viewWidth;
   @override
   Map<String, Map<String, int?>> get delayMap;
-  @override
-  Map<String, String> get selectedMap;
   @override
   List<Group> get groups;
   @override

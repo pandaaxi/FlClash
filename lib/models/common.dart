@@ -280,11 +280,18 @@ class Group with _$Group {
   factory Group.fromJson(Map<String, Object?> json) => _$GroupFromJson(json);
 }
 
+extension GroupsExt on List<Group> {
+  Group? getGroup(String groupName) {
+    final index = indexWhere((element) => element.name == groupName);
+    return index != -1 ? this[index] : null;
+  }
+}
+
 extension GroupExt on Group {
   String get realNow => now ?? "";
 
   String getCurrentSelectedName(String proxyName) {
-    if (type.isURLTestOrFallback) {
+    if (type.isComputedSelected) {
       return realNow.isNotEmpty ? realNow : proxyName;
     }
     return proxyName.isNotEmpty ? proxyName : realNow;
@@ -361,18 +368,18 @@ class ColorSchemes with _$ColorSchemes {
   }) = _ColorSchemes;
 }
 
-extension ColorSchemesExt on ColorSchemes{
+extension ColorSchemesExt on ColorSchemes {
   ColorScheme getColorSchemeForBrightness(Brightness? brightness) {
     if (brightness == Brightness.dark) {
       return darkColorScheme != null
           ? ColorScheme.fromSeed(
-        seedColor: darkColorScheme!.primary,
-        brightness: Brightness.dark,
-      )
+              seedColor: darkColorScheme!.primary,
+              brightness: Brightness.dark,
+            )
           : ColorScheme.fromSeed(
-        seedColor: defaultPrimaryColor,
-        brightness: Brightness.dark,
-      );
+              seedColor: defaultPrimaryColor,
+              brightness: Brightness.dark,
+            );
     }
     return lightColorScheme != null
         ? ColorScheme.fromSeed(seedColor: lightColorScheme!.primary)

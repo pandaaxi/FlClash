@@ -55,7 +55,7 @@ final proxyStateProvider = AutoDisposeProvider<ProxyState>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef ProxyStateRef = AutoDisposeProviderRef<ProxyState>;
-String _$trayStateHash() => r'eb722635400d06cfb7d2c124f0fb46edb891d9e4';
+String _$trayStateHash() => r'06ff742a92893667a30bc6a25d13594d83dd74fc';
 
 /// See also [trayState].
 @ProviderFor(trayState)
@@ -160,7 +160,7 @@ final profilesSelectorStateProvider =
 // ignore: unused_element
 typedef ProfilesSelectorStateRef
     = AutoDisposeProviderRef<ProfilesSelectorState>;
-String _$getRealProxyNameHash() => r'ba6992dc79055ef1dc66aaf18dec7f7b909623e9';
+String _$getRealTestUrlHash() => r'5c6513cabb53e5e6689cba5919f49aeaeff90247';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -183,30 +183,30 @@ class _SystemHash {
   }
 }
 
-/// See also [getRealProxyName].
-@ProviderFor(getRealProxyName)
-const getRealProxyNameProvider = GetRealProxyNameFamily();
+/// See also [getRealTestUrl].
+@ProviderFor(getRealTestUrl)
+const getRealTestUrlProvider = GetRealTestUrlFamily();
 
-/// See also [getRealProxyName].
-class GetRealProxyNameFamily extends Family<String> {
-  /// See also [getRealProxyName].
-  const GetRealProxyNameFamily();
+/// See also [getRealTestUrl].
+class GetRealTestUrlFamily extends Family<String> {
+  /// See also [getRealTestUrl].
+  const GetRealTestUrlFamily();
 
-  /// See also [getRealProxyName].
-  GetRealProxyNameProvider call(
-    String proxyName,
-  ) {
-    return GetRealProxyNameProvider(
-      proxyName,
+  /// See also [getRealTestUrl].
+  GetRealTestUrlProvider call([
+    String? testUrl,
+  ]) {
+    return GetRealTestUrlProvider(
+      testUrl,
     );
   }
 
   @override
-  GetRealProxyNameProvider getProviderOverride(
-    covariant GetRealProxyNameProvider provider,
+  GetRealTestUrlProvider getProviderOverride(
+    covariant GetRealTestUrlProvider provider,
   ) {
     return call(
-      provider.proxyName,
+      provider.testUrl,
     );
   }
 
@@ -222,75 +222,75 @@ class GetRealProxyNameFamily extends Family<String> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'getRealProxyNameProvider';
+  String? get name => r'getRealTestUrlProvider';
 }
 
-/// See also [getRealProxyName].
-class GetRealProxyNameProvider extends AutoDisposeProvider<String> {
-  /// See also [getRealProxyName].
-  GetRealProxyNameProvider(
-    String proxyName,
-  ) : this._internal(
-          (ref) => getRealProxyName(
-            ref as GetRealProxyNameRef,
-            proxyName,
+/// See also [getRealTestUrl].
+class GetRealTestUrlProvider extends AutoDisposeProvider<String> {
+  /// See also [getRealTestUrl].
+  GetRealTestUrlProvider([
+    String? testUrl,
+  ]) : this._internal(
+          (ref) => getRealTestUrl(
+            ref as GetRealTestUrlRef,
+            testUrl,
           ),
-          from: getRealProxyNameProvider,
-          name: r'getRealProxyNameProvider',
+          from: getRealTestUrlProvider,
+          name: r'getRealTestUrlProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$getRealProxyNameHash,
-          dependencies: GetRealProxyNameFamily._dependencies,
+                  : _$getRealTestUrlHash,
+          dependencies: GetRealTestUrlFamily._dependencies,
           allTransitiveDependencies:
-              GetRealProxyNameFamily._allTransitiveDependencies,
-          proxyName: proxyName,
+              GetRealTestUrlFamily._allTransitiveDependencies,
+          testUrl: testUrl,
         );
 
-  GetRealProxyNameProvider._internal(
+  GetRealTestUrlProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.proxyName,
+    required this.testUrl,
   }) : super.internal();
 
-  final String proxyName;
+  final String? testUrl;
 
   @override
   Override overrideWith(
-    String Function(GetRealProxyNameRef provider) create,
+    String Function(GetRealTestUrlRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: GetRealProxyNameProvider._internal(
-        (ref) => create(ref as GetRealProxyNameRef),
+      override: GetRealTestUrlProvider._internal(
+        (ref) => create(ref as GetRealTestUrlRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        proxyName: proxyName,
+        testUrl: testUrl,
       ),
     );
   }
 
   @override
   AutoDisposeProviderElement<String> createElement() {
-    return _GetRealProxyNameProviderElement(this);
+    return _GetRealTestUrlProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetRealProxyNameProvider && other.proxyName == proxyName;
+    return other is GetRealTestUrlProvider && other.testUrl == testUrl;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, proxyName.hashCode);
+    hash = _SystemHash.combine(hash, testUrl.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -298,20 +298,20 @@ class GetRealProxyNameProvider extends AutoDisposeProvider<String> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin GetRealProxyNameRef on AutoDisposeProviderRef<String> {
-  /// The parameter `proxyName` of this provider.
-  String get proxyName;
+mixin GetRealTestUrlRef on AutoDisposeProviderRef<String> {
+  /// The parameter `testUrl` of this provider.
+  String? get testUrl;
 }
 
-class _GetRealProxyNameProviderElement
-    extends AutoDisposeProviderElement<String> with GetRealProxyNameRef {
-  _GetRealProxyNameProviderElement(super.provider);
+class _GetRealTestUrlProviderElement extends AutoDisposeProviderElement<String>
+    with GetRealTestUrlRef {
+  _GetRealTestUrlProviderElement(super.provider);
 
   @override
-  String get proxyName => (origin as GetRealProxyNameProvider).proxyName;
+  String? get testUrl => (origin as GetRealTestUrlProvider).testUrl;
 }
 
-String _$getDelayHash() => r'8f9f7abc43a1c593cfa3ad84edaf37c563f32643';
+String _$getDelayHash() => r'eb10238499e73cfa664f0033b119f8933746ee70';
 
 /// See also [getDelay].
 @ProviderFor(getDelay)
@@ -457,8 +457,301 @@ class _GetDelayProviderElement extends AutoDisposeProviderElement<int?>
   String? get testUrl => (origin as GetDelayProvider).testUrl;
 }
 
+String _$selectedMapHash() => r'0d7a3610d9005e74e1a88595d7e22897dc8240a5';
+
+/// See also [selectedMap].
+@ProviderFor(selectedMap)
+final selectedMapProvider = AutoDisposeProvider<SelectedMap>.internal(
+  selectedMap,
+  name: r'selectedMapProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$selectedMapHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SelectedMapRef = AutoDisposeProviderRef<SelectedMap>;
+String _$currentProfileHash() => r'55f3cb9570a0aa6b9e0b83a36693b69d52e753ab';
+
+/// See also [currentProfile].
+@ProviderFor(currentProfile)
+final currentProfileProvider = AutoDisposeProvider<Profile?>.internal(
+  currentProfile,
+  name: r'currentProfileProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentProfileHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef CurrentProfileRef = AutoDisposeProviderRef<Profile?>;
+String _$getRealProxyNameHash() => r'47be6d115aa170f9bff610ec2cf7669e168bf472';
+
+/// See also [getRealProxyName].
+@ProviderFor(getRealProxyName)
+const getRealProxyNameProvider = GetRealProxyNameFamily();
+
+/// See also [getRealProxyName].
+class GetRealProxyNameFamily extends Family<String> {
+  /// See also [getRealProxyName].
+  const GetRealProxyNameFamily();
+
+  /// See also [getRealProxyName].
+  GetRealProxyNameProvider call(
+    String proxyName,
+  ) {
+    return GetRealProxyNameProvider(
+      proxyName,
+    );
+  }
+
+  @override
+  GetRealProxyNameProvider getProviderOverride(
+    covariant GetRealProxyNameProvider provider,
+  ) {
+    return call(
+      provider.proxyName,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getRealProxyNameProvider';
+}
+
+/// See also [getRealProxyName].
+class GetRealProxyNameProvider extends AutoDisposeProvider<String> {
+  /// See also [getRealProxyName].
+  GetRealProxyNameProvider(
+    String proxyName,
+  ) : this._internal(
+          (ref) => getRealProxyName(
+            ref as GetRealProxyNameRef,
+            proxyName,
+          ),
+          from: getRealProxyNameProvider,
+          name: r'getRealProxyNameProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getRealProxyNameHash,
+          dependencies: GetRealProxyNameFamily._dependencies,
+          allTransitiveDependencies:
+              GetRealProxyNameFamily._allTransitiveDependencies,
+          proxyName: proxyName,
+        );
+
+  GetRealProxyNameProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.proxyName,
+  }) : super.internal();
+
+  final String proxyName;
+
+  @override
+  Override overrideWith(
+    String Function(GetRealProxyNameRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetRealProxyNameProvider._internal(
+        (ref) => create(ref as GetRealProxyNameRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        proxyName: proxyName,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<String> createElement() {
+    return _GetRealProxyNameProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetRealProxyNameProvider && other.proxyName == proxyName;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, proxyName.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin GetRealProxyNameRef on AutoDisposeProviderRef<String> {
+  /// The parameter `proxyName` of this provider.
+  String get proxyName;
+}
+
+class _GetRealProxyNameProviderElement
+    extends AutoDisposeProviderElement<String> with GetRealProxyNameRef {
+  _GetRealProxyNameProviderElement(super.provider);
+
+  @override
+  String get proxyName => (origin as GetRealProxyNameProvider).proxyName;
+}
+
+String _$getProxyNameHash() => r'204a477ea18c8e1eeef55b3efd3d47e45b0d2350';
+
+/// See also [getProxyName].
+@ProviderFor(getProxyName)
+const getProxyNameProvider = GetProxyNameFamily();
+
+/// See also [getProxyName].
+class GetProxyNameFamily extends Family<String?> {
+  /// See also [getProxyName].
+  const GetProxyNameFamily();
+
+  /// See also [getProxyName].
+  GetProxyNameProvider call(
+    String groupName,
+  ) {
+    return GetProxyNameProvider(
+      groupName,
+    );
+  }
+
+  @override
+  GetProxyNameProvider getProviderOverride(
+    covariant GetProxyNameProvider provider,
+  ) {
+    return call(
+      provider.groupName,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getProxyNameProvider';
+}
+
+/// See also [getProxyName].
+class GetProxyNameProvider extends AutoDisposeProvider<String?> {
+  /// See also [getProxyName].
+  GetProxyNameProvider(
+    String groupName,
+  ) : this._internal(
+          (ref) => getProxyName(
+            ref as GetProxyNameRef,
+            groupName,
+          ),
+          from: getProxyNameProvider,
+          name: r'getProxyNameProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getProxyNameHash,
+          dependencies: GetProxyNameFamily._dependencies,
+          allTransitiveDependencies:
+              GetProxyNameFamily._allTransitiveDependencies,
+          groupName: groupName,
+        );
+
+  GetProxyNameProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.groupName,
+  }) : super.internal();
+
+  final String groupName;
+
+  @override
+  Override overrideWith(
+    String? Function(GetProxyNameRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetProxyNameProvider._internal(
+        (ref) => create(ref as GetProxyNameRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        groupName: groupName,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<String?> createElement() {
+    return _GetProxyNameProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetProxyNameProvider && other.groupName == groupName;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, groupName.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin GetProxyNameRef on AutoDisposeProviderRef<String?> {
+  /// The parameter `groupName` of this provider.
+  String get groupName;
+}
+
+class _GetProxyNameProviderElement extends AutoDisposeProviderElement<String?>
+    with GetProxyNameRef {
+  _GetProxyNameProviderElement(super.provider);
+
+  @override
+  String get groupName => (origin as GetProxyNameProvider).groupName;
+}
+
 String _$getSelectedProxyNameHash() =>
-    r'351b381acb9c78b7e4f0ef2fea88de1131dc4362';
+    r'13aeae1fede234983d262d824a85c7375f9e4e78';
 
 /// See also [getSelectedProxyName].
 @ProviderFor(getSelectedProxyName)

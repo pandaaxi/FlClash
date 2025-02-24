@@ -6,23 +6,6 @@ part of '../config.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentProfileHash() => r'29e6c163d7e5de8081aede36befe9092a7a4233f';
-
-/// See also [currentProfile].
-@ProviderFor(currentProfile)
-final currentProfileProvider = AutoDisposeProvider<Profile?>.internal(
-  currentProfile,
-  name: r'currentProfileProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentProfileHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CurrentProfileRef = AutoDisposeProviderRef<Profile?>;
 String _$appSettingHash() => r'7bb49266022ad812ba0caf81fec4aaacbc242165';
 
 /// See also [AppSetting].
