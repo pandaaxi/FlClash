@@ -113,9 +113,7 @@ class _AccessFragmentState extends State<AccessFragment> {
         showSheet(
           title: appLocalizations.proxiesSetting,
           context: context,
-          body: AccessControlWidget(
-            context: context,
-          ),
+          body: AccessControlPanel(),
         );
       },
       icon: const Icon(Icons.tune),
@@ -480,14 +478,14 @@ class AccessControlSearchDelegate extends SearchDelegate {
   }
 }
 
-class AccessControlWidget extends StatelessWidget {
-  final BuildContext context;
+class AccessControlPanel extends ConsumerStatefulWidget {
+  const AccessControlPanel({super.key});
 
-  const AccessControlWidget({
-    super.key,
-    required this.context,
-  });
+  @override
+  ConsumerState createState() => _AccessControlPanelState();
+}
 
+class _AccessControlPanelState extends ConsumerState<AccessControlPanel> {
   IconData _getIconWithAccessControlMode(AccessControlMode mode) {
     return switch (mode) {
       AccessControlMode.acceptSelected => Icons.adjust_outlined,
@@ -673,10 +671,12 @@ class AccessControlWidget extends StatelessWidget {
     final rejectList = packageNames
         .where((item) => selectedPackageNames.contains(item))
         .toList();
-    config.accessControl = accessControl.copyWith(
-      acceptList: acceptList,
-      rejectList: rejectList,
-    );
+    ref.read(accessControlSettingProvider.notifier).updateState(
+          (state) => state.copyWith(
+            acceptList: acceptList,
+            rejectList: rejectList,
+          ),
+        );
   }
 
   _copyToClipboard() async {
@@ -688,21 +688,23 @@ class AccessControlWidget extends StatelessWidget {
         ),
       );
     });
-    if (!context.mounted) return;
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
   _pasteToClipboard() async {
-    await globalState.safeRun(() async {
-      final config = globalState.config;
-      final data = await Clipboard.getData('text/plain');
-      final text = data?.text;
-      if (text == null) return;
-      // config.accessControl = AccessControl.fromJson(
-      //   json.decode(text),
-      // );
-    });
-    if (!context.mounted) return;
+    await globalState.safeRun(
+      () async {
+        final data = await Clipboard.getData('text/plain');
+        final text = data?.text;
+        if (text == null) return;
+        ref.read(accessControlSettingProvider.notifier).state =
+            AccessControl.fromJson(
+          json.decode(text),
+        );
+      },
+    );
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 
