@@ -167,6 +167,23 @@ class AppController {
     }
   }
 
+  getCurrentGroupName() {
+    final currentGroupName = ref.read(currentProfileProvider.select(
+      (state) => state?.currentGroupName,
+    ));
+    return currentGroupName;
+  }
+
+  updateCurrentGroupName(String groupName) {
+    final profile = ref.read(currentProfileProvider);
+    if (profile == null || profile.currentGroupName == groupName) {
+      return;
+    }
+    setProfile(
+      profile.copyWith(currentGroupName: groupName),
+    );
+  }
+
   Future<void> updateClashConfig([bool? isPatch]) async {
     final commonScaffoldState = globalState.homeScaffoldKey.currentState;
     if (commonScaffoldState?.mounted != true) return;
@@ -620,7 +637,7 @@ class AppController {
     });
   }
 
-  setProvider(ExternalProvider? provider){
+  setProvider(ExternalProvider? provider) {
     ref.read(providersProvider.notifier).setProvider(provider);
   }
 
@@ -699,18 +716,6 @@ class AppController {
 
   updateStart() {
     updateStatus(ref.read(runTimeProvider.notifier).isStart);
-  }
-
-  updateCurrentGroupName(String groupName) {
-    final currentProfile = ref.watch(currentProfileProvider);
-    if (currentProfile != null &&
-        currentProfile.currentGroupName != groupName) {
-      ref.read(profilesProvider.notifier).setProfile(
-            currentProfile.copyWith(
-              currentGroupName: groupName,
-            ),
-          );
-    }
   }
 
   updateCurrentSelectedMap(String groupName, String proxyName) {

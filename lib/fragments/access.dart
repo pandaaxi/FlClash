@@ -4,11 +4,12 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AccessFragment extends StatefulWidget {
   const AccessFragment({super.key});
@@ -28,12 +29,12 @@ class _AccessFragmentState extends State<AccessFragment> {
     _updateInitList();
     _controller = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final appState = globalState.appController.appState;
-      if (appState.packages.isEmpty) {
-        Future.delayed(const Duration(milliseconds: 300), () async {
-          appState.packages = await app?.getPackages() ?? [];
-        });
-      }
+      // final appState = globalState.appController.appState;
+      // if (appState.packages.isEmpty) {
+      //   Future.delayed(const Duration(milliseconds: 300), () async {
+      //     appState.packages = await app?.getPackages() ?? [];
+      //   });
+      // }
     });
   }
 
@@ -44,9 +45,9 @@ class _AccessFragmentState extends State<AccessFragment> {
   }
 
   _updateInitList() {
-    final accessControl = globalState.appController.config.accessControl;
-    acceptList = accessControl.acceptList;
-    rejectList = accessControl.rejectList;
+    // final accessControl = globalState.appController.config.accessControl;
+    // acceptList = accessControl.acceptList;
+    // rejectList = accessControl.rejectList;
   }
 
   Widget _buildSearchButton() {
@@ -77,28 +78,28 @@ class _AccessFragmentState extends State<AccessFragment> {
     return IconButton(
       tooltip: tooltip,
       onPressed: () {
-        final config = globalState.appController.config;
-        final isAccept =
-            config.accessControl.mode == AccessControlMode.acceptSelected;
-        if (isSelectedAll) {
-          config.accessControl = switch (isAccept) {
-            true => config.accessControl.copyWith(
-                acceptList: [],
-              ),
-            false => config.accessControl.copyWith(
-                rejectList: [],
-              ),
-          };
-        } else {
-          config.accessControl = switch (isAccept) {
-            true => config.accessControl.copyWith(
-                acceptList: allValueList,
-              ),
-            false => config.accessControl.copyWith(
-                rejectList: allValueList,
-              ),
-          };
-        }
+        // final config = globalState.appController.config;
+        // final isAccept =
+        //     config.accessControl.mode == AccessControlMode.acceptSelected;
+        // if (isSelectedAll) {
+        //   config.accessControl = switch (isAccept) {
+        //     true => config.accessControl.copyWith(
+        //         acceptList: [],
+        //       ),
+        //     false => config.accessControl.copyWith(
+        //         rejectList: [],
+        //       ),
+        //   };
+        // } else {
+        //   config.accessControl = switch (isAccept) {
+        //     true => config.accessControl.copyWith(
+        //         acceptList: allValueList,
+        //       ),
+        //     false => config.accessControl.copyWith(
+        //         rejectList: allValueList,
+        //       ),
+        //   };
+        // }
       },
       icon: isSelectedAll
           ? const Icon(Icons.deselect)
@@ -123,9 +124,23 @@ class _AccessFragmentState extends State<AccessFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<Config, bool>(
-      selector: (_, config) => config.isAccessControl,
-      builder: (_, isAccessControl, child) {
+    return Consumer(
+      builder: (_, ref, child) {
+        final isAccessControl = ref.watch(isAccessControlProvider);
+        final state = ref.watch(packageListSelectorStateProvider);
+        final accessControl = state.accessControl;
+        final accessControlMode = accessControl.mode;
+        final packages = state.getList(
+          accessControlMode == AccessControlMode.acceptSelected
+              ? acceptList
+              : rejectList,
+        );
+        final currentList = accessControl.currentList;
+        final packageNameList = packages.map((e) => e.packageName).toList();
+        final valueList = currentList.intersection(packageNameList);
+        final describe = accessControlMode == AccessControlMode.acceptSelected
+            ? appLocalizations.accessControlAllowDesc
+            : appLocalizations.accessControlNotAllowDesc;
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -136,8 +151,8 @@ class _AccessFragmentState extends State<AccessFragment> {
                 delegate: SwitchDelegate(
                   value: isAccessControl,
                   onChanged: (isAccessControl) {
-                    final config = context.read<Config>();
-                    config.isAccessControl = isAccessControl;
+                    // final config = context.read<Config>();
+                    // config.isAccessControl = isAccessControl;
                   },
                 ),
               ),
@@ -149,38 +164,7 @@ class _AccessFragmentState extends State<AccessFragment> {
               ),
             ),
             Flexible(
-              child: child!,
-            ),
-          ],
-        );
-      },
-      child: Selector<AppState, List<Package>>(
-        selector: (_, appState) => appState.packages,
-        builder: (_, packages, ___) {
-          return Selector2<AppState, Config, PackageListSelectorState>(
-            selector: (_, appState, config) => PackageListSelectorState(
-              accessControl: config.accessControl,
-              isAccessControl: config.isAccessControl,
-              packages: appState.packages,
-            ),
-            builder: (context, state, __) {
-              final accessControl = state.accessControl;
-              final isAccessControl = state.isAccessControl;
-              final accessControlMode = accessControl.mode;
-              final packages = state.getList(
-                accessControlMode == AccessControlMode.acceptSelected
-                    ? acceptList
-                    : rejectList,
-              );
-              final currentList = accessControl.currentList;
-              final packageNameList =
-                  packages.map((e) => e.packageName).toList();
-              final valueList = currentList.intersection(packageNameList);
-              final describe =
-                  accessControlMode == AccessControlMode.acceptSelected
-                      ? appLocalizations.accessControlAllowDesc
-                      : appLocalizations.accessControlNotAllowDesc;
-              return DisabledMask(
+              child: DisabledMask(
                 status: !isAccessControl,
                 child: Column(
                   children: [
@@ -291,25 +275,25 @@ class _AccessFragmentState extends State<AccessFragment> {
                                         valueList.contains(package.packageName),
                                     isActive: isAccessControl,
                                     onChanged: (value) {
-                                      if (value == true) {
-                                        valueList.add(package.packageName);
-                                      } else {
-                                        valueList.remove(package.packageName);
-                                      }
-                                      final config =
-                                          globalState.appController.config;
-                                      if (accessControlMode ==
-                                          AccessControlMode.acceptSelected) {
-                                        config.accessControl =
-                                            config.accessControl.copyWith(
-                                          acceptList: valueList,
-                                        );
-                                      } else {
-                                        config.accessControl =
-                                            config.accessControl.copyWith(
-                                          rejectList: valueList,
-                                        );
-                                      }
+                                      // if (value == true) {
+                                      //   valueList.add(package.packageName);
+                                      // } else {
+                                      //   valueList.remove(package.packageName);
+                                      // }
+                                      // final config =
+                                      //     globalState.appController.config;
+                                      // if (accessControlMode ==
+                                      //     AccessControlMode.acceptSelected) {
+                                      //   config.accessControl =
+                                      //       config.accessControl.copyWith(
+                                      //     acceptList: valueList,
+                                      //   );
+                                      // } else {
+                                      //   config.accessControl =
+                                      //       config.accessControl.copyWith(
+                                      //     rejectList: valueList,
+                                      //   );
+                                      // }
                                     },
                                   );
                                 },
@@ -318,11 +302,11 @@ class _AccessFragmentState extends State<AccessFragment> {
                     ),
                   ],
                 ),
-              );
-            },
-          );
-        },
-      ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -428,13 +412,9 @@ class AccessControlSearchDelegate extends SearchDelegate {
 
   Widget _packageList() {
     final lowQuery = query.toLowerCase();
-    return Selector2<AppState, Config, PackageListSelectorState>(
-      selector: (_, appState, config) => PackageListSelectorState(
-        packages: appState.packages,
-        accessControl: config.accessControl,
-        isAccessControl: config.isAccessControl,
-      ),
-      builder: (context, state, __) {
+    return Consumer(
+      builder: (context, ref, __) {
+        final state = ref.watch(packageListSelectorStateProvider);
         final accessControl = state.accessControl;
         final accessControlMode = accessControl.mode;
         final packages = state.getList(
@@ -465,21 +445,21 @@ class AccessControlSearchDelegate extends SearchDelegate {
                 value: valueList.contains(package.packageName),
                 isActive: isAccessControl,
                 onChanged: (value) {
-                  if (value == true) {
-                    valueList.add(package.packageName);
-                  } else {
-                    valueList.remove(package.packageName);
-                  }
-                  final config = globalState.appController.config;
-                  if (accessControlMode == AccessControlMode.acceptSelected) {
-                    config.accessControl = config.accessControl.copyWith(
-                      acceptList: valueList,
-                    );
-                  } else {
-                    config.accessControl = config.accessControl.copyWith(
-                      rejectList: valueList,
-                    );
-                  }
+                  // if (value == true) {
+                  //   valueList.add(package.packageName);
+                  // } else {
+                  //   valueList.remove(package.packageName);
+                  // }
+                  // final config = globalState.appController.config;
+                  // if (accessControlMode == AccessControlMode.acceptSelected) {
+                  //   config.accessControl = config.accessControl.copyWith(
+                  //     acceptList: valueList,
+                  //   );
+                  // } else {
+                  //   config.accessControl = config.accessControl.copyWith(
+                  //     rejectList: valueList,
+                  //   );
+                  // }
                 },
               );
             },
@@ -651,8 +631,8 @@ class AccessControlWidget extends StatelessWidget {
   }
 
   _intelligentSelected() async {
-    final appState = globalState.appController.appState;
-    final config = globalState.appController.config;
+    final appState = globalState.appState;
+    final config = globalState.config;
     final accessControl = config.accessControl;
     final packageNames = appState.packages
         .where(
@@ -685,7 +665,7 @@ class AccessControlWidget extends StatelessWidget {
 
   _copyToClipboard() async {
     await globalState.safeRun(() {
-      final data = globalState.appController.config.accessControl.toJson();
+      final data = globalState.config.accessControl.toJson();
       Clipboard.setData(
         ClipboardData(
           text: json.encode(data),
@@ -698,13 +678,13 @@ class AccessControlWidget extends StatelessWidget {
 
   _pasteToClipboard() async {
     await globalState.safeRun(() async {
-      final config = globalState.appController.config;
+      final config = globalState.config;
       final data = await Clipboard.getData('text/plain');
       final text = data?.text;
       if (text == null) return;
-      config.accessControl = AccessControl.fromJson(
-        json.decode(text),
-      );
+      // config.accessControl = AccessControl.fromJson(
+      //   json.decode(text),
+      // );
     });
     if (!context.mounted) return;
     Navigator.of(context).pop();

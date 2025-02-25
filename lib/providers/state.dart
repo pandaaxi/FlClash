@@ -177,6 +177,56 @@ ProxiesListSelectorState proxiesListSelectorState(Ref ref) {
 }
 
 @riverpod
+ProxiesSelectorState proxiesSelectorState(Ref ref) {
+  final groupNames = ref.watch(currentGroupsProvider.select((state) {
+    return state.map((e) => e.name).toList();
+  }));
+  final currentGroupName = ref.watch(currentProfileProvider.select(
+    (state) => state?.currentGroupName,
+  ));
+  return ProxiesSelectorState(
+    groupNames: groupNames,
+    currentGroupName: currentGroupName,
+  );
+}
+
+@riverpod
+ProxyGroupSelectorState proxyGroupSelectorState(Ref ref, String groupName) {
+  final testUrl =
+      ref.watch(appSettingProvider.select((state) => state.testUrl));
+  final proxiesStyle = ref.watch(
+    proxiesStyleSettingProvider,
+  );
+  final group = ref.watch(
+      currentGroupsProvider.select((state) => state.getGroup(groupName)));
+  final sortNum = ref.watch(sortNumProvider);
+  final columns = ref.watch(getProxiesColumnsProvider);
+  return ProxyGroupSelectorState(
+    testUrl: testUrl,
+    proxiesSortType: proxiesStyle.sortType,
+    proxyCardType: proxiesStyle.cardType,
+    sortNum: sortNum,
+    groupType: group?.type ?? GroupType.Selector,
+    proxies: group?.all ?? [],
+    columns: columns,
+  );
+}
+
+@riverpod
+PackageListSelectorState packageListSelectorState(Ref ref) {
+  final packages = ref.watch(packagesProvider);
+  final isAccessControl = ref.watch(isAccessControlProvider);
+  final accessControl = ref.watch(
+    accessControlSettingProvider,
+  );
+  return PackageListSelectorState(
+    packages: packages,
+    accessControl: accessControl,
+    isAccessControl: isAccessControl,
+  );
+}
+
+@riverpod
 bool isCurrentPage(
   Ref ref,
   PageLabel pageLabel, {

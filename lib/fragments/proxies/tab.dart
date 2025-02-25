@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:fl_clash/common/common.dart';
-import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'card.dart';
 import 'common.dart';
@@ -36,17 +36,17 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
   }
 
   scrollToGroupSelected() {
-    final currentGroupName = globalState.appController.config.currentGroupName;
+    final currentGroupName = globalState.appController.getCurrentGroupName();
     _keyMap[currentGroupName]?.currentState?.scrollToSelected();
   }
 
   _buildMoreButton() {
-    return Selector<AppState, bool>(
-      selector: (_, appState) => appState.viewMode == ViewMode.mobile,
-      builder: (_, value, ___) {
+    return Consumer(
+      builder: (_, ref, ___) {
+        final isMobileView = ref.watch(viewWidthProvider.notifier).isMobileView;
         return IconButton(
           onPressed: _showMoreMenu,
-          icon: value
+          icon: isMobileView
               ? const Icon(
                   Icons.expand_more,
                 )
@@ -65,16 +65,9 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
       isScrollControlled: false,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Selector2<AppState, Config, ProxiesSelectorState>(
-          selector: (_, appState, config) {
-            final currentGroups = appState.currentGroups;
-            final groupNames = currentGroups.map((e) => e.name).toList();
-            return ProxiesSelectorState(
-              groupNames: groupNames,
-              currentGroupName: config.currentGroupName,
-            );
-          },
-          builder: (_, state, __) {
+        child: Consumer(
+          builder: (_, ref, __) {
+            final state = ref.watch(proxiesSelectorStateProvider);
             return SizedBox(
               width: double.infinity,
               child: Wrap(
@@ -86,13 +79,13 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
                     SettingTextCard(
                       groupName,
                       onPressed: () {
-                        final index = state.groupNames
-                            .indexWhere((item) => item == groupName);
+                        final index = state.groupNames.indexWhere(
+                          (item) => item == groupName,
+                        );
                         if (index == -1) return;
                         _tabController?.animateTo(index);
-                        globalState.appController.config.updateCurrentGroupName(
-                          groupName,
-                        );
+                        globalState.appController
+                            .updateCurrentGroupName(groupName);
                         Navigator.of(context).pop();
                       },
                       isSelected: groupName == state.currentGroupName,
@@ -109,7 +102,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
 
   _tabControllerListener([int? index]) {
     final appController = globalState.appController;
-    final currentGroups = appController.appState.currentGroups;
+    final currentGroups = appController.ref.read(currentGroupsProvider);
     if (_tabController?.index == null) {
       return;
     }
@@ -117,7 +110,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     currentProxies = currentGroup.all;
     currentTestUrl = currentGroup.testUrl;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      appController.config.updateCurrentGroupName(
+      globalState.appController.updateCurrentGroupName(
         currentGroup.name,
       );
     });
@@ -146,23 +139,9 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
 
   @override
   Widget build(BuildContext context) {
-    return Selector2<AppState, Config, ProxiesSelectorState>(
-      selector: (_, appState, config) {
-        final currentGroups = appState.currentGroups;
-        final groupNames = currentGroups.map((e) => e.name).toList();
-        return ProxiesSelectorState(
-          groupNames: groupNames,
-          currentGroupName: config.currentGroupName,
-        );
-      },
-      shouldRebuild: (prev, next) {
-        if (!stringListEquality.equals(prev.groupNames, next.groupNames)) {
-          _destroyTabController();
-          return true;
-        }
-        return false;
-      },
-      builder: (_, state, __) {
+    return Consumer(
+      builder: (_, ref, __) {
+        final state = ref.watch(proxiesSelectorStateProvider);
         if (state.groupNames.isEmpty) {
           return NullStatus(
             label: appLocalizations.nullProxies,
@@ -330,23 +309,9 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector2<AppState, Config, ProxyGroupSelectorState>(
-      selector: (_, appState, config) {
-        final group = appState.getGroupWithName(groupName)!;
-        return ProxyGroupSelectorState(
-          proxyCardType: config.proxiesStyle.cardType,
-          proxiesSortType: config.proxiesStyle.sortType,
-          columns: other.getProxiesColumns(
-            appState.viewWidth,
-            config.proxiesStyle.layout,
-          ),
-          sortNum: appState.sortNum,
-          proxies: group.all,
-          groupType: group.type,
-          testUrl: group.testUrl,
-        );
-      },
-      builder: (_, state, __) {
+    return Consumer(
+      builder: (_, ref, __) {
+        final state = ref.watch(proxyGroupSelectorStateProvider(groupName));
         final proxies = state.proxies;
         final columns = state.columns;
         final proxyCardType = state.proxyCardType;
@@ -354,41 +319,34 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
           proxies,
           state.testUrl,
         );
-        return ActiveBuilder(
-          label: "proxies",
-          builder: (isCurrent, child) {
-            initFab(isCurrent);
-            return child!;
-          },
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: GridView.builder(
-              controller: _controller,
-              padding: const EdgeInsets.only(
-                top: 16,
-                left: 16,
-                right: 16,
-                bottom: 96,
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: columns,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                mainAxisExtent: getItemHeight(proxyCardType),
-              ),
-              itemCount: sortedProxies.length,
-              itemBuilder: (_, index) {
-                final proxy = sortedProxies[index];
-                return ProxyCard(
-                  testUrl: state.testUrl,
-                  groupType: state.groupType,
-                  type: proxyCardType,
-                  key: ValueKey('$groupName.${proxy.name}'),
-                  proxy: proxy,
-                  groupName: groupName,
-                );
-              },
+        return Align(
+          alignment: Alignment.topCenter,
+          child: GridView.builder(
+            controller: _controller,
+            padding: const EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 16,
+              bottom: 96,
             ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              mainAxisExtent: getItemHeight(proxyCardType),
+            ),
+            itemCount: sortedProxies.length,
+            itemBuilder: (_, index) {
+              final proxy = sortedProxies[index];
+              return ProxyCard(
+                testUrl: state.testUrl,
+                groupType: state.groupType,
+                type: proxyCardType,
+                key: ValueKey('$groupName.${proxy.name}'),
+                proxy: proxy,
+                groupName: groupName,
+              );
+            },
           ),
         );
       },

@@ -199,7 +199,27 @@ final proxiesListSelectorStateProvider =
 // ignore: unused_element
 typedef ProxiesListSelectorStateRef
     = AutoDisposeProviderRef<ProxiesListSelectorState>;
-String _$isCurrentPageHash() => r'a9ec62dbf568221efd5842159ea14e23e7084944';
+String _$proxiesSelectorStateHash() =>
+    r'ccbfcf9784410ec8b83c402f449894ceab6d8ed2';
+
+/// See also [proxiesSelectorState].
+@ProviderFor(proxiesSelectorState)
+final proxiesSelectorStateProvider =
+    AutoDisposeProvider<ProxiesSelectorState>.internal(
+  proxiesSelectorState,
+  name: r'proxiesSelectorStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$proxiesSelectorStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ProxiesSelectorStateRef = AutoDisposeProviderRef<ProxiesSelectorState>;
+String _$proxyGroupSelectorStateHash() =>
+    r'2f12d5d937c3df85921478590f9ba4e0a201048b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -221,6 +241,161 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// See also [proxyGroupSelectorState].
+@ProviderFor(proxyGroupSelectorState)
+const proxyGroupSelectorStateProvider = ProxyGroupSelectorStateFamily();
+
+/// See also [proxyGroupSelectorState].
+class ProxyGroupSelectorStateFamily extends Family<ProxyGroupSelectorState> {
+  /// See also [proxyGroupSelectorState].
+  const ProxyGroupSelectorStateFamily();
+
+  /// See also [proxyGroupSelectorState].
+  ProxyGroupSelectorStateProvider call(
+    String groupName,
+  ) {
+    return ProxyGroupSelectorStateProvider(
+      groupName,
+    );
+  }
+
+  @override
+  ProxyGroupSelectorStateProvider getProviderOverride(
+    covariant ProxyGroupSelectorStateProvider provider,
+  ) {
+    return call(
+      provider.groupName,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'proxyGroupSelectorStateProvider';
+}
+
+/// See also [proxyGroupSelectorState].
+class ProxyGroupSelectorStateProvider
+    extends AutoDisposeProvider<ProxyGroupSelectorState> {
+  /// See also [proxyGroupSelectorState].
+  ProxyGroupSelectorStateProvider(
+    String groupName,
+  ) : this._internal(
+          (ref) => proxyGroupSelectorState(
+            ref as ProxyGroupSelectorStateRef,
+            groupName,
+          ),
+          from: proxyGroupSelectorStateProvider,
+          name: r'proxyGroupSelectorStateProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$proxyGroupSelectorStateHash,
+          dependencies: ProxyGroupSelectorStateFamily._dependencies,
+          allTransitiveDependencies:
+              ProxyGroupSelectorStateFamily._allTransitiveDependencies,
+          groupName: groupName,
+        );
+
+  ProxyGroupSelectorStateProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.groupName,
+  }) : super.internal();
+
+  final String groupName;
+
+  @override
+  Override overrideWith(
+    ProxyGroupSelectorState Function(ProxyGroupSelectorStateRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ProxyGroupSelectorStateProvider._internal(
+        (ref) => create(ref as ProxyGroupSelectorStateRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        groupName: groupName,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<ProxyGroupSelectorState> createElement() {
+    return _ProxyGroupSelectorStateProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ProxyGroupSelectorStateProvider &&
+        other.groupName == groupName;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, groupName.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ProxyGroupSelectorStateRef
+    on AutoDisposeProviderRef<ProxyGroupSelectorState> {
+  /// The parameter `groupName` of this provider.
+  String get groupName;
+}
+
+class _ProxyGroupSelectorStateProviderElement
+    extends AutoDisposeProviderElement<ProxyGroupSelectorState>
+    with ProxyGroupSelectorStateRef {
+  _ProxyGroupSelectorStateProviderElement(super.provider);
+
+  @override
+  String get groupName => (origin as ProxyGroupSelectorStateProvider).groupName;
+}
+
+String _$packageListSelectorStateHash() =>
+    r'13ca933b00068c4e916db645025fc4539a48a790';
+
+/// See also [packageListSelectorState].
+@ProviderFor(packageListSelectorState)
+final packageListSelectorStateProvider =
+    AutoDisposeProvider<PackageListSelectorState>.internal(
+  packageListSelectorState,
+  name: r'packageListSelectorStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$packageListSelectorStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef PackageListSelectorStateRef
+    = AutoDisposeProviderRef<PackageListSelectorState>;
+String _$isCurrentPageHash() => r'a9ec62dbf568221efd5842159ea14e23e7084944';
 
 /// See also [isCurrentPage].
 @ProviderFor(isCurrentPage)
