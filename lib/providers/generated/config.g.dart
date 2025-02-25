@@ -68,7 +68,7 @@ final networkSettingProvider =
 );
 
 typedef _$NetworkSetting = AutoDisposeNotifier<NetworkProps>;
-String _$themeSettingHash() => r'6d73892dc53342a06dfbf824848011f6c1a3ad17';
+String _$themeSettingHash() => r'abfa10763a3f21f8d02590dfe874a34582f2fa9b';
 
 /// See also [ThemeSetting].
 @ProviderFor(ThemeSetting)

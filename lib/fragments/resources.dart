@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:fl_clash/clash/clash.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' hide context;
-import 'package:provider/provider.dart';
 
 @immutable
 class GeoItem {
@@ -84,7 +85,7 @@ class _GeoDataListItemState extends State<GeoDataListItem> {
 
   GeoItem get geoItem => widget.geoItem;
 
-  _updateUrl(String url) async {
+  _updateUrl(String url, WidgetRef ref) async {
     final defaultMap = defaultGeoXUrl.toJson();
     final newUrl = await globalState.showCommonDialog<String>(
       child: UpdateGeoUrlFormDialog(
@@ -98,11 +99,13 @@ class _GeoDataListItemState extends State<GeoDataListItem> {
         if (!newUrl.isUrl) {
           throw "Invalid url";
         }
-        final config = globalState.appController.config;
-        final map = config.patchClashConfig.geoXUrl.toJson();
-        map[geoItem.key] = newUrl;
-        config.patchClashConfig =
-            config.patchClashConfig.copyWith(geoXUrl: GeoXUrl.fromJson(map));
+        ref.read(patchClashConfigProvider.notifier).updateState((state) {
+          final map = state.geoXUrl.toJson();
+          map[geoItem.key] = newUrl;
+          return state.copyWith(
+            geoXUrl: GeoXUrl.fromJson(map),
+          );
+        });
       } catch (e) {
         globalState.showMessage(
           title: geoItem.label,
@@ -125,63 +128,74 @@ class _GeoDataListItemState extends State<GeoDataListItem> {
     );
   }
 
-  Widget _buildSubtitle(String url) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 4,
-        ),
-        FutureBuilder<FileInfo>(
-          future: _getGeoFileLastModified(geoItem.fileName),
-          builder: (_, snapshot) {
-            return SizedBox(
-              height: 24,
-              child: FadeBox(
-                key: Key("fade_box_${geoItem.label}"),
-                child: snapshot.data == null
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        snapshot.data!.desc,
-                      ),
-              ),
-            );
-          },
-        ),
-        Text(
-          url,
-          style: context.textTheme.bodyMedium?.toLight,
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        Wrap(
-          runSpacing: 6,
-          spacing: 12,
+  Widget _buildSubtitle() {
+    return Consumer(
+      builder: (_, ref, __) {
+        final url = ref.watch(
+          patchClashConfigProvider
+              .select((state) => state.geoXUrl.toJson()[geoItem.key]),
+        );
+        if (url == null) {
+          return SizedBox();
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonChip(
-              avatar: const Icon(Icons.edit),
-              label: appLocalizations.edit,
-              onPressed: () {
-                _updateUrl(url);
+            const SizedBox(
+              height: 4,
+            ),
+            FutureBuilder<FileInfo>(
+              future: _getGeoFileLastModified(geoItem.fileName),
+              builder: (_, snapshot) {
+                return SizedBox(
+                  height: 24,
+                  child: FadeBox(
+                    key: Key("fade_box_${geoItem.label}"),
+                    child: snapshot.data == null
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            snapshot.data!.desc,
+                          ),
+                  ),
+                );
               },
             ),
-            CommonChip(
-              avatar: const Icon(Icons.sync),
-              label: appLocalizations.sync,
-              onPressed: () {
-                _handleUpdateGeoDataItem();
-              },
+            Text(
+              url,
+              style: context.textTheme.bodyMedium?.toLight,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Wrap(
+              runSpacing: 6,
+              spacing: 12,
+              children: [
+                CommonChip(
+                  avatar: const Icon(Icons.edit),
+                  label: appLocalizations.edit,
+                  onPressed: () {
+                    _updateUrl(url, ref);
+                  },
+                ),
+                CommonChip(
+                  avatar: const Icon(Icons.sync),
+                  label: appLocalizations.sync,
+                  onPressed: () {
+                    _handleUpdateGeoDataItem();
+                  },
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -227,13 +241,7 @@ class _GeoDataListItemState extends State<GeoDataListItem> {
         vertical: 4,
       ),
       title: Text(geoItem.label),
-      subtitle: Selector<Config, String>(
-        selector: (_, config) =>
-            config.patchClashConfig.geoXUrl.toJson()[geoItem.key]!,
-        builder: (_, value, __) {
-          return _buildSubtitle(value);
-        },
-      ),
+      subtitle: _buildSubtitle(),
       trailing: SizedBox(
         height: 48,
         width: 48,

@@ -10,6 +10,31 @@ import 'config.dart';
 part 'generated/state.g.dart';
 
 @riverpod
+List<NavigationItem> navigations(Ref ref) {
+  final openLogs = ref.watch(appSettingProvider).openLogs;
+  final hasProxies = ref.watch(currentProfileIdProvider) != null;
+  return navigation.getItems(
+    openLogs: openLogs,
+    hasProxies: hasProxies,
+  );
+}
+
+@riverpod
+List<NavigationItem> currentNavigations(Ref ref) {
+  final viewWidth = ref.watch(viewWidthProvider);
+  final navigations = ref.watch(navigationsProvider);
+  final navigationItemMode = switch (viewWidth <= maxMobileWidth) {
+    true => NavigationItemMode.mobile,
+    false => NavigationItemMode.desktop,
+  };
+  return navigations
+      .where(
+        (element) => element.modes.contains(navigationItemMode),
+      )
+      .toList();
+}
+
+@riverpod
 CoreState coreState(Ref ref) {
   final vpnProps = ref.watch(vpnSettingProvider);
   final currentProfile = ref.watch(currentProfileProvider);
@@ -244,31 +269,6 @@ bool isCurrentPage(
 }
 
 @riverpod
-List<NavigationItem> navigations(Ref ref) {
-  final openLogs = ref.watch(appSettingProvider).openLogs;
-  final hasProxies = ref.watch(currentProfileIdProvider) != null;
-  return navigation.getItems(
-    openLogs: openLogs,
-    hasProxies: hasProxies,
-  );
-}
-
-@riverpod
-List<NavigationItem> currentNavigations(Ref ref) {
-  final viewWidth = ref.watch(viewWidthProvider);
-  final navigations = ref.watch(navigationsProvider);
-  final navigationItemMode = switch (viewWidth <= maxMobileWidth) {
-    true => NavigationItemMode.mobile,
-    false => NavigationItemMode.desktop,
-  };
-  return navigations
-      .where(
-        (element) => element.modes.contains(navigationItemMode),
-      )
-      .toList();
-}
-
-@riverpod
 String getRealTestUrl(Ref ref, [String? testUrl]) {
   final currentTestUrl = ref.watch(appSettingProvider).testUrl;
   return testUrl.getSafeValue(currentTestUrl);
@@ -300,6 +300,22 @@ Set<String> unfoldSet(Ref ref) {
     currentProfileProvider.select((state) => state?.unfoldSet ?? {}),
   );
   return unfoldSet;
+}
+
+@riverpod
+HotKeyAction getHotKeyAction(Ref ref, HotAction hotAction) {
+  return ref.watch(
+    hotKeyActionsProvider.select(
+      (state) {
+        final index = state.indexWhere((item) => item.action == hotAction);
+        return index != -1
+            ? state[index]
+            : HotKeyAction(
+                action: hotAction,
+              );
+      },
+    ),
+  );
 }
 
 @riverpod

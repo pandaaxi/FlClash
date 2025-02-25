@@ -6,6 +6,41 @@ part of '../state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$navigationsHash() => r'09270afa940238ce49a0683989a2ac31d4ad92ad';
+
+/// See also [navigations].
+@ProviderFor(navigations)
+final navigationsProvider = AutoDisposeProvider<List<NavigationItem>>.internal(
+  navigations,
+  name: r'navigationsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$navigationsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef NavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
+String _$currentNavigationsHash() =>
+    r'c5b85dfaf045803381150870337170b703c46489';
+
+/// See also [currentNavigations].
+@ProviderFor(currentNavigations)
+final currentNavigationsProvider =
+    AutoDisposeProvider<List<NavigationItem>>.internal(
+  currentNavigations,
+  name: r'currentNavigationsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentNavigationsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef CurrentNavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
 String _$coreStateHash() => r'33f01ee9173525862c89522bf73b3174beb63daa';
 
 /// See also [coreState].
@@ -543,41 +578,6 @@ class _IsCurrentPageProviderElement extends AutoDisposeProviderElement<bool>
       (origin as IsCurrentPageProvider).handler;
 }
 
-String _$navigationsHash() => r'09270afa940238ce49a0683989a2ac31d4ad92ad';
-
-/// See also [navigations].
-@ProviderFor(navigations)
-final navigationsProvider = AutoDisposeProvider<List<NavigationItem>>.internal(
-  navigations,
-  name: r'navigationsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$navigationsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef NavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
-String _$currentNavigationsHash() =>
-    r'c5b85dfaf045803381150870337170b703c46489';
-
-/// See also [currentNavigations].
-@ProviderFor(currentNavigations)
-final currentNavigationsProvider =
-    AutoDisposeProvider<List<NavigationItem>>.internal(
-  currentNavigations,
-  name: r'currentNavigationsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentNavigationsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CurrentNavigationsRef = AutoDisposeProviderRef<List<NavigationItem>>;
 String _$getRealTestUrlHash() => r'5c6513cabb53e5e6689cba5919f49aeaeff90247';
 
 /// See also [getRealTestUrl].
@@ -886,6 +886,136 @@ final unfoldSetProvider = AutoDisposeProvider<Set<String>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef UnfoldSetRef = AutoDisposeProviderRef<Set<String>>;
+String _$getHotKeyActionHash() => r'4dc74ea7ffb25624ce70c7c8214806f3ef022223';
+
+/// See also [getHotKeyAction].
+@ProviderFor(getHotKeyAction)
+const getHotKeyActionProvider = GetHotKeyActionFamily();
+
+/// See also [getHotKeyAction].
+class GetHotKeyActionFamily extends Family<HotKeyAction> {
+  /// See also [getHotKeyAction].
+  const GetHotKeyActionFamily();
+
+  /// See also [getHotKeyAction].
+  GetHotKeyActionProvider call(
+    HotAction hotAction,
+  ) {
+    return GetHotKeyActionProvider(
+      hotAction,
+    );
+  }
+
+  @override
+  GetHotKeyActionProvider getProviderOverride(
+    covariant GetHotKeyActionProvider provider,
+  ) {
+    return call(
+      provider.hotAction,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getHotKeyActionProvider';
+}
+
+/// See also [getHotKeyAction].
+class GetHotKeyActionProvider extends AutoDisposeProvider<HotKeyAction> {
+  /// See also [getHotKeyAction].
+  GetHotKeyActionProvider(
+    HotAction hotAction,
+  ) : this._internal(
+          (ref) => getHotKeyAction(
+            ref as GetHotKeyActionRef,
+            hotAction,
+          ),
+          from: getHotKeyActionProvider,
+          name: r'getHotKeyActionProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getHotKeyActionHash,
+          dependencies: GetHotKeyActionFamily._dependencies,
+          allTransitiveDependencies:
+              GetHotKeyActionFamily._allTransitiveDependencies,
+          hotAction: hotAction,
+        );
+
+  GetHotKeyActionProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.hotAction,
+  }) : super.internal();
+
+  final HotAction hotAction;
+
+  @override
+  Override overrideWith(
+    HotKeyAction Function(GetHotKeyActionRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetHotKeyActionProvider._internal(
+        (ref) => create(ref as GetHotKeyActionRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        hotAction: hotAction,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<HotKeyAction> createElement() {
+    return _GetHotKeyActionProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetHotKeyActionProvider && other.hotAction == hotAction;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, hotAction.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin GetHotKeyActionRef on AutoDisposeProviderRef<HotKeyAction> {
+  /// The parameter `hotAction` of this provider.
+  HotAction get hotAction;
+}
+
+class _GetHotKeyActionProviderElement
+    extends AutoDisposeProviderElement<HotKeyAction> with GetHotKeyActionRef {
+  _GetHotKeyActionProviderElement(super.provider);
+
+  @override
+  HotAction get hotAction => (origin as GetHotKeyActionProvider).hotAction;
+}
+
 String _$currentProfileHash() => r'55f3cb9570a0aa6b9e0b83a36693b69d52e753ab';
 
 /// See also [currentProfile].

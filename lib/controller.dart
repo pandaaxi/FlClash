@@ -22,9 +22,9 @@ class AppController {
   int? lastProfileModified;
 
   final BuildContext context;
-  final WidgetRef ref;
+  final WidgetRef _ref;
 
-  AppController(this.context, this.ref);
+  AppController(this.context, WidgetRef ref) : _ref = ref;
 
   updateClashConfigDebounce() {
     debouncer.call(DebounceTag.updateClashConfig, updateClashConfig);
@@ -36,7 +36,7 @@ class AppController {
 
   addCheckIpNumDebounce() {
     debouncer.call(DebounceTag.addCheckIpNum, () {
-      ref.read(checkIpNumProvider.notifier).add();
+      _ref.read(checkIpNumProvider.notifier).add();
     });
   }
 
@@ -65,7 +65,7 @@ class AppController {
     await clashService?.reStart();
     await initCore();
 
-    if (ref.read(runTimeProvider.notifier).isStart) {
+    if (_ref.read(runTimeProvider.notifier).isStart) {
       await globalState.handleStart();
     }
   }
@@ -77,7 +77,7 @@ class AppController {
         updateTraffic,
       ]);
       final currentLastModified =
-          await ref.read(currentProfileProvider)?.profileLastModified;
+          await _ref.read(currentProfileProvider)?.profileLastModified;
       if (currentLastModified == null || lastProfileModified == null) {
         addCheckIpNumDebounce();
         return;
@@ -90,9 +90,9 @@ class AppController {
     } else {
       await globalState.handleStop();
       await clashCore.resetTraffic();
-      ref.read(trafficsProvider.notifier).clear();
-      ref.read(totalTrafficProvider.notifier).state = Traffic();
-      ref.read(runTimeProvider.notifier).state = null;
+      _ref.read(trafficsProvider.notifier).clear();
+      _ref.read(totalTrafficProvider.notifier).state = Traffic();
+      _ref.read(runTimeProvider.notifier).state = null;
       tray.updateTrayTitle(null);
       addCheckIpNumDebounce();
     }
@@ -103,32 +103,32 @@ class AppController {
     if (startTime != null) {
       final startTimeStamp = startTime.millisecondsSinceEpoch;
       final nowTimeStamp = DateTime.now().millisecondsSinceEpoch;
-      ref.read(runTimeProvider.notifier).state = nowTimeStamp - startTimeStamp;
+      _ref.read(runTimeProvider.notifier).state = nowTimeStamp - startTimeStamp;
     } else {
-      ref.read(runTimeProvider.notifier).state = null;
+      _ref.read(runTimeProvider.notifier).state = null;
     }
   }
 
   updateTraffic() async {
     final traffic = await clashCore.getTraffic();
-    ref.read(trafficsProvider).add(traffic);
+    _ref.read(trafficsProvider).add(traffic);
     tray.updateTrayTitle(traffic);
-    ref.read(totalTrafficProvider.notifier).state =
+    _ref.read(totalTrafficProvider.notifier).state =
         await clashCore.getTotalTraffic();
   }
 
   addProfile(Profile profile) async {
-    ref.read(profilesProvider.notifier).setProfile(profile);
-    if (ref.read(currentProfileIdProvider) != null) return;
-    ref.read(currentProfileIdProvider.notifier).state = profile.id;
+    _ref.read(profilesProvider.notifier).setProfile(profile);
+    if (_ref.read(currentProfileIdProvider) != null) return;
+    _ref.read(currentProfileIdProvider.notifier).state = profile.id;
   }
 
   deleteProfile(String id) async {
-    ref.read(profilesProvider.notifier).deleteProfileById(id);
+    _ref.read(profilesProvider.notifier).deleteProfileById(id);
     clearEffect(id);
     if (globalState.config.currentProfileId == id) {
       final profiles = globalState.config.profiles;
-      final currentProfileId = ref.read(currentProfileIdProvider.notifier);
+      final currentProfileId = _ref.read(currentProfileIdProvider.notifier);
       if (profiles.isNotEmpty) {
         final updateId = profiles.first.id;
         currentProfileId.state = updateId;
@@ -140,42 +140,67 @@ class AppController {
   }
 
   updateProviders() async {
-    ref.read(providersProvider.notifier).state =
+    _ref.read(providersProvider.notifier).state =
         await clashCore.getExternalProviders();
   }
 
   updateLocalIp() async {
-    ref.read(localIpProvider.notifier).state = null;
+    _ref.read(localIpProvider.notifier).state = null;
     await Future.delayed(commonDuration);
-    ref.read(localIpProvider.notifier).state = await other.getLocalIpAddress();
+    _ref.read(localIpProvider.notifier).state = await other.getLocalIpAddress();
   }
 
   Future<void> updateProfile(Profile profile) async {
     final newProfile = await profile.update();
-    ref
+    _ref
         .read(profilesProvider.notifier)
         .setProfile(newProfile.copyWith(isUpdating: false));
-    if (profile.id == ref.read(currentProfileIdProvider)) {
+    if (profile.id == _ref.read(currentProfileIdProvider)) {
       applyProfileDebounce();
     }
   }
 
   setProfile(Profile profile) {
-    ref.read(profilesProvider.notifier).setProfile(profile);
-    if (profile.id == ref.read(currentProfileIdProvider)) {
+    _ref.read(profilesProvider.notifier).setProfile(profile);
+    if (profile.id == _ref.read(currentProfileIdProvider)) {
       applyProfileDebounce();
     }
   }
 
+  setProfiles(List<Profile> profiles) {
+    _ref.read(profilesProvider.notifier).state = profiles;
+  }
+
+  addLog(Log log) {
+    _ref.read(logsProvider).add(log);
+  }
+
+  updateOrAddHotKeyAction(HotKeyAction hotKeyAction) {
+    final hotKeyActions = _ref.read(hotKeyActionsProvider);
+    final index =
+        hotKeyActions.indexWhere((item) => item.action == hotKeyAction.action);
+    if (index == -1) {
+      _ref.read(hotKeyActionsProvider.notifier).state = List.from(hotKeyActions)
+        ..add(hotKeyAction);
+    } else {
+      _ref.read(hotKeyActionsProvider.notifier).state = List.from(hotKeyActions)
+        ..[index] = hotKeyAction;
+    }
+
+    _ref.read(hotKeyActionsProvider.notifier).state = index == -1
+        ? (List.from(hotKeyActions)..add(hotKeyAction))
+        : (List.from(hotKeyActions)..[index] = hotKeyAction);
+  }
+
   getCurrentGroupName() {
-    final currentGroupName = ref.read(currentProfileProvider.select(
+    final currentGroupName = _ref.read(currentProfileProvider.select(
       (state) => state?.currentGroupName,
     ));
     return currentGroupName;
   }
 
   updateCurrentGroupName(String groupName) {
-    final profile = ref.read(currentProfileProvider);
+    final profile = _ref.read(currentProfileProvider);
     if (profile == null || profile.currentGroupName == groupName) {
       return;
     }
@@ -195,10 +220,10 @@ class AppController {
   }
 
   Future<void> _updateClashConfig([bool? isPatch]) async {
-    final profile = ref.watch(currentProfileProvider);
-    await ref.read(currentProfileProvider)?.checkAndUpdate();
-    final patchConfig = ref.read(patchClashConfigProvider);
-    final appSetting = ref.read(appSettingProvider);
+    final profile = _ref.watch(currentProfileProvider);
+    await _ref.read(currentProfileProvider)?.checkAndUpdate();
+    final patchConfig = _ref.read(patchClashConfigProvider);
+    final appSetting = _ref.read(appSettingProvider);
     bool enableTun = patchConfig.tun.enable;
     if (enableTun != lastTunEnable &&
         lastTunEnable == false &&
@@ -230,10 +255,10 @@ class AppController {
 
   UpdateConfigParams getUpdateConfigParams([bool? isPatch]) {
     return globalState.getUpdateConfigParams(
-      clashConfig: ref.read(patchClashConfigProvider),
-      selectedMap: ref.read(selectedMapProvider),
-      overrideDns: ref.read(overrideDnsProvider),
-      testUrl: ref.read(appSettingProvider).testUrl,
+      clashConfig: _ref.read(patchClashConfigProvider),
+      selectedMap: _ref.read(selectedMapProvider),
+      overrideDns: _ref.read(overrideDnsProvider),
+      testUrl: _ref.read(appSettingProvider).testUrl,
       isPatch: isPatch,
     );
   }
@@ -259,16 +284,16 @@ class AppController {
   }
 
   handleChangeProfile() {
-    ref.read(delayDataSourceProvider.notifier).state = {};
+    _ref.read(delayDataSourceProvider.notifier).state = {};
     applyProfile();
   }
 
   updateBrightness(Brightness brightness) {
-    ref.read(appBrightnessProvider.notifier).state = brightness;
+    _ref.read(appBrightnessProvider.notifier).state = brightness;
   }
 
   autoUpdateProfiles() async {
-    for (final profile in ref.read(profilesProvider)) {
+    for (final profile in _ref.read(profilesProvider)) {
       if (!profile.autoUpdate) continue;
       final isNotNeedUpdate = profile.lastUpdateDate
           ?.add(
@@ -281,7 +306,7 @@ class AppController {
       try {
         updateProfile(profile);
       } catch (e) {
-        ref.read(logsProvider.notifier).addLog(
+        _ref.read(logsProvider.notifier).addLog(
               Log(
                 logLevel: LogLevel.info,
                 payload: e.toString(),
@@ -292,12 +317,12 @@ class AppController {
   }
 
   Future<void> updateGroups() async {
-    ref.read(groupsProvider.notifier).state =
+    _ref.read(groupsProvider.notifier).state =
         await clashCore.getProxiesGroups();
   }
 
   updateProfiles() async {
-    for (final profile in ref.read(profilesProvider)) {
+    for (final profile in _ref.read(profilesProvider)) {
       if (profile.type == ProfileType.file) {
         continue;
       }
@@ -306,7 +331,7 @@ class AppController {
   }
 
   updateSystemColorSchemes(ColorSchemes colorSchemes) {
-    ref.read(appSchemesProvider.notifier).state = colorSchemes;
+    _ref.read(appSchemesProvider.notifier).state = colorSchemes;
   }
 
   savePreferences() async {
@@ -325,14 +350,14 @@ class AppController {
         proxyName: proxyName,
       ),
     );
-    if (ref.read(appSettingProvider).closeConnections) {
+    if (_ref.read(appSettingProvider).closeConnections) {
       clashCore.closeConnections();
     }
     addCheckIpNumDebounce();
   }
 
   handleBackOrExit() async {
-    if (ref.read(appSettingProvider).minimizeOnExit) {
+    if (_ref.read(appSettingProvider).minimizeOnExit) {
       if (system.isDesktop) {
         await savePreferencesDebounce();
       }
@@ -355,7 +380,7 @@ class AppController {
   }
 
   autoCheckUpdate() async {
-    if (!ref.read(appSettingProvider).autoCheckUpdate) return;
+    if (!_ref.read(appSettingProvider).autoCheckUpdate) return;
     final res = await request.checkForUpdate();
     checkUpdateResultHandle(data: res);
   }
@@ -427,7 +452,7 @@ class AppController {
     if (!isInit) {
       await clashCore.setState(
         globalState.getCoreState(
-          ref.read(currentProfileProvider),
+          _ref.read(currentProfileProvider),
         ),
       );
       await clashCore.init();
@@ -441,16 +466,16 @@ class AppController {
     await initCore();
     await _initStatus();
     autoLaunch?.updateStatus(
-      ref.read(appSettingProvider).autoLaunch,
+      _ref.read(appSettingProvider).autoLaunch,
     );
     autoUpdateProfiles();
     autoCheckUpdate();
-    if (!ref.read(appSettingProvider).silentLaunch) {
+    if (!_ref.read(appSettingProvider).silentLaunch) {
       window?.show();
     } else {
       window?.hide();
     }
-    ref.read(initProvider.notifier).state = true;
+    _ref.read(initProvider.notifier).state = true;
   }
 
   _initStatus() async {
@@ -459,7 +484,7 @@ class AppController {
     }
     final status = globalState.isStart == true
         ? true
-        : ref.read(appSettingProvider).autoLaunch;
+        : _ref.read(appSettingProvider).autoLaunch;
 
     await updateStatus(status);
     if (!status) {
@@ -468,22 +493,22 @@ class AppController {
   }
 
   setDelay(Delay delay) {
-    ref.read(delayDataSourceProvider.notifier).setDelay(delay);
+    _ref.read(delayDataSourceProvider.notifier).setDelay(delay);
   }
 
   toPage(
     int index, {
     bool hasAnimate = false,
   }) {
-    final navigations = ref.read(currentNavigationsProvider);
+    final navigations = _ref.read(currentNavigationsProvider);
     if (index > navigations.length - 1) {
       return;
     }
-    ref.read(currentPageLabelProvider.notifier).state =
+    _ref.read(currentPageLabelProvider.notifier).state =
         navigations[index].label;
-    final isAnimateToPage = ref.read(appSettingProvider).isAnimateToPage;
+    final isAnimateToPage = _ref.read(appSettingProvider).isAnimateToPage;
     final isMobile =
-        ref.read(viewWidthProvider.notifier).viewMode == ViewMode.mobile;
+        _ref.read(viewWidthProvider.notifier).viewMode == ViewMode.mobile;
     if (isAnimateToPage && isMobile) {
       globalState.pageController?.animateToPage(
         index,
@@ -496,8 +521,8 @@ class AppController {
   }
 
   toProfiles() {
-    final index = ref.read(currentNavigationsProvider).indexWhere(
-          (element) => element.label == "profiles",
+    final index = _ref.read(currentNavigationsProvider).indexWhere(
+          (element) => element.label == PageLabel.profiles,
         );
     if (index != -1) {
       toPage(index);
@@ -558,7 +583,7 @@ class AppController {
               ),
               TextButton(
                 onPressed: () {
-                  ref.read(appSettingProvider.notifier).updateState(
+                  _ref.read(appSettingProvider.notifier).updateState(
                         (state) => state.copyWith(disclaimerAccepted: true),
                       );
                   Navigator.of(context).pop<bool>(true);
@@ -572,7 +597,7 @@ class AppController {
   }
 
   _handlerDisclaimer() async {
-    if (ref.read(appSettingProvider).disclaimerAccepted) {
+    if (_ref.read(appSettingProvider).disclaimerAccepted) {
       return;
     }
     final isDisclaimerAccepted = await showDisclaimer();
@@ -633,12 +658,12 @@ class AppController {
 
   updateViewWidth(double width) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(viewWidthProvider.notifier).state = width;
+      _ref.read(viewWidthProvider.notifier).state = width;
     });
   }
 
   setProvider(ExternalProvider? provider) {
-    ref.read(providersProvider.notifier).setProvider(provider);
+    _ref.read(providersProvider.notifier).setProvider(provider);
   }
 
   List<Proxy> _sortOfName(List<Proxy> proxies) {
@@ -659,9 +684,9 @@ class AppController {
       ..sort(
         (a, b) {
           final aDelay =
-              ref.read(getDelayProvider(proxyName: a.name, testUrl: testUrl));
+              _ref.read(getDelayProvider(proxyName: a.name, testUrl: testUrl));
           final bDelay =
-              ref.read(getDelayProvider(proxyName: b.name, testUrl: testUrl));
+              _ref.read(getDelayProvider(proxyName: b.name, testUrl: testUrl));
           if (aDelay == null && bDelay == null) {
             return 0;
           }
@@ -677,7 +702,7 @@ class AppController {
   }
 
   List<Proxy> getSortProxies(List<Proxy> proxies, [String? url]) {
-    return switch (ref.read(proxiesStyleSettingProvider).sortType) {
+    return switch (_ref.read(proxiesStyleSettingProvider).sortType) {
       ProxiesSortType.none => proxies,
       ProxiesSortType.delay => _sortOfDelay(
           proxies: proxies,
@@ -701,13 +726,13 @@ class AppController {
   }
 
   updateTun() {
-    ref.read(patchClashConfigProvider.notifier).updateState(
+    _ref.read(patchClashConfigProvider.notifier).updateState(
           (state) => state.copyWith.tun(enable: !state.tun.enable),
         );
   }
 
   updateSystemProxy() {
-    ref.read(networkSettingProvider.notifier).updateState(
+    _ref.read(networkSettingProvider.notifier).updateState(
           (state) => state.copyWith(
             systemProxy: state.systemProxy,
           ),
@@ -715,17 +740,17 @@ class AppController {
   }
 
   updateStart() {
-    updateStatus(ref.read(runTimeProvider.notifier).isStart);
+    updateStatus(_ref.read(runTimeProvider.notifier).isStart);
   }
 
   updateCurrentSelectedMap(String groupName, String proxyName) {
-    final currentProfile = ref.read(currentProfileProvider);
+    final currentProfile = _ref.read(currentProfileProvider);
     if (currentProfile != null &&
         currentProfile.selectedMap[groupName] != proxyName) {
       final SelectedMap selectedMap = Map.from(
         currentProfile.selectedMap,
       )..[groupName] = proxyName;
-      ref.read(profilesProvider.notifier).setProfile(
+      _ref.read(profilesProvider.notifier).setProfile(
             currentProfile.copyWith(
               selectedMap: selectedMap,
             ),
@@ -734,11 +759,11 @@ class AppController {
   }
 
   updateCurrentUnfoldSet(Set<String> value) {
-    final currentProfile = ref.read(currentProfileProvider);
+    final currentProfile = _ref.read(currentProfileProvider);
     if (currentProfile == null) {
       return;
     }
-    ref.read(profilesProvider.notifier).setProfile(
+    _ref.read(profilesProvider.notifier).setProfile(
           currentProfile.copyWith(
             unfoldSet: value,
           ),
@@ -746,11 +771,11 @@ class AppController {
   }
 
   changeMode(Mode mode) {
-    ref.read(patchClashConfigProvider.notifier).updateState(
+    _ref.read(patchClashConfigProvider.notifier).updateState(
           (state) => state.copyWith(mode: mode),
         );
     if (mode == Mode.global) {
-      ref.read(
+      _ref.read(
         updateCurrentGroupName(GroupName.GLOBAL.name),
       );
     }
@@ -758,7 +783,7 @@ class AppController {
   }
 
   updateAutoLaunch() {
-    ref.read(appSettingProvider.notifier).updateState(
+    _ref.read(appSettingProvider.notifier).updateState(
           (state) => state.copyWith(
             autoLaunch: !state.autoLaunch,
           ),
@@ -775,7 +800,7 @@ class AppController {
   }
 
   updateMode() {
-    ref.read(patchClashConfigProvider.notifier).updateState(
+    _ref.read(patchClashConfigProvider.notifier).updateState(
       (state) {
         final index = Mode.values.indexWhere((item) => item == state.mode);
         if (index == -1) {
@@ -790,7 +815,7 @@ class AppController {
   }
 
   Future<bool> exportLogs() async {
-    final logsRaw = ref.read(logsProvider).list.map(
+    final logsRaw = _ref.read(logsProvider).list.map(
           (item) => item.toString(),
         );
     final data = await Isolate.run<List<int>>(() async {
@@ -819,7 +844,7 @@ class AppController {
 
   updateTray([bool focus = false]) async {
     tray.update(
-      trayState: ref.read(trayStateProvider),
+      trayState: _ref.read(trayStateProvider),
     );
   }
 

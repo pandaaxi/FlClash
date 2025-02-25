@@ -100,6 +100,10 @@ class ThemeSetting extends _$ThemeSetting {
       themeProps: value,
     );
   }
+
+  updateState(ThemeProps Function(ThemeProps state) builder) {
+    state = builder(state);
+  }
 }
 
 @riverpod

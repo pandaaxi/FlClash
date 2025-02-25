@@ -12,7 +12,6 @@ import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'backup_and_recovery.dart';
 import 'theme.dart';
 import 'package:path/path.dart' show dirname, join;

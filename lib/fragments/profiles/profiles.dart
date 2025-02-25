@@ -508,9 +508,7 @@ class _ReorderableProfilesState extends State<ReorderableProfiles> {
           child: FilledButton.tonal(
             onPressed: () {
               Navigator.of(context).pop();
-              globalState.appController.ref
-                  .read(profilesProvider.notifier)
-                  .state = profiles;
+              globalState.appController.setProfiles(profiles);
             },
             style: ButtonStyle(
               padding: WidgetStateProperty.all(

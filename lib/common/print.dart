@@ -20,12 +20,12 @@ class CommonPrint {
     if (globalState.isService) {
       return;
     }
-    globalState.appController.ref.read(logsProvider).add(
-          Log(
-            logLevel: LogLevel.info,
-            payload: payload,
-          ),
-        );
+    globalState.appController.addLog(
+      Log(
+        logLevel: LogLevel.info,
+        payload: payload,
+      ),
+    );
   }
 }
 
