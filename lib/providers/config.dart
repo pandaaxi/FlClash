@@ -234,6 +234,10 @@ class AccessControlSetting extends _$AccessControlSetting {
       accessControl: value,
     );
   }
+
+  updateState(AccessControl Function(AccessControl state) builder) {
+    state = builder(state);
+  }
 }
 
 @riverpod

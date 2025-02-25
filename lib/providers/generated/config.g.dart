@@ -162,7 +162,7 @@ final isAccessControlProvider =
 
 typedef _$IsAccessControl = AutoDisposeNotifier<bool>;
 String _$accessControlSettingHash() =>
-    r'1f22cb3db3706bbd679dce154991c85c8dfcfafa';
+    r'83dba8b077faca4322b9cd8cef4c7d0bdf9bddc5';
 
 /// See also [AccessControlSetting].
 @ProviderFor(AccessControlSetting)

@@ -532,9 +532,11 @@ class AccessControlWidget extends StatelessWidget {
         SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           scrollDirection: Axis.horizontal,
-          child: Selector<Config, AccessControlMode>(
-            selector: (_, config) => config.accessControl.mode,
-            builder: (_, accessControlMode, __) {
+          child: Consumer(
+            builder: (_, ref, __) {
+              final accessControlMode = ref.watch(
+                accessControlSettingProvider.select((state) => state.mode),
+              );
               return Wrap(
                 spacing: 16,
                 children: [
@@ -546,10 +548,13 @@ class AccessControlWidget extends StatelessWidget {
                       ),
                       isSelected: accessControlMode == item,
                       onPressed: () {
-                        final config = globalState.appController.config;
-                        config.accessControl = config.accessControl.copyWith(
-                          mode: item,
-                        );
+                        ref
+                            .read(accessControlSettingProvider.notifier)
+                            .updateState(
+                              (state) => state.copyWith(
+                                mode: item,
+                              ),
+                            );
                       },
                     )
                 ],
@@ -568,9 +573,11 @@ class AccessControlWidget extends StatelessWidget {
         SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           scrollDirection: Axis.horizontal,
-          child: Selector<Config, AccessSortType>(
-            selector: (_, config) => config.accessControl.sort,
-            builder: (_, accessSortType, __) {
+          child: Consumer(
+            builder: (_, ref, __) {
+              final accessSortType = ref.watch(
+                accessControlSettingProvider.select((state) => state.sort),
+              );
               return Wrap(
                 spacing: 16,
                 children: [
@@ -582,10 +589,13 @@ class AccessControlWidget extends StatelessWidget {
                       ),
                       isSelected: accessSortType == item,
                       onPressed: () {
-                        final config = globalState.appController.config;
-                        config.accessControl = config.accessControl.copyWith(
-                          sort: item,
-                        );
+                        ref
+                            .read(accessControlSettingProvider.notifier)
+                            .updateState(
+                              (state) => state.copyWith(
+                                sort: item,
+                              ),
+                            );
                       },
                     ),
                 ],
@@ -604,9 +614,12 @@ class AccessControlWidget extends StatelessWidget {
         SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           scrollDirection: Axis.horizontal,
-          child: Selector<Config, bool>(
-            selector: (_, config) => config.accessControl.isFilterSystemApp,
-            builder: (_, isFilterSystemApp, __) {
+          child: Consumer(
+            builder: (_, ref, __) {
+              final isFilterSystemApp = ref.watch(
+                accessControlSettingProvider
+                    .select((state) => state.isFilterSystemApp),
+              );
               return Wrap(
                 spacing: 16,
                 children: [
@@ -615,10 +628,13 @@ class AccessControlWidget extends StatelessWidget {
                       _getTextWithIsFilterSystemApp(item),
                       isSelected: isFilterSystemApp == item,
                       onPressed: () {
-                        final config = globalState.appController.config;
-                        config.accessControl = config.accessControl.copyWith(
-                          isFilterSystemApp: item,
-                        );
+                        ref
+                            .read(accessControlSettingProvider.notifier)
+                            .updateState(
+                              (state) => state.copyWith(
+                                isFilterSystemApp: item,
+                              ),
+                            );
                       },
                     )
                 ],
