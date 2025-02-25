@@ -23,9 +23,8 @@ double getItemHeight(ProxyCardType proxyCardType) {
 
 proxyDelayTest(Proxy proxy, [String? testUrl]) async {
   final appController = globalState.appController;
-  final proxyName =
-      appController.ref.read(getRealProxyNameProvider(proxy.name));
-  final realTestUrl = appController.ref.read(getRealTestUrlProvider(testUrl));
+  final proxyName = appController.getRealProxyName(proxy.name);
+  final realTestUrl = appController.getRealTestUrl(testUrl);
   appController.setDelay(
     Delay(
       url: realTestUrl,
@@ -44,12 +43,11 @@ proxyDelayTest(Proxy proxy, [String? testUrl]) async {
 delayTest(List<Proxy> proxies, [String? testUrl]) async {
   final appController = globalState.appController;
   final proxyNames = proxies
-      .map((proxy) =>
-          appController.ref.read(getRealProxyNameProvider(proxy.name)))
+      .map((proxy) => appController.getRealProxyName(proxy.name))
       .toSet()
       .toList();
 
-  final url = appController.ref.read(getRealTestUrlProvider(testUrl));
+  final url = appController.getRealTestUrl(testUrl);
 
   final delayProxies = proxyNames.map<Future>((proxyName) async {
     appController.setDelay(
@@ -71,7 +69,7 @@ delayTest(List<Proxy> proxies, [String? testUrl]) async {
   for (final batchDelayProxies in batchesDelayProxies) {
     await Future.wait(batchDelayProxies);
   }
-  appController.ref.read(sortNumProvider.notifier).add();
+  appController.addSortNum();
 }
 
 double getScrollToSelectedOffset({
@@ -79,11 +77,9 @@ double getScrollToSelectedOffset({
   required List<Proxy> proxies,
 }) {
   final appController = globalState.appController;
-  final columns = appController.ref.read(getProxiesColumnsProvider);
-  final proxyCardType = appController.ref
-      .read(proxiesStyleSettingProvider.select((state) => state.cardType));
-  final selectedProxyName =
-      appController.ref.read(getSelectedProxyNameProvider(groupName));
+  final columns = appController.getProxiesColumns();
+  final proxyCardType = globalState.config.proxiesStyle.cardType;
+  final selectedProxyName = appController.getSelectedProxyName(groupName);
   final findSelectedIndex = proxies.indexWhere(
     (proxy) => proxy.name == selectedProxyName,
   );

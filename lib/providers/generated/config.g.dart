@@ -114,21 +114,22 @@ final currentProfileIdProvider =
 );
 
 typedef _$CurrentProfileId = AutoDisposeNotifier<String?>;
-String _$dAVSettingHash() => r'f46ac0f1b4317ec14fcd5a6a5af7e0e80c4cc44e';
+String _$appDAVSettingHash() => r'b2119513acc7b129492fc1e093226f0eb3845f1e';
 
-/// See also [DAVSetting].
-@ProviderFor(DAVSetting)
-final dAVSettingProvider =
-    AutoDisposeNotifierProvider<DAVSetting, DAV?>.internal(
-  DAVSetting.new,
-  name: r'dAVSettingProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$dAVSettingHash,
+/// See also [AppDAVSetting].
+@ProviderFor(AppDAVSetting)
+final appDAVSettingProvider =
+    AutoDisposeNotifierProvider<AppDAVSetting, DAV?>.internal(
+  AppDAVSetting.new,
+  name: r'appDAVSettingProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$appDAVSettingHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$DAVSetting = AutoDisposeNotifier<DAV?>;
+typedef _$AppDAVSetting = AutoDisposeNotifier<DAV?>;
 String _$overrideDnsHash() => r'cee354c88eaf29d3ba2a8669177d300c420799ec';
 
 /// See also [OverrideDns].

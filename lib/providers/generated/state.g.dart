@@ -430,6 +430,26 @@ final packageListSelectorStateProvider =
 // ignore: unused_element
 typedef PackageListSelectorStateRef
     = AutoDisposeProviderRef<PackageListSelectorState>;
+String _$moreToolsSelectorStateHash() =>
+    r'b795a70336f81b579729f3528fd2834d742efe2a';
+
+/// See also [moreToolsSelectorState].
+@ProviderFor(moreToolsSelectorState)
+final moreToolsSelectorStateProvider =
+    AutoDisposeProvider<MoreToolsSelectorState>.internal(
+  moreToolsSelectorState,
+  name: r'moreToolsSelectorStateProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$moreToolsSelectorStateHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef MoreToolsSelectorStateRef
+    = AutoDisposeProviderRef<MoreToolsSelectorState>;
 String _$isCurrentPageHash() => r'a9ec62dbf568221efd5842159ea14e23e7084944';
 
 /// See also [isCurrentPage].

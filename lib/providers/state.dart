@@ -252,6 +252,24 @@ PackageListSelectorState packageListSelectorState(Ref ref) {
 }
 
 @riverpod
+MoreToolsSelectorState moreToolsSelectorState(Ref ref) {
+  final viewMode = ref.read(viewWidthProvider.notifier).viewMode;
+  final navigationItems = ref.read(navigationsProvider.select((state) {
+    state.where((element) {
+      final isMore = element.modes.contains(NavigationItemMode.more);
+      final isDesktop = element.modes.contains(NavigationItemMode.desktop);
+      if (isMore && !isDesktop) return true;
+      if (viewMode != ViewMode.mobile || !isMore) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }));
+
+  return MoreToolsSelectorState(navigationItems: navigationItems);
+}
+
+@riverpod
 bool isCurrentPage(
   Ref ref,
   PageLabel pageLabel, {

@@ -102,7 +102,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
 
   _tabControllerListener([int? index]) {
     final appController = globalState.appController;
-    final currentGroups = appController.ref.read(currentGroupsProvider);
+    final currentGroups = appController.getCurrentGroups();
     if (_tabController?.index == null) {
       return;
     }

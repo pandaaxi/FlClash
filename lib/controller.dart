@@ -192,11 +192,35 @@ class AppController {
         : (List.from(hotKeyActions)..[index] = hotKeyAction);
   }
 
+  getCurrentGroups() {
+    return _ref.read(currentGroupsProvider);
+  }
+
+  String getRealTestUrl(String? url) {
+    return _ref.read(getRealTestUrlProvider(url));
+  }
+
+  int getProxiesColumns() {
+    return _ref.read(getProxiesColumnsProvider);
+  }
+
+  addSortNum() {
+    return _ref.read(sortNumProvider.notifier).add();
+  }
+
   getCurrentGroupName() {
     final currentGroupName = _ref.read(currentProfileProvider.select(
       (state) => state?.currentGroupName,
     ));
     return currentGroupName;
+  }
+
+  getRealProxyName(proxyName) {
+    return _ref.read(getRealTestUrlProvider(proxyName));
+  }
+
+  getSelectedProxyName(groupName) {
+    return _ref.read(getSelectedProxyNameProvider(groupName));
   }
 
   updateCurrentGroupName(String groupName) {

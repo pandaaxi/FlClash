@@ -223,7 +223,7 @@ class _ProxiesListFragmentState extends State<ProxiesListFragment> {
       return;
     }
     final appController = globalState.appController;
-    final currentGroups = appController.ref.read(currentGroupsProvider);
+    final currentGroups = appController.getCurrentGroups();
     final groupNames = currentGroups.map((e) => e.name).toList();
     final findIndex = groupNames.indexWhere((item) => item == groupName);
     final index = findIndex != -1 ? findIndex : 0;

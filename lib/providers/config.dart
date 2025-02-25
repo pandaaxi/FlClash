@@ -169,7 +169,7 @@ class CurrentProfileId extends _$CurrentProfileId {
 }
 
 @riverpod
-class DAVSetting extends _$DAVSetting {
+class AppDAVSetting extends _$AppDAVSetting {
   @override
   DAV? build() {
     return globalState.config.dav;
@@ -181,6 +181,10 @@ class DAVSetting extends _$DAVSetting {
     globalState.config = globalState.config.copyWith(
       dav: value,
     );
+  }
+
+  updateState(DAV? Function(DAV? state) builder) {
+    state = builder(state);
   }
 }
 
