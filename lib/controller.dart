@@ -12,6 +12,7 @@ import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common/common.dart';
@@ -359,9 +360,8 @@ class AppController {
   }
 
   savePreferences() async {
-    // commonPrint.log("savePreferences");
-    // await preferences.saveConfig(config);
-    // await preferences.saveClashConfig(clashConfig);
+    commonPrint.log("save preferences");
+    await preferences.saveConfig(globalState.config);
   }
 
   changeProxy({
@@ -876,43 +876,78 @@ class AppController {
     List<int> data,
     RecoveryOption recoveryOption,
   ) async {
-    // final archive = await Isolate.run<Archive>(() {
-    //   final zipDecoder = ZipDecoder();
-    //   return zipDecoder.decodeBytes(data);
-    // });
-    // final homeDirPath = await appPath.homeDirPath;
-    // final configs =
-    //     archive.files.where((item) => item.name.endsWith(".json")).toList();
-    // final profiles =
-    //     archive.files.where((item) => !item.name.endsWith(".json"));
-    // final configIndex =
-    //     configs.indexWhere((config) => config.name == "config.json");
-    // if (configIndex == -1) throw "invalid backup.zip";
-    // final configFile = configs[configIndex];
-    // final tempConfig = Config.fromJson(
-    //   json.decode(
-    //     utf8.decode(configFile.content),
-    //   ),
-    // );
-    // for (final profile in profiles) {
-    //   final filePath = join(homeDirPath, profile.name);
-    //   final file = File(filePath);
-    //   await file.create(recursive: true);
-    //   await file.writeAsBytes(profile.content);
-    // }
-    // config.update(tempConfig, recoveryOption);
-    // final clashConfigIndex =
-    //     configs.indexWhere((config) => config.name == "clashConfig.json");
-    // if (clashConfigIndex == -1) {
-    //   return;
-    // }
-    // final clashConfigFile = configs[clashConfigIndex];
-    // config.patchClashConfig = ClashConfig.fromJson(
-    //   json.decode(
-    //     utf8.decode(
-    //       clashConfigFile.content,
-    //     ),
-    //   ),
-    // );
+    final archive = await Isolate.run<Archive>(() {
+      final zipDecoder = ZipDecoder();
+      return zipDecoder.decodeBytes(data);
+    });
+    final homeDirPath = await appPath.homeDirPath;
+    final configs =
+        archive.files.where((item) => item.name.endsWith(".json")).toList();
+    final profiles =
+        archive.files.where((item) => !item.name.endsWith(".json"));
+    final configIndex =
+        configs.indexWhere((config) => config.name == "config.json");
+    if (configIndex == -1) throw "invalid backup file";
+    final configFile = configs[configIndex];
+    var tempConfig = Config.fromJson(
+      json.decode(
+        utf8.decode(configFile.content),
+      ),
+    );
+    for (final profile in profiles) {
+      final filePath = join(homeDirPath, profile.name);
+      final file = File(filePath);
+      await file.create(recursive: true);
+      await file.writeAsBytes(profile.content);
+    }
+    final clashConfigIndex =
+        configs.indexWhere((config) => config.name == "clashConfig.json");
+    if (clashConfigIndex != -1) {
+      final clashConfigFile = configs[clashConfigIndex];
+      tempConfig = tempConfig.copyWith(
+        patchClashConfig: ClashConfig.fromJson(
+          json.decode(
+            utf8.decode(
+              clashConfigFile.content,
+            ),
+          ),
+        ),
+      );
+    }
+    _recovery(
+      tempConfig,
+      recoveryOption,
+    );
+  }
+
+  _recovery(Config config, RecoveryOption recoveryOption) {
+    final profiles = config.profiles;
+    for (final profile in profiles) {
+      _ref.read(profilesProvider.notifier).setProfile(profile);
+    }
+    final onlyProfiles = recoveryOption == RecoveryOption.onlyProfiles;
+    if (onlyProfiles) {
+      final currentProfile = _ref.read(currentProfileProvider);
+      if (currentProfile != null) {
+        _ref.read(currentProfileIdProvider.notifier).state = profiles.first.id;
+      }
+      return;
+    }
+    _ref.read(patchClashConfigProvider.notifier).state =
+        config.patchClashConfig;
+    _ref.read(appSettingProvider.notifier).state = config.appSetting;
+    _ref.read(currentProfileIdProvider.notifier).state =
+        config.currentProfileId;
+    _ref.read(appDAVSettingProvider.notifier).state = config.dav;
+    _ref.read(isAccessControlProvider.notifier).state = config.isAccessControl;
+    _ref.read(accessControlSettingProvider.notifier).state =
+        config.accessControl;
+    _ref.read(themeSettingProvider.notifier).state = config.themeProps;
+    _ref.read(windowSettingProvider.notifier).state = config.windowProps;
+    _ref.read(vpnSettingProvider.notifier).state = config.vpnProps;
+    _ref.read(proxiesStyleSettingProvider.notifier).state = config.proxiesStyle;
+    _ref.read(overrideDnsProvider.notifier).state = config.overrideDns;
+    _ref.read(networkSettingProvider.notifier).state = config.networkProps;
+    _ref.read(hotKeyActionsProvider.notifier).state = config.hotKeyActions;
   }
 }
