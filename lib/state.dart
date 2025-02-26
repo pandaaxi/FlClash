@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:fl_clash/clash/clash.dart';
@@ -111,8 +110,8 @@ class GlobalState {
 
   getUpdateConfigParams({
     required ClashConfig clashConfig,
-    String? currentProfileId,
-    bool? isPatch,
+    required String? currentProfileId,
+    required bool? isPatch,
     required SelectedMap selectedMap,
     required bool overrideDns,
     required String testUrl,

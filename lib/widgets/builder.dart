@@ -1,4 +1,3 @@
-import 'package:fl_clash/models/models.dart';
 import 'package:flutter/material.dart';
 
 class ScrollOverBuilder extends StatefulWidget {

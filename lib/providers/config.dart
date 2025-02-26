@@ -1,21 +1,19 @@
-import 'package:fl_clash/common/other.dart';
+import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated/config.g.dart';
 
 @riverpod
-class AppSetting extends _$AppSetting {
+class AppSetting extends _$AppSetting with AutoDisposeNotifierMixin {
   @override
   AppSettingProps build() {
     return globalState.config.appSetting;
   }
 
   @override
-  set state(AppSettingProps value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       appSetting: value,
     );
@@ -27,15 +25,14 @@ class AppSetting extends _$AppSetting {
 }
 
 @riverpod
-class WindowSetting extends _$WindowSetting {
+class WindowSetting extends _$WindowSetting with AutoDisposeNotifierMixin {
   @override
   WindowProps build() {
     return globalState.config.windowProps;
   }
 
   @override
-  set state(WindowProps value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       windowProps: value,
     );
@@ -47,15 +44,14 @@ class WindowSetting extends _$WindowSetting {
 }
 
 @riverpod
-class VpnSetting extends _$VpnSetting {
+class VpnSetting extends _$VpnSetting with AutoDisposeNotifierMixin {
   @override
   VpnProps build() {
     return globalState.config.vpnProps;
   }
 
   @override
-  set state(VpnProps value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       vpnProps: value,
     );
@@ -67,15 +63,14 @@ class VpnSetting extends _$VpnSetting {
 }
 
 @riverpod
-class NetworkSetting extends _$NetworkSetting {
+class NetworkSetting extends _$NetworkSetting with AutoDisposeNotifierMixin {
   @override
   NetworkProps build() {
     return globalState.config.networkProps;
   }
 
   @override
-  set state(NetworkProps value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       networkProps: value,
     );
@@ -87,15 +82,14 @@ class NetworkSetting extends _$NetworkSetting {
 }
 
 @riverpod
-class ThemeSetting extends _$ThemeSetting {
+class ThemeSetting extends _$ThemeSetting with AutoDisposeNotifierMixin {
   @override
   ThemeProps build() {
     return globalState.config.themeProps;
   }
 
   @override
-  set state(ThemeProps value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       themeProps: value,
     );
@@ -107,15 +101,14 @@ class ThemeSetting extends _$ThemeSetting {
 }
 
 @riverpod
-class Profiles extends _$Profiles {
+class Profiles extends _$Profiles with AutoDisposeNotifierMixin {
   @override
   List<Profile> build() {
     return globalState.config.profiles;
   }
 
   @override
-  set state(List<Profile> value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       profiles: value,
     );
@@ -154,30 +147,30 @@ class Profiles extends _$Profiles {
 }
 
 @riverpod
-class CurrentProfileId extends _$CurrentProfileId {
+class CurrentProfileId extends _$CurrentProfileId
+    with AutoDisposeNotifierMixin {
   @override
   String? build() {
     return globalState.config.currentProfileId;
   }
 
   @override
-  set state(String? value) {
-    if (value == state) return;
-    state = value;
-    globalState.config = globalState.config.copyWith(currentProfileId: value);
+  onUpdate(value) {
+    globalState.config = globalState.config.copyWith(
+      currentProfileId: value,
+    );
   }
 }
 
 @riverpod
-class AppDAVSetting extends _$AppDAVSetting {
+class AppDAVSetting extends _$AppDAVSetting with AutoDisposeNotifierMixin {
   @override
   DAV? build() {
     return globalState.config.dav;
   }
 
   @override
-  set state(DAV? value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       dav: value,
     );
@@ -189,15 +182,14 @@ class AppDAVSetting extends _$AppDAVSetting {
 }
 
 @riverpod
-class OverrideDns extends _$OverrideDns {
+class OverrideDns extends _$OverrideDns with AutoDisposeNotifierMixin {
   @override
   bool build() {
     return globalState.config.overrideDns;
   }
 
   @override
-  set state(bool value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       overrideDns: value,
     );
@@ -205,15 +197,14 @@ class OverrideDns extends _$OverrideDns {
 }
 
 @riverpod
-class IsAccessControl extends _$IsAccessControl {
+class IsAccessControl extends _$IsAccessControl with AutoDisposeNotifierMixin {
   @override
   bool build() {
     return globalState.config.isAccessControl;
   }
 
   @override
-  set state(bool value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       isAccessControl: value,
     );
@@ -221,15 +212,15 @@ class IsAccessControl extends _$IsAccessControl {
 }
 
 @riverpod
-class AccessControlSetting extends _$AccessControlSetting {
+class AccessControlSetting extends _$AccessControlSetting
+    with AutoDisposeNotifierMixin {
   @override
   AccessControl build() {
     return globalState.config.accessControl;
   }
 
   @override
-  set state(AccessControl value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       accessControl: value,
     );
@@ -241,15 +232,14 @@ class AccessControlSetting extends _$AccessControlSetting {
 }
 
 @riverpod
-class HotKeyActions extends _$HotKeyActions {
+class HotKeyActions extends _$HotKeyActions with AutoDisposeNotifierMixin {
   @override
   List<HotKeyAction> build() {
     return globalState.config.hotKeyActions;
   }
 
   @override
-  set state(List<HotKeyAction> value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       hotKeyActions: value,
     );
@@ -257,15 +247,15 @@ class HotKeyActions extends _$HotKeyActions {
 }
 
 @riverpod
-class ProxiesStyleSetting extends _$ProxiesStyleSetting {
+class ProxiesStyleSetting extends _$ProxiesStyleSetting
+    with AutoDisposeNotifierMixin {
   @override
   ProxiesStyle build() {
     return globalState.config.proxiesStyle;
   }
 
   @override
-  set state(ProxiesStyle value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       proxiesStyle: value,
     );
@@ -277,7 +267,8 @@ class ProxiesStyleSetting extends _$ProxiesStyleSetting {
 }
 
 @riverpod
-class PatchClashConfig extends _$PatchClashConfig {
+class PatchClashConfig extends _$PatchClashConfig
+    with AutoDisposeNotifierMixin {
   @override
   ClashConfig build() {
     return globalState.config.patchClashConfig;
@@ -292,8 +283,7 @@ class PatchClashConfig extends _$PatchClashConfig {
   }
 
   @override
-  set state(ClashConfig value) {
-    super.state = value;
+  onUpdate(value) {
     globalState.config = globalState.config.copyWith(
       patchClashConfig: value,
     );

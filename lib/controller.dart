@@ -92,8 +92,8 @@ class AppController {
       await globalState.handleStop();
       await clashCore.resetTraffic();
       _ref.read(trafficsProvider.notifier).clear();
-      _ref.read(totalTrafficProvider.notifier).state = Traffic();
-      _ref.read(runTimeProvider.notifier).state = null;
+      _ref.read(totalTrafficProvider.notifier).value = Traffic();
+      _ref.read(runTimeProvider.notifier).value = null;
       tray.updateTrayTitle(null);
       addCheckIpNumDebounce();
     }
@@ -104,9 +104,9 @@ class AppController {
     if (startTime != null) {
       final startTimeStamp = startTime.millisecondsSinceEpoch;
       final nowTimeStamp = DateTime.now().millisecondsSinceEpoch;
-      _ref.read(runTimeProvider.notifier).state = nowTimeStamp - startTimeStamp;
+      _ref.read(runTimeProvider.notifier).value = nowTimeStamp - startTimeStamp;
     } else {
-      _ref.read(runTimeProvider.notifier).state = null;
+      _ref.read(runTimeProvider.notifier).value = null;
     }
   }
 
@@ -114,14 +114,14 @@ class AppController {
     final traffic = await clashCore.getTraffic();
     _ref.read(trafficsProvider).add(traffic);
     tray.updateTrayTitle(traffic);
-    _ref.read(totalTrafficProvider.notifier).state =
+    _ref.read(totalTrafficProvider.notifier).value =
         await clashCore.getTotalTraffic();
   }
 
   addProfile(Profile profile) async {
     _ref.read(profilesProvider.notifier).setProfile(profile);
     if (_ref.read(currentProfileIdProvider) != null) return;
-    _ref.read(currentProfileIdProvider.notifier).state = profile.id;
+    _ref.read(currentProfileIdProvider.notifier).value = profile.id;
   }
 
   deleteProfile(String id) async {
@@ -132,23 +132,23 @@ class AppController {
       final currentProfileId = _ref.read(currentProfileIdProvider.notifier);
       if (profiles.isNotEmpty) {
         final updateId = profiles.first.id;
-        currentProfileId.state = updateId;
+        currentProfileId.value = updateId;
       } else {
-        currentProfileId.state = null;
+        currentProfileId.value = null;
         updateStatus(false);
       }
     }
   }
 
   updateProviders() async {
-    _ref.read(providersProvider.notifier).state =
+    _ref.read(providersProvider.notifier).value =
         await clashCore.getExternalProviders();
   }
 
   updateLocalIp() async {
-    _ref.read(localIpProvider.notifier).state = null;
+    _ref.read(localIpProvider.notifier).value = null;
     await Future.delayed(commonDuration);
-    _ref.read(localIpProvider.notifier).state = await other.getLocalIpAddress();
+    _ref.read(localIpProvider.notifier).value = await other.getLocalIpAddress();
   }
 
   Future<void> updateProfile(Profile profile) async {
@@ -169,7 +169,7 @@ class AppController {
   }
 
   setProfiles(List<Profile> profiles) {
-    _ref.read(profilesProvider.notifier).state = profiles;
+    _ref.read(profilesProvider.notifier).value = profiles;
   }
 
   addLog(Log log) {
@@ -181,14 +181,14 @@ class AppController {
     final index =
         hotKeyActions.indexWhere((item) => item.action == hotKeyAction.action);
     if (index == -1) {
-      _ref.read(hotKeyActionsProvider.notifier).state = List.from(hotKeyActions)
+      _ref.read(hotKeyActionsProvider.notifier).value = List.from(hotKeyActions)
         ..add(hotKeyAction);
     } else {
-      _ref.read(hotKeyActionsProvider.notifier).state = List.from(hotKeyActions)
+      _ref.read(hotKeyActionsProvider.notifier).value = List.from(hotKeyActions)
         ..[index] = hotKeyAction;
     }
 
-    _ref.read(hotKeyActionsProvider.notifier).state = index == -1
+    _ref.read(hotKeyActionsProvider.notifier).value = index == -1
         ? (List.from(hotKeyActions)..add(hotKeyAction))
         : (List.from(hotKeyActions)..[index] = hotKeyAction);
   }
@@ -280,6 +280,7 @@ class AppController {
 
   UpdateConfigParams getUpdateConfigParams([bool? isPatch]) {
     return globalState.getUpdateConfigParams(
+      currentProfileId: _ref.read(currentProfileIdProvider),
       clashConfig: _ref.read(patchClashConfigProvider),
       selectedMap: _ref.read(selectedMapProvider),
       overrideDns: _ref.read(overrideDnsProvider),
@@ -309,12 +310,12 @@ class AppController {
   }
 
   handleChangeProfile() {
-    _ref.read(delayDataSourceProvider.notifier).state = {};
+    _ref.read(delayDataSourceProvider.notifier).value = {};
     applyProfile();
   }
 
   updateBrightness(Brightness brightness) {
-    _ref.read(appBrightnessProvider.notifier).state = brightness;
+    _ref.read(appBrightnessProvider.notifier).value = brightness;
   }
 
   autoUpdateProfiles() async {
@@ -342,7 +343,7 @@ class AppController {
   }
 
   Future<void> updateGroups() async {
-    _ref.read(groupsProvider.notifier).state =
+    _ref.read(groupsProvider.notifier).value =
         await clashCore.getProxiesGroups();
   }
 
@@ -356,7 +357,7 @@ class AppController {
   }
 
   updateSystemColorSchemes(ColorSchemes colorSchemes) {
-    _ref.read(appSchemesProvider.notifier).state = colorSchemes;
+    _ref.read(appSchemesProvider.notifier).value = colorSchemes;
   }
 
   savePreferences() async {
@@ -489,6 +490,7 @@ class AppController {
     await _handlerDisclaimer();
     await initCore();
     await _initStatus();
+    updateTray(true);
     autoLaunch?.updateStatus(
       _ref.read(appSettingProvider).autoLaunch,
     );
@@ -499,7 +501,7 @@ class AppController {
     } else {
       window?.hide();
     }
-    _ref.read(initProvider.notifier).state = true;
+    _ref.read(initProvider.notifier).value = true;
   }
 
   _initStatus() async {
@@ -528,7 +530,7 @@ class AppController {
     if (index > navigations.length - 1) {
       return;
     }
-    _ref.read(currentPageLabelProvider.notifier).state =
+    _ref.read(currentPageLabelProvider.notifier).value =
         navigations[index].label;
     final isAnimateToPage = _ref.read(appSettingProvider).isAnimateToPage;
     final isMobile =
@@ -682,7 +684,7 @@ class AppController {
 
   updateViewWidth(double width) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _ref.read(viewWidthProvider.notifier).state = width;
+      _ref.read(viewWidthProvider.notifier).value = width;
     });
   }
 
@@ -929,25 +931,25 @@ class AppController {
     if (onlyProfiles) {
       final currentProfile = _ref.read(currentProfileProvider);
       if (currentProfile != null) {
-        _ref.read(currentProfileIdProvider.notifier).state = profiles.first.id;
+        _ref.read(currentProfileIdProvider.notifier).value = profiles.first.id;
       }
       return;
     }
-    _ref.read(patchClashConfigProvider.notifier).state =
+    _ref.read(patchClashConfigProvider.notifier).value =
         config.patchClashConfig;
-    _ref.read(appSettingProvider.notifier).state = config.appSetting;
-    _ref.read(currentProfileIdProvider.notifier).state =
+    _ref.read(appSettingProvider.notifier).value = config.appSetting;
+    _ref.read(currentProfileIdProvider.notifier).value =
         config.currentProfileId;
-    _ref.read(appDAVSettingProvider.notifier).state = config.dav;
-    _ref.read(isAccessControlProvider.notifier).state = config.isAccessControl;
-    _ref.read(accessControlSettingProvider.notifier).state =
+    _ref.read(appDAVSettingProvider.notifier).value = config.dav;
+    _ref.read(isAccessControlProvider.notifier).value = config.isAccessControl;
+    _ref.read(accessControlSettingProvider.notifier).value =
         config.accessControl;
-    _ref.read(themeSettingProvider.notifier).state = config.themeProps;
-    _ref.read(windowSettingProvider.notifier).state = config.windowProps;
-    _ref.read(vpnSettingProvider.notifier).state = config.vpnProps;
-    _ref.read(proxiesStyleSettingProvider.notifier).state = config.proxiesStyle;
-    _ref.read(overrideDnsProvider.notifier).state = config.overrideDns;
-    _ref.read(networkSettingProvider.notifier).state = config.networkProps;
-    _ref.read(hotKeyActionsProvider.notifier).state = config.hotKeyActions;
+    _ref.read(themeSettingProvider.notifier).value = config.themeProps;
+    _ref.read(windowSettingProvider.notifier).value = config.windowProps;
+    _ref.read(vpnSettingProvider.notifier).value = config.vpnProps;
+    _ref.read(proxiesStyleSettingProvider.notifier).value = config.proxiesStyle;
+    _ref.read(overrideDnsProvider.notifier).value = config.overrideDns;
+    _ref.read(networkSettingProvider.notifier).value = config.networkProps;
+    _ref.read(hotKeyActionsProvider.notifier).value = config.hotKeyActions;
   }
 }

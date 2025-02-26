@@ -330,7 +330,7 @@ class _WebDAVFormDialogState extends ConsumerState<WebDAVFormDialog> {
 
   _submit() {
     if (!_formKey.currentState!.validate()) return;
-    ref.read(appDAVSettingProvider.notifier).state = DAV(
+    ref.read(appDAVSettingProvider.notifier).value = DAV(
       uri: uriController.text,
       user: userController.text,
       password: passwordController.text,
@@ -339,7 +339,7 @@ class _WebDAVFormDialogState extends ConsumerState<WebDAVFormDialog> {
   }
 
   _delete() {
-    ref.read(appDAVSettingProvider.notifier).state = null;
+    ref.read(appDAVSettingProvider.notifier).value = null;
     Navigator.pop(context);
   }
 

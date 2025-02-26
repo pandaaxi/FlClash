@@ -5,7 +5,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'common.dart';
 import 'core.dart';
-import 'profile.dart';
 
 part 'generated/app.freezed.dart';
 

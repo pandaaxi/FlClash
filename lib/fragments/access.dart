@@ -32,7 +32,7 @@ class _AccessFragmentState extends ConsumerState<AccessFragment> {
       final appState = globalState.appState;
       if (appState.packages.isEmpty) {
         Future.delayed(const Duration(milliseconds: 300), () async {
-          ref.read(packagesProvider.notifier).state =
+          ref.read(packagesProvider.notifier).value =
               await app?.getPackages() ?? [];
         });
       }
@@ -697,7 +697,7 @@ class _AccessControlPanelState extends ConsumerState<AccessControlPanel> {
         final data = await Clipboard.getData('text/plain');
         final text = data?.text;
         if (text == null) return;
-        ref.read(accessControlSettingProvider.notifier).state =
+        ref.read(accessControlSettingProvider.notifier).value =
             AccessControl.fromJson(
           json.decode(text),
         );

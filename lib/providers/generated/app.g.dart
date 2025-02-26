@@ -23,7 +23,7 @@ final currentGroupsProvider = AutoDisposeProvider<List<Group>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentGroupsRef = AutoDisposeProviderRef<List<Group>>;
-String _$logsHash() => r'9e10c54c2ac6b014cf4060b6b651a0e921da626b';
+String _$logsHash() => r'3fa8bc94a435adfc8183c3689ccf1d9df65451f6';
 
 /// See also [Logs].
 @ProviderFor(Logs)
@@ -37,7 +37,7 @@ final logsProvider = AutoDisposeNotifierProvider<Logs, FixedList<Log>>.internal(
 );
 
 typedef _$Logs = AutoDisposeNotifier<FixedList<Log>>;
-String _$requestsHash() => r'f5e129cf2821884f626f4f7ca7b2e99e3cbe6ade';
+String _$requestsHash() => r'd05f8c89938a30cb211435510d6f9ce5c56804e3';
 
 /// See also [Requests].
 @ProviderFor(Requests)
@@ -52,7 +52,7 @@ final requestsProvider =
 );
 
 typedef _$Requests = AutoDisposeNotifier<FixedList<Connection>>;
-String _$providersHash() => r'ff84a1409a8fafc7ec2e9a965f6ed8d67c58c4e9';
+String _$providersHash() => r'69e480ef409837596937d233e45b9995a83b3949';
 
 /// See also [Providers].
 @ProviderFor(Providers)
@@ -67,7 +67,7 @@ final providersProvider =
 );
 
 typedef _$Providers = AutoDisposeNotifier<List<ExternalProvider>>;
-String _$packagesHash() => r'dc5c89a695c624e22e39423753524c7276c020de';
+String _$packagesHash() => r'84bff9f5271622ed4199ecafacda8e74fa444fe2';
 
 /// See also [Packages].
 @ProviderFor(Packages)
@@ -82,7 +82,7 @@ final packagesProvider =
 );
 
 typedef _$Packages = AutoDisposeNotifier<List<Package>>;
-String _$appBrightnessHash() => r'05a4005d1d0fa543bd560eb81b014f4149c56b62';
+String _$appBrightnessHash() => r'bc893bacdc2645c985037d3754bad4e651587771';
 
 /// See also [AppBrightness].
 @ProviderFor(AppBrightness)
@@ -98,7 +98,7 @@ final appBrightnessProvider =
 );
 
 typedef _$AppBrightness = AutoDisposeNotifier<Brightness?>;
-String _$trafficsHash() => r'4c19f6bc7b0ecd75ba621d866e639cd3f31029ff';
+String _$trafficsHash() => r'9bf489b36632784edfd43c04d166637717e893f6';
 
 /// See also [Traffics].
 @ProviderFor(Traffics)
@@ -113,7 +113,7 @@ final trafficsProvider =
 );
 
 typedef _$Traffics = AutoDisposeNotifier<FixedList<Traffic>>;
-String _$totalTrafficHash() => r'7307b83a91ab0ba3aa58a2b309037f0fbc24f329';
+String _$totalTrafficHash() => r'cc993ec58fa4c8ee0dbbf2e8a146f7039e818d7e';
 
 /// See also [TotalTraffic].
 @ProviderFor(TotalTraffic)
@@ -128,7 +128,7 @@ final totalTrafficProvider =
 );
 
 typedef _$TotalTraffic = AutoDisposeNotifier<Traffic>;
-String _$localIpHash() => r'1ec26dd2e8c9b8fb7b0c9b05e6bdf6ecbf88c774';
+String _$localIpHash() => r'2dd4afdb29db4791ebd80d976f9ea31c62959199';
 
 /// See also [LocalIp].
 @ProviderFor(LocalIp)
@@ -142,7 +142,7 @@ final localIpProvider = AutoDisposeNotifierProvider<LocalIp, String?>.internal(
 );
 
 typedef _$LocalIp = AutoDisposeNotifier<String?>;
-String _$runTimeHash() => r'4e200d5df2fba5cb53353fefc233614228adbfde';
+String _$runTimeHash() => r'9aab44f2234590a70cbf0ff7394e496c2c97c00e';
 
 /// See also [RunTime].
 @ProviderFor(RunTime)
@@ -156,7 +156,7 @@ final runTimeProvider = AutoDisposeNotifierProvider<RunTime, int?>.internal(
 );
 
 typedef _$RunTime = AutoDisposeNotifier<int?>;
-String _$viewWidthHash() => r'9adf1e7dec30ce75d4eb9f9a3d1dde3075ccf64a';
+String _$viewWidthHash() => r'2d492c97b26c9634ee945a8d7da1563d98b830bd';
 
 /// See also [ViewWidth].
 @ProviderFor(ViewWidth)
@@ -171,7 +171,7 @@ final viewWidthProvider =
 );
 
 typedef _$ViewWidth = AutoDisposeNotifier<double>;
-String _$initHash() => r'fcbfaaf9b8ccf6a5899aeebd81bae44e47ff9193';
+String _$initHash() => r'7d3f11c8aff7a1924c5ec8886b2cd2cbdda57c3f';
 
 /// See also [Init].
 @ProviderFor(Init)
@@ -185,7 +185,7 @@ final initProvider = AutoDisposeNotifierProvider<Init, bool>.internal(
 );
 
 typedef _$Init = AutoDisposeNotifier<bool>;
-String _$currentPageLabelHash() => r'2271c2ca1d2975c6e57d9a0d549ee6942370d245';
+String _$currentPageLabelHash() => r'a4ed13348bcd406ec3be52138cf1083106d31215';
 
 /// See also [CurrentPageLabel].
 @ProviderFor(CurrentPageLabel)
@@ -201,7 +201,7 @@ final currentPageLabelProvider =
 );
 
 typedef _$CurrentPageLabel = AutoDisposeNotifier<PageLabel>;
-String _$appSchemesHash() => r'c8f4cdc39a49fd5d61596584ddfb8b806f7ef33d';
+String _$appSchemesHash() => r'748f48f23539a879a92f318a21e1266b1df56aae';
 
 /// See also [AppSchemes].
 @ProviderFor(AppSchemes)
@@ -216,7 +216,7 @@ final appSchemesProvider =
 );
 
 typedef _$AppSchemes = AutoDisposeNotifier<ColorSchemes>;
-String _$sortNumHash() => r'9b9343f54d527245484a70952ca05132d6b3e34b';
+String _$sortNumHash() => r'0f85ebbc77124020eaccf988c6ac9d86a7f34d7e';
 
 /// See also [SortNum].
 @ProviderFor(SortNum)
@@ -230,7 +230,7 @@ final sortNumProvider = AutoDisposeNotifierProvider<SortNum, int>.internal(
 );
 
 typedef _$SortNum = AutoDisposeNotifier<int>;
-String _$checkIpNumHash() => r'5e3302215a3178bae532da3cf60c881aee06147b';
+String _$checkIpNumHash() => r'794de8e31e98ee4fde10509dc8f433699bff18b4';
 
 /// See also [CheckIpNum].
 @ProviderFor(CheckIpNum)
@@ -245,7 +245,7 @@ final checkIpNumProvider =
 );
 
 typedef _$CheckIpNum = AutoDisposeNotifier<int>;
-String _$versionHash() => r'de02ded49b54af0eb489766386d7a510b592c3b5';
+String _$versionHash() => r'8c0ee019d20df3f112c38ae4dc4abd61148d3809';
 
 /// See also [Version].
 @ProviderFor(Version)
@@ -259,7 +259,7 @@ final versionProvider = AutoDisposeNotifierProvider<Version, int>.internal(
 );
 
 typedef _$Version = AutoDisposeNotifier<int>;
-String _$groupsHash() => r'094c490f8eb99cc2c5cd2ff6ffae1c2901cbde3a';
+String _$groupsHash() => r'fbff504e0bcdb5a2770a902f2867aabd921fbadc';
 
 /// See also [Groups].
 @ProviderFor(Groups)
@@ -274,7 +274,7 @@ final groupsProvider =
 );
 
 typedef _$Groups = AutoDisposeNotifier<List<Group>>;
-String _$delayDataSourceHash() => r'5e0cf42b0d0988c6341a80db4a68c042b46a5462';
+String _$delayDataSourceHash() => r'9731553fb48dd89840767bf5508547d90562eb55';
 
 /// See also [DelayDataSource].
 @ProviderFor(DelayDataSource)

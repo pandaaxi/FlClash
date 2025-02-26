@@ -19,7 +19,7 @@ class OverrideItem extends ConsumerWidget {
       delegate: SwitchDelegate(
         value: override,
         onChanged: (bool value) async {
-          ref.read(overrideDnsProvider.notifier).state = value;
+          ref.read(overrideDnsProvider.notifier).value = value;
         },
       ),
     );

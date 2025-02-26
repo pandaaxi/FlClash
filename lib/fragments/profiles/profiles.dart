@@ -144,7 +144,7 @@ class _ProfilesFragmentState extends State<ProfilesFragment> {
                       profile: profilesSelectorState.profiles[i],
                       groupValue: profilesSelectorState.currentProfileId,
                       onChanged: (profileId) {
-                        ref.read(currentProfileIdProvider.notifier).state =
+                        ref.read(currentProfileIdProvider.notifier).value =
                             profileId;
                       },
                     ),
