@@ -23,7 +23,7 @@ final currentGroupsProvider = AutoDisposeProvider<List<Group>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentGroupsRef = AutoDisposeProviderRef<List<Group>>;
-String _$logsHash() => r'045f75f484186253423271d7cfd4a5d196bc8373';
+String _$logsHash() => r'9e10c54c2ac6b014cf4060b6b651a0e921da626b';
 
 /// See also [Logs].
 @ProviderFor(Logs)

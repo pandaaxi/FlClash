@@ -12,7 +12,7 @@ part 'generated/app.g.dart';
 @riverpod
 List<Group> currentGroups(Ref ref) {
   final mode =
-  ref.watch(patchClashConfigProvider.select((state) => state.mode));
+      ref.watch(patchClashConfigProvider.select((state) => state.mode));
   final groups = ref.watch(groupsProvider);
   return switch (mode) {
     Mode.direct => [],
@@ -32,9 +32,14 @@ class Logs extends _$Logs {
   }
 
   @override
-  set state(FixedList<Log> value) {
-    super.state = value;
-    globalState.appState = globalState.appState.copyWith(logs: state);
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(
+        logs: next,
+      );
+    }
+    return res;
   }
 
   addLog(Log value) {
@@ -50,9 +55,12 @@ class Requests extends _$Requests {
   }
 
   @override
-  set state(FixedList<Connection> value) {
-    super.state = value;
-    globalState.appState = globalState.appState.copyWith(requests: state);
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(requests: next);
+    }
+    return res;
   }
 
   addRequest(Connection value) {
@@ -68,9 +76,12 @@ class Providers extends _$Providers {
   }
 
   @override
-  set state(List<ExternalProvider> value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(providers: state);
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(providers: next);
+    }
+    return res;
   }
 
   setProvider(ExternalProvider? provider) {
@@ -89,11 +100,12 @@ class Packages extends _$Packages {
   }
 
   @override
-  set state(List<Package> value) {
-    super.state = value;
-    globalState.appState = globalState.appState.copyWith(
-      packages: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(packages: next);
+    }
+    return res;
   }
 }
 
@@ -105,9 +117,12 @@ class AppBrightness extends _$AppBrightness {
   }
 
   @override
-  set state(Brightness? value) {
-    super.state = value;
-    globalState.appState = globalState.appState.copyWith(brightness: state);
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(brightness: next);
+    }
+    return res;
   }
 
   setState(Brightness? value) {
@@ -123,9 +138,12 @@ class Traffics extends _$Traffics {
   }
 
   @override
-  set state(FixedList<Traffic> value) {
-    super.state = value;
-    globalState.appState = globalState.appState.copyWith(traffics: state);
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(traffics: next);
+    }
+    return res;
   }
 
   addTraffic(Traffic value) {
@@ -145,11 +163,12 @@ class TotalTraffic extends _$TotalTraffic {
   }
 
   @override
-  set state(Traffic newTraffic) {
-    state = newTraffic;
-    globalState.appState = globalState.appState.copyWith(
-      totalTraffic: state,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(totalTraffic: next);
+    }
+    return res;
   }
 }
 
@@ -158,6 +177,15 @@ class LocalIp extends _$LocalIp {
   @override
   String? build() {
     return globalState.appState.localIp;
+  }
+
+  @override
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(localIp: next);
+    }
+    return res;
   }
 
   @override
@@ -177,11 +205,12 @@ class RunTime extends _$RunTime {
   }
 
   @override
-  set state(int? value) {
-    super.state = value;
-    globalState.appState = globalState.appState.copyWith(
-      runTime: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(runTime: next);
+    }
+    return res;
   }
 
   bool get isStart {
@@ -197,14 +226,12 @@ class ViewWidth extends _$ViewWidth {
   }
 
   @override
-  set state(double value) {
-    if (value != state) {
-      return;
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(viewWidth: next);
     }
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      viewWidth: state,
-    );
+    return res;
   }
 
   ViewMode get viewMode => other.getViewMode(state);
@@ -220,11 +247,12 @@ class Init extends _$Init {
   }
 
   @override
-  set state(bool value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      isInit: state,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(isInit: next);
+    }
+    return res;
   }
 }
 
@@ -236,11 +264,12 @@ class CurrentPageLabel extends _$CurrentPageLabel {
   }
 
   @override
-  set state(PageLabel value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      pageLabel: state,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(pageLabel: next);
+    }
+    return res;
   }
 }
 
@@ -252,11 +281,12 @@ class AppSchemes extends _$AppSchemes {
   }
 
   @override
-  set state(ColorSchemes value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      colorSchemes: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(colorSchemes: next);
+    }
+    return res;
   }
 }
 
@@ -268,11 +298,12 @@ class SortNum extends _$SortNum {
   }
 
   @override
-  set state(int value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      sortNum: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(sortNum: next);
+    }
+    return res;
   }
 
   add() => state++;
@@ -286,11 +317,12 @@ class CheckIpNum extends _$CheckIpNum {
   }
 
   @override
-  set state(int value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      checkIpNum: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(checkIpNum: next);
+    }
+    return res;
   }
 
   add() => state++;
@@ -304,11 +336,12 @@ class Version extends _$Version {
   }
 
   @override
-  set state(int value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      version: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(version: next);
+    }
+    return res;
   }
 }
 
@@ -320,11 +353,12 @@ class Groups extends _$Groups {
   }
 
   @override
-  set state(List<Group> value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      groups: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(groups: next);
+    }
+    return res;
   }
 }
 
@@ -336,11 +370,12 @@ class DelayDataSource extends _$DelayDataSource {
   }
 
   @override
-  set state(DelayMap value) {
-    state = value;
-    globalState.appState = globalState.appState.copyWith(
-      delayMap: value,
-    );
+  bool updateShouldNotify(previous, next) {
+    final res = super.updateShouldNotify(previous, next);
+    if (res) {
+      globalState.appState = globalState.appState.copyWith(delayMap: next);
+    }
+    return res;
   }
 
   setDelay(Delay delay) {
