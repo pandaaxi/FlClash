@@ -161,8 +161,12 @@ class AppController {
     }
   }
 
-  setProfile(Profile profile) {
+  _setProfile(Profile profile){
     _ref.read(profilesProvider.notifier).setProfile(profile);
+  }
+
+  setProfile(Profile profile) {
+    _setProfile(profile);
     if (profile.id == _ref.read(currentProfileIdProvider)) {
       applyProfileDebounce();
     }
@@ -229,7 +233,7 @@ class AppController {
     if (profile == null || profile.currentGroupName == groupName) {
       return;
     }
-    setProfile(
+    _setProfile(
       profile.copyWith(currentGroupName: groupName),
     );
   }
@@ -245,6 +249,7 @@ class AppController {
   }
 
   Future<void> _updateClashConfig([bool? isPatch]) async {
+    print("[update]===>");
     final profile = _ref.watch(currentProfileProvider);
     await _ref.read(currentProfileProvider)?.checkAndUpdate();
     final patchConfig = _ref.read(patchClashConfigProvider);
@@ -330,7 +335,7 @@ class AppController {
         continue;
       }
       try {
-       await updateProfile(profile);
+        await updateProfile(profile);
       } catch (e) {
         _ref.read(logsProvider.notifier).addLog(
               Log(

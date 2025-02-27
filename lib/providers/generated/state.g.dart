@@ -235,7 +235,7 @@ final proxiesListSelectorStateProvider =
 typedef ProxiesListSelectorStateRef
     = AutoDisposeProviderRef<ProxiesListSelectorState>;
 String _$proxiesSelectorStateHash() =>
-    r'ccbfcf9784410ec8b83c402f449894ceab6d8ed2';
+    r'2ba6f576267c93af990e8a8db888691f55405f27';
 
 /// See also [proxiesSelectorState].
 @ProviderFor(proxiesSelectorState)

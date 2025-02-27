@@ -206,7 +206,7 @@ ProxiesSelectorState proxiesSelectorState(Ref ref) {
   final groupNames = ref.watch(currentGroupsProvider.select((state) {
     return state.map((e) => e.name).toList();
   }));
-  final currentGroupName = ref.watch(currentProfileProvider.select(
+  final currentGroupName = ref.read(currentProfileProvider.select(
     (state) => state?.currentGroupName,
   ));
   return ProxiesSelectorState(

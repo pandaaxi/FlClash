@@ -143,15 +143,25 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
     return Consumer(
       builder: (_, ref, __) {
         final state = ref.watch(proxiesSelectorStateProvider);
+        ref.listenManual(
+          currentProfileProvider.select(
+            (state) => state?.currentGroupName,
+          ),
+          (prev, next) {
+            if (prev != next) {
+              final index = state.groupNames.indexWhere(
+                (item) => item == next,
+              );
+              _updateTabController(state.groupNames.length, index);
+            }
+          },
+          fireImmediately: true,
+        );
         if (state.groupNames.isEmpty) {
           return NullStatus(
             label: appLocalizations.nullProxies,
           );
         }
-        final index = state.groupNames.indexWhere(
-          (item) => item == state.currentGroupName,
-        );
-        _updateTabController(state.groupNames.length, index);
         if (state.groupNames.isEmpty) {
           return Container();
         }
