@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
@@ -238,7 +239,7 @@ class ProxiesTabFragmentState extends State<ProxiesTabFragment>
   }
 }
 
-class ProxyGroupView extends StatefulWidget {
+class ProxyGroupView extends ConsumerStatefulWidget {
   final String groupName;
 
   const ProxyGroupView({
@@ -247,10 +248,10 @@ class ProxyGroupView extends StatefulWidget {
   });
 
   @override
-  State<ProxyGroupView> createState() => ProxyGroupViewState();
+  ConsumerState<ProxyGroupView> createState() => ProxyGroupViewState();
 }
 
-class ProxyGroupViewState extends State<ProxyGroupView> {
+class ProxyGroupViewState extends ConsumerState<ProxyGroupView> {
   var isLock = false;
   final _controller = ScrollController();
 
@@ -294,10 +295,21 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
     );
   }
 
-  initFab(bool isCurrent) {
-    if (!isCurrent) {
-      return;
-    }
+  @override
+  void initState() {
+    super.initState();
+    ref.listenManual(
+      isCurrentPageProvider(PageLabel.proxies),
+      (prev, next) {
+        if (prev != next && next == true) {
+          _initFab();
+        }
+      },
+      fireImmediately: true,
+    );
+  }
+
+  _initFab() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.commonScaffoldState?.floatingActionButton = DelayTestButton(
         onClick: () async {
@@ -309,47 +321,43 @@ class ProxyGroupViewState extends State<ProxyGroupView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (_, ref, __) {
-        final state = ref.watch(proxyGroupSelectorStateProvider(groupName));
-        final proxies = state.proxies;
-        final columns = state.columns;
-        final proxyCardType = state.proxyCardType;
-        final sortedProxies = globalState.appController.getSortProxies(
-          proxies,
-          state.testUrl,
-        );
-        return Align(
-          alignment: Alignment.topCenter,
-          child: GridView.builder(
-            controller: _controller,
-            padding: const EdgeInsets.only(
-              top: 16,
-              left: 16,
-              right: 16,
-              bottom: 96,
-            ),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columns,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              mainAxisExtent: getItemHeight(proxyCardType),
-            ),
-            itemCount: sortedProxies.length,
-            itemBuilder: (_, index) {
-              final proxy = sortedProxies[index];
-              return ProxyCard(
-                testUrl: state.testUrl,
-                groupType: state.groupType,
-                type: proxyCardType,
-                key: ValueKey('$groupName.${proxy.name}'),
-                proxy: proxy,
-                groupName: groupName,
-              );
-            },
-          ),
-        );
-      },
+    final state = ref.watch(proxyGroupSelectorStateProvider(groupName));
+    final proxies = state.proxies;
+    final columns = state.columns;
+    final proxyCardType = state.proxyCardType;
+    final sortedProxies = globalState.appController.getSortProxies(
+      proxies,
+      state.testUrl,
+    );
+    return Align(
+      alignment: Alignment.topCenter,
+      child: GridView.builder(
+        controller: _controller,
+        padding: const EdgeInsets.only(
+          top: 16,
+          left: 16,
+          right: 16,
+          bottom: 96,
+        ),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columns,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          mainAxisExtent: getItemHeight(proxyCardType),
+        ),
+        itemCount: sortedProxies.length,
+        itemBuilder: (_, index) {
+          final proxy = sortedProxies[index];
+          return ProxyCard(
+            testUrl: state.testUrl,
+            groupType: state.groupType,
+            type: proxyCardType,
+            key: ValueKey('$groupName.${proxy.name}'),
+            proxy: proxy,
+            groupName: groupName,
+          );
+        },
+      ),
     );
   }
 }

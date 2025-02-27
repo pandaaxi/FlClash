@@ -32,7 +32,6 @@ class _ClashContainerState extends ConsumerState<ClashManager>
   void initState() {
     super.initState();
     clashMessage.addListener(this);
-
     ref.listenManual(currentProfileIdProvider, (prev, next) {
       if (prev != next) {
         globalState.appController.handleChangeProfile();

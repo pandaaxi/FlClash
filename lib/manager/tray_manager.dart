@@ -29,7 +29,6 @@ class _TrayContainerState extends ConsumerState<TrayManager> with TrayListener {
           globalState.appController.updateTray();
         }
       },
-      fireImmediately: true,
     );
   }
 
