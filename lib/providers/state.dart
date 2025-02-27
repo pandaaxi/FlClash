@@ -384,12 +384,14 @@ String? getProxyName(Ref ref, String groupName) {
   return proxyName;
 }
 
+
+
 @riverpod
 String? getSelectedProxyName(Ref ref, String groupName) {
   final proxyName = ref.watch(getProxyNameProvider(groupName));
   final group = ref.watch(
     groupsProvider.select(
-      (state) => state.getGroup(groupName),
+          (state) => state.getGroup(groupName),
     ),
   );
   return group?.getCurrentSelectedName(proxyName ?? '');
