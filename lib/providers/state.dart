@@ -299,9 +299,11 @@ int? getDelay(
   String? testUrl,
 }) {
   final currentTestUrl = ref.watch(getRealTestUrlProvider(testUrl));
-  final currentDelayMap = ref
-      .watch(delayDataSourceProvider.select((state) => state[currentTestUrl]));
-  return currentDelayMap?[proxyName];
+  return ref.watch(
+    delayDataSourceProvider.select(
+      (state) => state[currentTestUrl]?[proxyName],
+    ),
+  );
 }
 
 @riverpod
@@ -384,14 +386,12 @@ String? getProxyName(Ref ref, String groupName) {
   return proxyName;
 }
 
-
-
 @riverpod
 String? getSelectedProxyName(Ref ref, String groupName) {
   final proxyName = ref.watch(getProxyNameProvider(groupName));
   final group = ref.watch(
     groupsProvider.select(
-          (state) => state.getGroup(groupName),
+      (state) => state.getGroup(groupName),
     ),
   );
   return group?.getCurrentSelectedName(proxyName ?? '');

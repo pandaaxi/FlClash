@@ -38,12 +38,13 @@ class ProxyCard extends StatelessWidget {
       height: measure.labelSmallHeight,
       child: Consumer(
         builder: (context, ref, __) {
-          final delay = ref.watch(getDelayProvider(proxyName: proxy.name));
+          final delay = ref.watch(getDelayProvider(
+            proxyName: proxy.name,
+            testUrl: testUrl,
+          ));
           return FadeBox(
-            child: Builder(
-              builder: (_) {
-                if (delay == 0 || delay == null) {
-                  return SizedBox(
+            child: delay == 0 || delay == null
+                ? SizedBox(
                     height: measure.labelSmallHeight,
                     width: measure.labelSmallHeight,
                     child: delay == 0
@@ -56,22 +57,19 @@ class ProxyCard extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             onPressed: _handleTestCurrentDelay,
                           ),
-                  );
-                }
-                return GestureDetector(
-                  onTap: _handleTestCurrentDelay,
-                  child: Text(
-                    delay > 0 ? '$delay ms' : "Timeout",
-                    style: context.textTheme.labelSmall?.copyWith(
-                      overflow: TextOverflow.ellipsis,
-                      color: other.getDelayColor(
-                        delay,
+                  )
+                : GestureDetector(
+                    onTap: _handleTestCurrentDelay,
+                    child: Text(
+                      delay > 0 ? '$delay ms' : "Timeout",
+                      style: context.textTheme.labelSmall?.copyWith(
+                        overflow: TextOverflow.ellipsis,
+                        color: other.getDelayColor(
+                          delay,
+                        ),
                       ),
                     ),
                   ),
-                );
-              },
-            ),
           );
         },
       ),

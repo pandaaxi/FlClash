@@ -228,6 +228,7 @@ func handleAsyncTestDelay(paramsString string, fn func(string)) {
 		if params.TestUrl != "" {
 			testUrl = params.TestUrl
 		}
+		delayData.Url = testUrl
 
 		delay, err := proxy.URLTest(ctx, testUrl, expectedStatus)
 		if err != nil || delay == 0 {

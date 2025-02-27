@@ -23,17 +23,17 @@ double getItemHeight(ProxyCardType proxyCardType) {
 proxyDelayTest(Proxy proxy, [String? testUrl]) async {
   final appController = globalState.appController;
   final proxyName = appController.getRealProxyName(proxy.name);
-  final realTestUrl = appController.getRealTestUrl(testUrl);
+  final url = appController.getRealTestUrl(testUrl);
   appController.setDelay(
     Delay(
-      url: realTestUrl,
+      url: url,
       name: proxyName,
       value: 0,
     ),
   );
   appController.setDelay(
     await clashCore.getDelay(
-      realTestUrl,
+      url,
       proxyName,
     ),
   );
