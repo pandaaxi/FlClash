@@ -431,7 +431,7 @@ final packageListSelectorStateProvider =
 typedef PackageListSelectorStateRef
     = AutoDisposeProviderRef<PackageListSelectorState>;
 String _$moreToolsSelectorStateHash() =>
-    r'b795a70336f81b579729f3528fd2834d742efe2a';
+    r'10f177f8d485586d2f2d034677c04d3a516fd976';
 
 /// See also [moreToolsSelectorState].
 @ProviderFor(moreToolsSelectorState)

@@ -253,9 +253,9 @@ PackageListSelectorState packageListSelectorState(Ref ref) {
 
 @riverpod
 MoreToolsSelectorState moreToolsSelectorState(Ref ref) {
-  final viewMode = ref.read(viewWidthProvider.notifier).viewMode;
-  final navigationItems = ref.read(navigationsProvider.select((state) {
-    state.where((element) {
+  final viewMode = ref.watch(viewWidthProvider.notifier).viewMode;
+  final navigationItems = ref.watch(navigationsProvider.select((state) {
+    return state.where((element) {
       final isMore = element.modes.contains(NavigationItemMode.more);
       final isDesktop = element.modes.contains(NavigationItemMode.desktop);
       if (isMore && !isDesktop) return true;
