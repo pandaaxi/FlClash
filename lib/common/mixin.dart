@@ -20,17 +20,17 @@ mixin ViewMixin<T extends StatefulWidget> on State<T> {
   Function(List<String>)? get onKeywordsUpdate => null;
 }
 
-mixin ListenManualMixin<T extends StatefulWidget> on State<T> {
-  List<ProviderSubscription> subscriptions = [];
-
-  @override
-  void dispose() {
-    for (final subscription in subscriptions) {
-      subscription.close();
-    }
-    super.dispose();
-  }
-}
+// mixin ListenManualMixin<T extends StatefulWidget> on State<T> {
+//   List<ProviderSubscription> subscriptions = [];
+//
+//   @override
+//   void dispose() {
+//     for (final subscription in subscriptions) {
+//       subscription.close();
+//     }
+//     super.dispose();
+//   }
+// }
 
 mixin AutoDisposeNotifierMixin<T> on AutoDisposeNotifier<T> {
   set value(T value) {

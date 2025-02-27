@@ -22,7 +22,7 @@ class ClashManager extends ConsumerStatefulWidget {
 }
 
 class _ClashContainerState extends ConsumerState<ClashManager>
-    with AppMessageListener, ListenManualMixin {
+    with AppMessageListener {
   @override
   Widget build(BuildContext context) {
     return widget.child;
@@ -32,23 +32,22 @@ class _ClashContainerState extends ConsumerState<ClashManager>
   void initState() {
     super.initState();
     clashMessage.addListener(this);
-    subscriptions = [
-      ref.listenManual(currentProfileIdProvider, (prev, next) {
-        if (prev != next) {
-          globalState.appController.handleChangeProfile();
-        }
-      }),
-      ref.listenManual(coreStateProvider, (prev, next) async {
-        if (prev != next) {
-          await clashCore.setState(next);
-        }
-      }),
-      ref.listenManual(clashConfigStateProvider, (prev, next) {
-        if (prev != next) {
-          globalState.appController.updateClashConfigDebounce();
-        }
-      }),
-    ];
+
+    ref.listenManual(currentProfileIdProvider, (prev, next) {
+      if (prev != next) {
+        globalState.appController.handleChangeProfile();
+      }
+    });
+    ref.listenManual(coreStateProvider, (prev, next) async {
+      if (prev != next) {
+        await clashCore.setState(next);
+      }
+    });
+    ref.listenManual(clashConfigStateProvider, (prev, next) {
+      if (prev != next) {
+        globalState.appController.updateClashConfigDebounce();
+      }
+    });
   }
 
   @override

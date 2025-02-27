@@ -24,8 +24,7 @@ class NetworkDetection extends ConsumerStatefulWidget {
   ConsumerState<NetworkDetection> createState() => _NetworkDetectionState();
 }
 
-class _NetworkDetectionState extends ConsumerState<NetworkDetection>
-    with ListenManualMixin {
+class _NetworkDetectionState extends ConsumerState<NetworkDetection> {
   bool? _preIsStart;
   Timer? _setTimeoutTimer;
   CancelToken? cancelToken;
@@ -33,13 +32,11 @@ class _NetworkDetectionState extends ConsumerState<NetworkDetection>
 
   @override
   void initState() {
-    subscriptions = [
-      ref.listenManual(checkIpNumProvider, (prev, next) {
-        if (prev != next) {
-          _startCheck();
-        }
-      }),
-    ];
+    ref.listenManual(checkIpNumProvider, (prev, next) {
+      if (prev != next) {
+        _startCheck();
+      }
+    });
     super.initState();
   }
 

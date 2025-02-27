@@ -1,4 +1,3 @@
-import 'package:fl_clash/common/mixin.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:flutter/material.dart';
@@ -17,20 +16,17 @@ class AndroidManager extends ConsumerStatefulWidget {
   ConsumerState<AndroidManager> createState() => _AndroidContainerState();
 }
 
-class _AndroidContainerState extends ConsumerState<AndroidManager>
-    with ListenManualMixin {
+class _AndroidContainerState extends ConsumerState<AndroidManager> {
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    subscriptions = [
-      ref.listenManual(
-        appSettingProvider.select((state) => state.hidden),
-        (prev, next) {
-          app?.updateExcludeFromRecents(next);
-        },
-      ),
-    ];
+    ref.listenManual(
+      appSettingProvider.select((state) => state.hidden),
+      (prev, next) {
+        app?.updateExcludeFromRecents(next);
+      },
+    );
   }
 
   @override

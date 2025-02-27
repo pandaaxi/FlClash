@@ -122,11 +122,15 @@ class _ProxiesFragmentState extends State<ProxiesFragment> {
       builder: (_, ref, child) {
         final proxiesType = ref
             .watch(proxiesStyleSettingProvider.select((state) => state.type));
-        ref.listen(proxiesActionsStateProvider, (prev, next) {
-          if (prev != next && next.isCurrent) {
-            _initActions(proxiesType, next.hasProvider);
-          }
-        });
+        ref.listenManual(
+          proxiesActionsStateProvider,
+          (prev, next) {
+            if (prev != next && next.isCurrent) {
+              _initActions(proxiesType, next.hasProvider);
+            }
+          },
+          fireImmediately: true,
+        );
         return switch (proxiesType) {
           ProxiesType.tab => ProxiesTabFragment(
               key: _proxiesTabKey,

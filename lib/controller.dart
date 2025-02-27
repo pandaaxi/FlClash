@@ -330,7 +330,7 @@ class AppController {
         continue;
       }
       try {
-        updateProfile(profile);
+       await updateProfile(profile);
       } catch (e) {
         _ref.read(logsProvider.notifier).addLog(
               Log(

@@ -103,16 +103,19 @@ class _ConnectionsFragmentState extends State<ConnectionsFragment>
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, child) {
-        ref.listen(
-            isCurrentPageProvider(
-              PageLabel.connections,
-              handler: (pageLabel, viewMode) =>
-                  pageLabel == PageLabel.tools && viewMode == ViewMode.mobile,
-            ), (prev, next) {
-          if (prev != next) {
-            _initActions();
-          }
-        });
+        ref.listenManual(
+          isCurrentPageProvider(
+            PageLabel.connections,
+            handler: (pageLabel, viewMode) =>
+                pageLabel == PageLabel.tools && viewMode == ViewMode.mobile,
+          ),
+          (prev, next) {
+            if (prev != next && next == true) {
+              _initActions();
+            }
+          },
+          fireImmediately: true,
+        );
         return child!;
       },
       child: ValueListenableBuilder<ConnectionsState>(

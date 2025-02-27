@@ -17,19 +17,20 @@ class TrayManager extends ConsumerStatefulWidget {
   ConsumerState<TrayManager> createState() => _TrayContainerState();
 }
 
-class _TrayContainerState extends ConsumerState<TrayManager>
-    with TrayListener, ListenManualMixin {
+class _TrayContainerState extends ConsumerState<TrayManager> with TrayListener {
   @override
   void initState() {
     super.initState();
     trayManager.addListener(this);
-    subscriptions = [
-      ref.listenManual(trayStateProvider, (prev, next) {
+    ref.listenManual(
+      trayStateProvider,
+      (prev, next) {
         if (prev != next) {
           globalState.appController.updateTray();
         }
-      })
-    ];
+      },
+      fireImmediately: true,
+    );
   }
 
   @override

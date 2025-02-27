@@ -175,7 +175,7 @@ final proxiesActionsStateProvider =
 // ignore: unused_element
 typedef ProxiesActionsStateRef = AutoDisposeProviderRef<ProxiesActionsState>;
 String _$startButtonSelectorStateHash() =>
-    r'fadbbc8f063444d3c221b9dcd50f636ded38f2af';
+    r'537aff93c98b0a689cf8cabd080c610c9c58e611';
 
 /// See also [startButtonSelectorState].
 @ProviderFor(startButtonSelectorState)
@@ -450,7 +450,7 @@ final moreToolsSelectorStateProvider =
 // ignore: unused_element
 typedef MoreToolsSelectorStateRef
     = AutoDisposeProviderRef<MoreToolsSelectorState>;
-String _$isCurrentPageHash() => r'a9ec62dbf568221efd5842159ea14e23e7084944';
+String _$isCurrentPageHash() => r'562702367f009c7b324395ab0a2ad3464784be8c';
 
 /// See also [isCurrentPage].
 @ProviderFor(isCurrentPage)

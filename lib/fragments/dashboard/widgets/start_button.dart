@@ -54,13 +54,11 @@ class _StartButtonState extends State<StartButton>
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, child) {
-        final startButtonSelectorState =
-            ref.watch(startButtonSelectorStateProvider);
-        if (!startButtonSelectorState.isInit ||
-            !startButtonSelectorState.hasProfile) {
+        final state = ref.watch(startButtonSelectorStateProvider);
+        if (!state.isInit || !state.hasProfile) {
           return Container();
         }
-        ref.listen(
+        ref.listenManual(
           runTimeProvider.notifier.select((state) => state.isStart),
           (prev, next) {
             if (next != isStart) {
@@ -68,6 +66,7 @@ class _StartButtonState extends State<StartButton>
               updateController();
             }
           },
+          fireImmediately: true,
         );
         final textWidth = globalState.measure
                 .computeTextSize(

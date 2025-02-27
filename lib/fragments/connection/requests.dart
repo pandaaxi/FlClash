@@ -130,24 +130,30 @@ class _RequestsFragmentState extends State<RequestsFragment> with ViewMixin {
           _handleTryClearCache(constraints.maxWidth - 40 - (value ? 60 : 0));
           return Consumer(
             builder: (_, ref, child) {
-              ref.listen(
-                  isCurrentPageProvider(
-                    PageLabel.requests,
-                    handler: (pageLabel, viewMode) =>
-                        pageLabel == PageLabel.tools &&
-                        viewMode == ViewMode.mobile,
-                  ), (prev, next) {
-                if (prev != next) {
-                  _initActions();
-                }
-              });
-              ref.listen(requestsProvider.select((state) => state.list),
-                  (prev, next) {
-                if (!connectionListEquality.equals(prev, next)) {
-                  _requests = next;
-                  updateRequestsThrottler();
-                }
-              });
+              ref.listenManual(
+                isCurrentPageProvider(
+                  PageLabel.requests,
+                  handler: (pageLabel, viewMode) =>
+                      pageLabel == PageLabel.tools &&
+                      viewMode == ViewMode.mobile,
+                ),
+                (prev, next) {
+                  if (prev != next && next == true) {
+                    _initActions();
+                  }
+                },
+                fireImmediately: true,
+              );
+              ref.listenManual(
+                requestsProvider.select((state) => state.list),
+                (prev, next) {
+                  if (!connectionListEquality.equals(prev, next)) {
+                    _requests = next;
+                    updateRequestsThrottler();
+                  }
+                },
+                fireImmediately: true,
+              );
               return child!;
             },
             child: ValueListenableBuilder<ConnectionsState>(

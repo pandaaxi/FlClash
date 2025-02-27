@@ -23,7 +23,7 @@ class WindowManager extends ConsumerStatefulWidget {
 }
 
 class _WindowContainerState extends ConsumerState<WindowManager>
-    with WindowListener, WindowExtListener, ListenManualMixin {
+    with WindowListener, WindowExtListener {
   @override
   Widget build(BuildContext context) {
     return widget.child;
@@ -32,21 +32,20 @@ class _WindowContainerState extends ConsumerState<WindowManager>
   @override
   void initState() {
     super.initState();
-    subscriptions = [
-      ref.listenManual(
-        appSettingProvider.select((state) => state.autoLaunch),
-        (prev, next) {
-          if (prev != next) {
-            debouncer.call(
-              DebounceTag.autoLaunch,
-              () {
-                autoLaunch?.updateStatus(next);
-              },
-            );
-          }
-        },
-      ),
-    ];
+
+    ref.listenManual(
+      appSettingProvider.select((state) => state.autoLaunch),
+      (prev, next) {
+        if (prev != next) {
+          debouncer.call(
+            DebounceTag.autoLaunch,
+            () {
+              autoLaunch?.updateStatus(next);
+            },
+          );
+        }
+      },
+    );
     windowExtManager.addListener(this);
     windowManager.addListener(this);
   }

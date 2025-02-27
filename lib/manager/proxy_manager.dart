@@ -24,13 +24,14 @@ class ProxyManager extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, child) {
-        ref.listen(
+        ref.listenManual(
           proxyStateProvider,
           (prev, next) {
             if (prev != next) {
               _updateProxy(next);
             }
           },
+          fireImmediately: true,
         );
         return child!;
       },

@@ -170,16 +170,16 @@ class Tray {
   }
 
   updateTrayTitle([Traffic? traffic]) async {
-    if (!Platform.isMacOS) {
-      return;
-    }
-    if (traffic == null) {
-      await trayManager.setTitle("");
-    } else {
-      await trayManager.setTitle(
-        "${traffic.up.shortShow} ↑ \n${traffic.down.shortShow} ↓",
-      );
-    }
+    // if (!Platform.isMacOS) {
+    //   return;
+    // }
+    // if (traffic == null) {
+    //   await trayManager.setTitle("");
+    // } else {
+    //   await trayManager.setTitle(
+    //     "${traffic.up.shortShow} ↑ \n${traffic.down.shortShow} ↓",
+    //   );
+    // }
   }
 
   Future<void> _copyEnv(int port) async {

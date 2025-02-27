@@ -63,13 +63,14 @@ class HotKeyManager extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, child) {
-        ref.listen(
+        ref.listenManual(
           hotKeyActionsProvider,
           (prev, next) {
             if (!hotKeyActionListEquality.equals(prev, next)) {
               _updateHotKeys(hotKeyActions: next);
             }
           },
+          fireImmediately: true,
         );
         return child!;
       },

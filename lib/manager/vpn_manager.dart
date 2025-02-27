@@ -18,16 +18,13 @@ class VpnManager extends ConsumerStatefulWidget {
   ConsumerState<VpnManager> createState() => _VpnContainerState();
 }
 
-class _VpnContainerState extends ConsumerState<VpnManager>
-    with ListenManualMixin {
+class _VpnContainerState extends ConsumerState<VpnManager> {
   @override
   void initState() {
     super.initState();
-    subscriptions = [
-      ref.listenManual(vpnStateProvider, (prev, next) {
-        showTip();
-      })
-    ];
+    ref.listenManual(vpnStateProvider, (prev, next) {
+      showTip();
+    });
   }
 
   showTip() {

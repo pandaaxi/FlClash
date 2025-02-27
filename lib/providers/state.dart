@@ -162,7 +162,7 @@ ProxiesActionsState proxiesActionsState(Ref ref) {
 StartButtonSelectorState startButtonSelectorState(Ref ref) {
   final isInit = ref.watch(initProvider);
   final hasProfile =
-      ref.watch(profilesProvider.select((state) => state.isEmpty));
+      ref.watch(profilesProvider.select((state) => state.isNotEmpty));
   return StartButtonSelectorState(
     isInit: isInit,
     hasProfile: hasProfile,
@@ -275,13 +275,13 @@ bool isCurrentPage(
   PageLabel pageLabel, {
   bool Function(PageLabel pageLabel, ViewMode viewMode)? handler,
 }) {
-  final pageLabel = ref.watch(currentPageLabelProvider);
-  if (pageLabel == pageLabel) {
+  final currentPageLabel = ref.watch(currentPageLabelProvider);
+  if (pageLabel == currentPageLabel) {
     return true;
   }
   if (handler != null) {
     final viewMode = ref.watch(viewWidthProvider.notifier).viewMode;
-    return handler(pageLabel, viewMode);
+    return handler(currentPageLabel, viewMode);
   }
   return false;
 }

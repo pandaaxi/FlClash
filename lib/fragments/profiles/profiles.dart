@@ -112,11 +112,11 @@ class _ProfilesFragmentState extends State<ProfilesFragment> {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, __) {
-        ref.listen(isCurrentPageProvider(PageLabel.profiles), (prev, next) {
-          if (prev != next) {
+        ref.listenManual(isCurrentPageProvider(PageLabel.profiles), (prev, next) {
+          if (prev != next && next == true) {
             _initScaffold();
           }
-        });
+        },fireImmediately: true);
         final profilesSelectorState = ref.watch(profilesSelectorStateProvider);
         if (profilesSelectorState.profiles.isEmpty) {
           return NullStatus(

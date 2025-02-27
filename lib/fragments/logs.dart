@@ -141,25 +141,32 @@ class _LogsFragmentState extends State<LogsFragment> with ViewMixin {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (_, ref, child) {
-        ref.listen(
-            isCurrentPageProvider(
-              PageLabel.logs,
-              handler: (pageLabel, viewMode) =>
-                  pageLabel == PageLabel.tools && viewMode == ViewMode.mobile,
-            ), (prev, next) {
-          if (prev != next && next == true) {
-            _initActions();
-          }
-        });
-        ref.listen(logsProvider.select((state) => state.list), (prev, next) {
-          if (prev != next) {
-            final isEquality = logListEquality.equals(prev, next);
-            if (!isEquality) {
-              _logs = next;
-              updateLogsThrottler();
+        ref.listenManual(
+          isCurrentPageProvider(
+            PageLabel.logs,
+            handler: (pageLabel, viewMode) =>
+                pageLabel == PageLabel.tools && viewMode == ViewMode.mobile,
+          ),
+          (prev, next) {
+            if (prev != next && next == true) {
+              _initActions();
             }
-          }
-        });
+          },
+          fireImmediately: true,
+        );
+        ref.listenManual(
+          logsProvider.select((state) => state.list),
+          (prev, next) {
+            if (prev != next) {
+              final isEquality = logListEquality.equals(prev, next);
+              if (!isEquality) {
+                _logs = next;
+                updateLogsThrottler();
+              }
+            }
+          },
+          fireImmediately: true,
+        );
         return child!;
       },
       child: LayoutBuilder(

@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'widgets/start_button.dart';
 
-class DashboardFragment extends StatefulWidget {
+class DashboardFragment extends ConsumerStatefulWidget {
   const DashboardFragment({super.key});
 
   @override
-  State<DashboardFragment> createState() => _DashboardFragmentState();
+  ConsumerState<DashboardFragment> createState() => _DashboardFragmentState();
 }
 
-class _DashboardFragmentState extends State<DashboardFragment> {
+class _DashboardFragmentState extends ConsumerState<DashboardFragment> {
   final key = GlobalKey<SuperGridState>();
 
   _initScaffold() {
@@ -66,6 +66,20 @@ class _DashboardFragmentState extends State<DashboardFragment> {
     });
   }
 
+  @override
+  void initState() {
+    ref.listenManual(
+      isCurrentPageProvider(PageLabel.dashboard),
+          (prev, next) {
+        if (prev != next && next == true) {
+          _initScaffold();
+        }
+      },
+      fireImmediately: true,
+    );
+    super.initState();
+  }
+
   _handleSave(List<GridItem> girdItems, WidgetRef ref) {
     final dashboardWidgets = girdItems
         .map(
@@ -79,54 +93,47 @@ class _DashboardFragmentState extends State<DashboardFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (_, ref, ___) {
-      ref.listen(isCurrentPageProvider(PageLabel.dashboard), (prev, next) {
-        if (prev != next) {
-          _initScaffold();
-        }
-      });
-      final dashboardState = ref.watch(dashboardStateProvider);
-      final columns = max(4 * ((dashboardState.viewWidth / 350).ceil()), 8);
-      return Align(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16).copyWith(
-            bottom: 88,
-          ),
-          child: SuperGrid(
-            key: key,
-            crossAxisCount: columns,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            children: [
-              ...dashboardState.dashboardWidgets
-                  .where(
-                    (item) => item.platforms.contains(
-                      SupportPlatform.currentPlatform,
-                    ),
-                  )
-                  .map(
-                    (item) => item.widget,
-                  ),
-            ],
-            onSave: (girdItems) {
-              _handleSave(girdItems, ref);
-            },
-            addedItemsBuilder: (girdItems) {
-              return DashboardWidget.values
-                  .where(
-                    (item) =>
-                        !girdItems.contains(item.widget) &&
-                        item.platforms.contains(
-                          SupportPlatform.currentPlatform,
-                        ),
-                  )
-                  .map((item) => item.widget)
-                  .toList();
-            },
-          ),
+    final dashboardState = ref.watch(dashboardStateProvider);
+    final columns = max(4 * ((dashboardState.viewWidth / 350).ceil()), 8);
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16).copyWith(
+          bottom: 88,
         ),
-      );
-    });
+        child: SuperGrid(
+          key: key,
+          crossAxisCount: columns,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          children: [
+            ...dashboardState.dashboardWidgets
+                .where(
+                  (item) => item.platforms.contains(
+                    SupportPlatform.currentPlatform,
+                  ),
+                )
+                .map(
+                  (item) => item.widget,
+                ),
+          ],
+          onSave: (girdItems) {
+            _handleSave(girdItems, ref);
+          },
+          addedItemsBuilder: (girdItems) {
+            return DashboardWidget.values
+                .where(
+                  (item) =>
+                      !girdItems.contains(item.widget) &&
+                      item.platforms.contains(
+                        SupportPlatform.currentPlatform,
+                      ),
+                )
+                .map((item) => item.widget)
+                .toList();
+          },
+        ),
+      ),
+    );
   }
 }
