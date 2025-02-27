@@ -249,7 +249,6 @@ class AppController {
   }
 
   Future<void> _updateClashConfig([bool? isPatch]) async {
-    print("[update]===>");
     final profile = _ref.watch(currentProfileProvider);
     await _ref.read(currentProfileProvider)?.checkAndUpdate();
     final patchConfig = _ref.read(patchClashConfigProvider);
